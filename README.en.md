@@ -1,8 +1,8 @@
 # codex-history-compat
 
-If a Codex desktop mod sends history to a Responses-compatible service and the service rejects encrypted reasoning, tool-call ordering, or image-resize notices, this patch normalizes the copy that is about to be sent.
+While maintaining a ChatGPT/Codex desktop mod, I need both to follow official desktop updates and to keep different tasks on their established model services. A Responses-compatible service can reject history because of reasoning items, tool-call ordering, or image-resize notices. Fixing an ordinary request once does not prove that WebSocket or compacted history will still work.
 
-It grew out of ChatGPT/Codex desktop-mod update work and targets one exact [OpenAI Codex](https://github.com/openai/codex) commit. It is not a ChatGPT plugin, installable desktop application, or patch for every Codex version.
+This patch normalizes only the copy about to be sent and leaves durable local history alone. It is the compatibility part of the maintenance workflow: [electron-update-safety](https://github.com/catterhu1207-ux/electron-update-safety) handles safe isolation of a candidate package, while [desktop-adaptation-lab](https://github.com/catterhu1207-ux/desktop-adaptation-lab) explains the task workflow and acceptance states.
 
 ## What can I use it for?
 

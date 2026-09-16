@@ -1,8 +1,8 @@
 # codex-history-compat
 
-当你维护的 Codex 魔改版要把历史请求发往 Responses 兼容服务，却因为推理项、工具调用顺序或图片缩放提示被拒绝时，这个补丁把“将要发出的副本”整理成更容易被兼容服务接受的结构。
+我维护 ChatGPT/Codex 魔改版时，既要跟上官方桌面版更新，也要让不同任务继续使用原来的模型服务。问题是，历史请求到了 Responses 兼容服务后，可能因为推理项、工具调用顺序或图片缩放提示被拒绝。一次临时修好普通请求，也不代表 WebSocket 或压缩后的历史还能工作。
 
-它源于 ChatGPT/Codex 桌面魔改版的更新适配实践，目标是 [OpenAI Codex](https://github.com/openai/codex) 的一个精确上游提交。它不是 ChatGPT 插件、不是可直接安装的桌面应用，也不适用于任意 Codex 版本。
+这个补丁把“将要发出的副本”整理成兼容服务更容易接受的结构，同时不改写本地历史。它是整套维护流程中的兼容环节：候选包的隔离安全由 [electron-update-safety](https://github.com/catterhu1207-ux/electron-update-safety) 处理，任务工作流与验收状态由 [desktop-adaptation-lab](https://github.com/catterhu1207-ux/desktop-adaptation-lab) 说明。
 
 ## 我可以拿它做什么？
 
