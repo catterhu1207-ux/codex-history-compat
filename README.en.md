@@ -13,10 +13,13 @@ This patch normalizes only the copy about to be sent and leaves durable local hi
 
 It is for people who build Codex from source and maintain a custom provider connection. It is not for ordinary users of the official desktop application.
 
-## Which of the three repositories do I need?
+To generate the desktop workflow mod from your own official Codex installation first, use [codex-desktop-workflow](https://github.com/catterhu1207-ux/codex-desktop-workflow). Its v0.1.0 still marks this backend patch as an unsupported desktop combination; the existence of the source patch does not mean that integration has qualified.
+
+## Which of the four repositories do I need?
 
 | Problem | Repository |
 |---|---|
+| Generate and run the mod from my own official Codex installation | [codex-desktop-workflow](https://github.com/catterhu1207-ux/codex-desktop-workflow) |
 | A Codex history request is rejected by a compatible provider | **codex-history-compat** (this repository) |
 | Is the update candidate trustworthy, and did isolated testing leave a process behind? | [electron-update-safety](https://github.com/catterhu1207-ux/electron-update-safety) |
 | How do I require matching evidence before an adaptation moves forward? | [desktop-adaptation-lab](https://github.com/catterhu1207-ux/desktop-adaptation-lab) |

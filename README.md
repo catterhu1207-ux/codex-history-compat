@@ -13,10 +13,13 @@
 
 适合愿意自行编译 Codex、维护自定义模型服务连接的人。如果你只想使用官方桌面应用，或无法接受源码补丁与构建流程，本仓库不适合你。
 
-## 三个仓库怎么选？
+如果你要先用自己的官方 Codex 安装目录生成带界面工作流改造的魔改版，请使用 [codex-desktop-workflow](https://github.com/catterhu1207-ux/codex-desktop-workflow)。本仓库的后端补丁在该入口的 v0.1.0 中仍标为未支持组合，不能把源码补丁存在理解为桌面集成已经通过。
+
+## 四个仓库怎么选？
 
 | 你要解决的问题 | 使用这个仓库 |
 |---|---|
+| 用自己的官方 Codex 安装目录生成并运行魔改版 | [codex-desktop-workflow](https://github.com/catterhu1207-ux/codex-desktop-workflow) |
 | Codex 发出的历史请求被兼容服务拒绝 | **codex-history-compat**（本仓库） |
 | 更新候选包是否可信，隔离运行是否有后台残留 | [electron-update-safety](https://github.com/catterhu1207-ux/electron-update-safety) |
 | 如何让适配阶段必须具备对应证据才能继续 | [desktop-adaptation-lab](https://github.com/catterhu1207-ux/desktop-adaptation-lab) |
