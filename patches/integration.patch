@@ -1,0 +1,77 @@
+diff --git a/codex-rs/core/src/compact.rs b/codex-rs/core/src/compact.rs
+index 49306c3..68a916d 100644
+--- a/codex-rs/core/src/compact.rs
++++ b/codex-rs/core/src/compact.rs
+@@ -278,6 +278,10 @@ async fn run_compact_task_inner_impl(
+         let turn_input = history
+             .clone()
+             .for_prompt(&turn_context.model_info().input_modalities);
++        let turn_input = crate::prompt_history_compat::sanitize_prompt_history(
++            &turn_context.config.model_provider_id,
++            turn_input,
++        );
+         let turn_input_len = turn_input.len();
+         let prompt = Prompt {
+             input: turn_input,
+diff --git a/codex-rs/core/src/compact_remote_request.rs b/codex-rs/core/src/compact_remote_request.rs
+index b6b418c..6d17650 100644
+--- a/codex-rs/core/src/compact_remote_request.rs
++++ b/codex-rs/core/src/compact_remote_request.rs
+@@ -59,6 +59,10 @@ pub(super) async fn run_remote_compact_attempt(
+         .is_enabled()
+         .then(|| history.raw_items().cloned().collect());
+     let prompt_input = history.for_prompt(&turn_context.model_info().input_modalities);
++    let prompt_input = crate::prompt_history_compat::sanitize_prompt_history(
++        &turn_context.config.model_provider_id,
++        prompt_input,
++    );
+     let tool_router = &step_context.tool_router;
+     let prompt = Prompt {
+         input: prompt_input,
+diff --git a/codex-rs/core/src/compact_remote_v2_attempt.rs b/codex-rs/core/src/compact_remote_v2_attempt.rs
+index 8827ba1..a2ed65f 100644
+--- a/codex-rs/core/src/compact_remote_v2_attempt.rs
++++ b/codex-rs/core/src/compact_remote_v2_attempt.rs
+@@ -67,8 +67,12 @@ pub(super) async fn run_remote_compact_v2_attempt(
+     let trace_input_history = compaction_trace
+         .is_enabled()
+         .then(|| history.raw_items().cloned().collect());
+-    let (mut input, prompt_input_metadata): (Vec<_>, Vec<_>) = history
+-        .for_prompt_annotated(&turn_context.model_info().input_modalities)
++    let annotated_input = history.for_prompt_annotated(&turn_context.model_info().input_modalities);
++    let annotated_input = crate::prompt_history_compat::sanitize_prompt_history_annotated(
++        &turn_context.config.model_provider_id,
++        annotated_input,
++    );
++    let (mut input, prompt_input_metadata): (Vec<_>, Vec<_>) = annotated_input
+         .into_iter()
+         .map(|envelope| (envelope.item, envelope.metadata))
+         .unzip();
+diff --git a/codex-rs/core/src/lib.rs b/codex-rs/core/src/lib.rs
+index b4e9792..2ffbf6d 100644
+--- a/codex-rs/core/src/lib.rs
++++ b/codex-rs/core/src/lib.rs
+@@ -33,6 +33,7 @@ mod compact_remote;
+ mod compact_remote_history;
+ mod compact_remote_v2;
+ mod compact_token_budget;
++mod prompt_history_compat;
+ pub use codex_network_proxy::EnvironmentNetworkPolicy;
+ pub use codex_network_proxy::NetworkDomainPermission;
+ pub use codex_network_proxy::NetworkDomainPermissionEntry;
+diff --git a/codex-rs/core/src/session/turn.rs b/codex-rs/core/src/session/turn.rs
+index f7c4268..0784b2d 100644
+--- a/codex-rs/core/src/session/turn.rs
++++ b/codex-rs/core/src/session/turn.rs
+@@ -1415,7 +1415,10 @@ async fn run_sampling_request(
+                 .await
+                 .for_prompt(&step_context.settings.model_info.input_modalities)
+         };
+-        let mut prompt_input = prompt_input;
++        let mut prompt_input = crate::prompt_history_compat::sanitize_prompt_history(
++            &turn_context.config.model_provider_id,
++            prompt_input,
++        );
+         if let Some(executed_tool_calls) = sess.services.executed_tool_calls.as_ref()
+             && executed_tool_calls
+                 .attach_pending_to_prompt(&mut prompt_input, &mut executed_tool_calls_by_output)

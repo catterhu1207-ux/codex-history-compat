@@ -1,0 +1,18 @@
+name: tests
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  patch-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: {path: patch}
+      - uses: actions/checkout@v4
+        with:
+          repository: openai/codex
+          ref: b5bffd3ec4db487e7e3dec59663875b0ef7b72ca
+          path: upstream
+      - run: ./patch/apply.sh ./upstream
+      - uses: dtolnay/rust-toolchain@stable
+      - run: cargo test --manifest-path upstream/codex-rs/Cargo.toml -p codex-core prompt_history_compat --lib -- --test-threads 1
