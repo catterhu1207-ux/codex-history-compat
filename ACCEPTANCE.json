@@ -1,0 +1,135 @@
+{
+  "schema_version": 1,
+  "status": "passed",
+  "upstream_commit": "10382da79a2a2d6e8ae221fa63077215389c1ad2",
+  "version": "0.158.0-alpha.2",
+  "module_tests": 15,
+  "packaging_tests": 7,
+  "source_inputs": {
+    "build_backend.py": "6bbdcbbe7d65411096f5838471de6a11bb0401bbcb2ac8640d2e95cb9e6de5ee",
+    "profiles/0.158.0-alpha.2/deepseek_notice_batch.json": "70f97e6903f72f0011b5da54baf0208721cf664deca4aae4ea58ef229af38e21",
+    "profiles/0.158.0-alpha.2/integration.patch": "088825c68de0d7eec2816258e7dd444139e970a1dbb5ecd9758592d05580f9de",
+    "profiles/0.158.0-alpha.2/migrations.json": "dda57592f62173d386d636e65ec8f11e579d2e85a0d91c7b758f446896dd5065",
+    "profiles/0.158.0-alpha.2/profile.json": "7d155ead5290cfa7de562a3d0a576da366dde08cfdeef729f98b5e55d5c9bebe",
+    "profiles/0.158.0-alpha.2/prompt_history_compat.rs": "ea25d8dab7ac22d687d2e27bdc5dc8f3ad82106ea6581563427d14e3edb3cacb"
+  },
+  "compiled_backend_sha256": "67fd8f1334dc66aba4d76fd59fa4a64db3ecc7801f074d452d63602b27a9ccfe",
+  "migrations": {
+    "count": 57,
+    "compiled_and_database_checksums_match": true,
+    "cold_databases_checked": 3
+  },
+  "runtime": {
+    "http": {
+      "status": "passed",
+      "binary_sha256": "67fd8f1334dc66aba4d76fd59fa4a64db3ecc7801f074d452d63602b27a9ccfe",
+      "binary_version": "codex-cli 0.158.0-alpha.2",
+      "exit_code": 0,
+      "request_count": 2,
+      "call_count": 4,
+      "output_count": 4,
+      "call_output_pairing": "complete",
+      "call_positions": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "output_positions": [
+        7,
+        8,
+        9,
+        10
+      ],
+      "notice_message_positions": [],
+      "message_immediately_before_output": [],
+      "folded_notice_output_count": 4,
+      "recorded_items": 11,
+      "content_logged": false,
+      "transport": [
+        "http"
+      ],
+      "fixture_sha256": {
+        "sample-a.png": "f45be4aaa8ce9807f46ebf2385e8bb88b0c9b4bf109c5d7c2e665ba9dc2c7f2d",
+        "sample-b.png": "f45be4aaa8ce9807f46ebf2385e8bb88b0c9b4bf109c5d7c2e665ba9dc2c7f2d",
+        "sample-c.png": "f45be4aaa8ce9807f46ebf2385e8bb88b0c9b4bf109c5d7c2e665ba9dc2c7f2d",
+        "sample-d.png": "f45be4aaa8ce9807f46ebf2385e8bb88b0c9b4bf109c5d7c2e665ba9dc2c7f2d"
+      }
+    },
+    "websocket": {
+      "status": "passed",
+      "binary_sha256": "67fd8f1334dc66aba4d76fd59fa4a64db3ecc7801f074d452d63602b27a9ccfe",
+      "binary_version": "codex-cli 0.158.0-alpha.2",
+      "exit_code": 0,
+      "request_count": 2,
+      "call_count": 4,
+      "output_count": 4,
+      "call_output_pairing": "complete",
+      "call_positions": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "output_positions": [
+        7,
+        8,
+        9,
+        10
+      ],
+      "notice_message_positions": [],
+      "message_immediately_before_output": [],
+      "folded_notice_output_count": 4,
+      "recorded_items": 11,
+      "content_logged": false,
+      "transport": [
+        "websocket"
+      ],
+      "fixture_sha256": {
+        "sample-a.png": "f45be4aaa8ce9807f46ebf2385e8bb88b0c9b4bf109c5d7c2e665ba9dc2c7f2d",
+        "sample-b.png": "f45be4aaa8ce9807f46ebf2385e8bb88b0c9b4bf109c5d7c2e665ba9dc2c7f2d",
+        "sample-c.png": "f45be4aaa8ce9807f46ebf2385e8bb88b0c9b4bf109c5d7c2e665ba9dc2c7f2d",
+        "sample-d.png": "f45be4aaa8ce9807f46ebf2385e8bb88b0c9b4bf109c5d7c2e665ba9dc2c7f2d"
+      }
+    },
+    "cold-resume": {
+      "status": "passed",
+      "backend_sha256": "67fd8f1334dc66aba4d76fd59fa4a64db3ecc7801f074d452d63602b27a9ccfe",
+      "global_model_changed": true,
+      "retained_model": "fixture-old",
+      "retained_effort": "high",
+      "resume_uses_saved_task_settings": true,
+      "existing_history_bytes_preserved": true,
+      "real_task_data": false,
+      "compaction_mode": null,
+      "compaction_requests": 0,
+      "ordinary_requests": 1
+    },
+    "local-compaction": {
+      "status": "passed",
+      "backend_sha256": "67fd8f1334dc66aba4d76fd59fa4a64db3ecc7801f074d452d63602b27a9ccfe",
+      "global_model_changed": true,
+      "retained_model": "fixture-old",
+      "retained_effort": "high",
+      "resume_uses_saved_task_settings": true,
+      "existing_history_bytes_preserved": true,
+      "real_task_data": false,
+      "compaction_mode": "local",
+      "compaction_requests": 1,
+      "ordinary_requests": 1
+    },
+    "remote-compaction-v2": {
+      "status": "passed",
+      "backend_sha256": "67fd8f1334dc66aba4d76fd59fa4a64db3ecc7801f074d452d63602b27a9ccfe",
+      "global_model_changed": true,
+      "retained_model": "fixture-old",
+      "retained_effort": "high",
+      "resume_uses_saved_task_settings": true,
+      "existing_history_bytes_preserved": true,
+      "real_task_data": false,
+      "compaction_mode": "remote",
+      "compaction_requests": 1,
+      "ordinary_requests": 1
+    }
+  }
+}
