@@ -22,7 +22,7 @@ On Unix, use `./apply.sh /path/to/codex 0.158.0-alpha.2`. Omitting the profile r
 
 The current profile keeps tool-item metadata, normalizes only outbound history, and covers ordinary requests, WebSocket requests, local compaction and remote compaction V2. Remote compaction V1 no longer exists in this upstream version. Source-built Windows backends preserve the official migration-file bytes and verify their embedded checksums; they do not rewrite existing migration records.
 
-Desktop integration is provided by `codex-desktop-workflow` as an explicit `compat` backend mode. Source patch tests, desktop renderer qualification and daily-user validation are separate results.
+Desktop integration is provided by `codex-desktop-workflow` as an explicit `compat` backend mode.
 
 
 我维护 ChatGPT/Codex 魔改版时，既要跟上官方桌面版更新，也要让不同任务继续使用原来的模型服务。问题是，历史请求到了 Responses 兼容服务后，可能因为推理项、工具调用顺序或图片缩放提示被拒绝。一次临时修好普通请求，也不代表 WebSocket 或压缩后的历史还能工作。

@@ -39,13 +39,17 @@ def apply(codex_root, profile):
 
 def build(source,target,profile,official_backend=None,target_cache=None,dry_run=False,reuse_verified_source=False):
     folder,data=load_profile(profile)
+    profile_digest=sha(folder/'profile.json')
     if sys.version_info < (3,11):raise ValueError('python_3_11_required_for_source_build')
     recipe_sha256=sha(Path(__file__))
     compat_commit=checked(['git','rev-parse','HEAD'],ROOT)
     if os.name!='nt':raise ValueError('windows_build_required')
     if target.exists() and not reuse_verified_source:raise ValueError('target_must_not_exist')
-    if not shutil.which('git') or not shutil.which('cargo') or not shutil.which('rustc'):
+    if not shutil.which('git') or not shutil.which('cargo') or not shutil.which('rustc') or not shutil.which('rustup'):
         raise ValueError('git_and_rust_toolchain_required')
+    installed=checked(['rustup','toolchain','list'])
+    if not any(line.startswith(data['rust_toolchain']+'-x86_64-pc-windows-msvc ') or line==data['rust_toolchain']+'-x86_64-pc-windows-msvc' for line in installed.splitlines()):
+        raise ValueError('pinned_Rust_toolchain_not_installed_no_automatic_install')
     toolchain=checked(['rustc','+'+data['rust_toolchain'],'--version'])
     if not shutil.which('cl'):
         raise ValueError('run_from_x64_MSVC_developer_environment_with_Windows_SDK')
@@ -117,6 +121,16 @@ def build(source,target,profile,official_backend=None,target_cache=None,dry_run=
     shutil.copy2(binary,target/'codex.exe')
     version=checked([str(target/'codex.exe'),'--version'])
     if version!='codex-cli '+data['version']:raise ValueError('backend_version_mismatch')
+    if sha(folder/'profile.json')!=profile_digest or load_profile(profile)[1]!=data:
+        raise ValueError('build_profile_changed_during_build')
+    for name,digest in data['source_files'].items():
+        if hashlib.sha256((src/name).read_bytes().replace(b'\r\n',b'\n')).hexdigest()!=digest:
+            raise ValueError('patched_source_changed_during_build:'+name)
+    if cargo.read_bytes()!=text.encode() or lock.read_bytes()!=desired_lock.encode():
+        raise ValueError('workspace_version_or_lock_changed_during_build')
+    for row in migrations:
+        if sha(src/'codex-rs/state/migrations'/row['path'])!=row['sha256']:
+            raise ValueError('migration_source_changed_during_build:'+row['path'])
     manifest={'schema_version':2,'mode':'patched','patch_id':'public-source-'+profile,'compatibility':{'packages':[{'package_version':data['desktop_version'],'package_full_name':'OpenAI.Codex_'+data['desktop_version']+'_x64__2p2nqsd0c76g0'}]},
         'official':{'sha256':data['official_backend_sha256'],'size':official_backend.stat().st_size if official_backend else 321969456,'pe_machine':'amd64'},
         'patched':{'file':'codex.exe','sha256':sha(target/'codex.exe'),'size':(target/'codex.exe').stat().st_size,'pe_machine':'amd64','authenticode_status':'NotSigned','version_output':version},

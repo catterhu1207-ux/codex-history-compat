@@ -22,7 +22,7 @@ On Unix, use `./apply.sh /path/to/codex 0.158.0-alpha.2`. Omitting the profile r
 
 The current profile keeps tool-item metadata, normalizes only outbound history, and covers ordinary requests, WebSocket requests, local compaction and remote compaction V2. Remote compaction V1 no longer exists in this upstream version. Source-built Windows backends preserve the official migration-file bytes and verify their embedded checksums; they do not rewrite existing migration records.
 
-Desktop integration is provided by `codex-desktop-workflow` as an explicit `compat` backend mode. Source patch tests, desktop renderer qualification and daily-user validation are separate results.
+Desktop integration is provided by `codex-desktop-workflow` as an explicit `compat` backend mode.
 
 
 While maintaining a ChatGPT/Codex desktop mod, I need both to follow official desktop updates and to keep different tasks on their established model services. A Responses-compatible service can reject history because of reasoning items, tool-call ordering, or image-resize notices. Fixing an ordinary request once does not prove that WebSocket or compacted history will still work.

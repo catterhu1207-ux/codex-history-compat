@@ -7,15 +7,17 @@ from pathlib import Path
 from http.server import BaseHTTPRequestHandler,ThreadingHTTPServer
 from threading import Thread
 import os,json,sys,subprocess,hashlib,uuid
-import base64,struct
+import base64,struct,zlib
 websocket_mode=len(sys.argv)>3 and sys.argv[3]=='websocket'
 W=Path(__file__).parent;binary=Path(sys.argv[1]).resolve();label=sys.argv[2]
 run=W.parent/'replay-results'/f'{label}-{uuid.uuid4().hex[:8]}';run.mkdir(parents=True)
 home=run/'home';home.mkdir();cwd=run/'workspace';cwd.mkdir()
 paths=[]
-from PIL import Image
+def png_chunk(kind,data):
+    return struct.pack('!I',len(data))+kind+data+struct.pack('!I',zlib.crc32(kind+data)&0xffffffff)
+image=b'\x89PNG\r\n\x1a\n'+png_chunk(b'IHDR',struct.pack('!IIBBBBB',4096,4096,8,2,0,0,0))+png_chunk(b'IDAT',zlib.compress((b'\x00'+bytes((32,64,96))*4096)*4096))+png_chunk(b'IEND',b'')
 for name in ('sample-a.png','sample-b.png','sample-c.png','sample-d.png'):
-    path=cwd/name;Image.new('RGB',(4096,4096),(32,64,96)).save(path);paths.append(path)
+    path=cwd/name;path.write_bytes(image);paths.append(path)
 requests=[];transports=[]
 def event(kind,**kwargs):return {'type':kind,**kwargs}
 class Handler(BaseHTTPRequestHandler):

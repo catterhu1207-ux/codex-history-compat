@@ -4,14 +4,18 @@ from pathlib import Path
 from http.server import BaseHTTPRequestHandler,ThreadingHTTPServer
 
 binary=Path(sys.argv[1]).resolve()
+compact_mode=sys.argv[2] if len(sys.argv)>2 else None
+phase='ordinary';requests=[]
 root=Path(__file__).resolve().parents[1]/'replay-results'/('cold-'+uuid.uuid4().hex)
 home=root/'home';home.mkdir(parents=True);workspace=root/'workspace';workspace.mkdir()
 class Handler(BaseHTTPRequestHandler):
     def log_message(self,*args):pass
     def do_POST(self):
-        self.rfile.read(int(self.headers.get('Content-Length',0)))
+        body=json.loads(self.rfile.read(int(self.headers.get('Content-Length',0))));requests.append({'phase':phase,'body':body})
+        output={'type':'message','role':'assistant','id':'synthetic-message','content':[{'type':'output_text','text':'Synthetic completed.'}]}
+        if phase=='compaction' and compact_mode=='remote':output={'type':'compaction','id':'synthetic-compaction','encrypted_content':'c3ludGhldGljLWNvbXBhY3Rpb24='}
         events=[{'type':'response.created','response':{'id':'synthetic-response'}},
-            {'type':'response.output_item.done','item':{'type':'message','role':'assistant','id':'synthetic-message','content':[{'type':'output_text','text':'Synthetic completed.'}]}},
+            {'type':'response.output_item.done','item':output},
             {'type':'response.completed','response':{'id':'synthetic-response','usage':{'input_tokens':0,'output_tokens':0,'total_tokens':0}}}]
         raw=''.join('event: '+e['type']+'\ndata: '+json.dumps(e)+'\n\n' for e in events).encode()
         self.send_response(200);self.send_header('Content-Type','text/event-stream');self.send_header('Content-Length',str(len(raw)));self.end_headers();self.wfile.write(raw)
@@ -21,7 +25,7 @@ def config(model,effort):
 model = "{model}"
 model_reasoning_effort = "{effort}"
 [model_providers.fixture]
-name = "Synthetic loopback"
+name = "{'OpenAI' if compact_mode=='remote' else 'Synthetic loopback'}"
 base_url = "http://127.0.0.1:{server.server_port}/v1"
 wire_api = "responses"
 requires_openai_auth = false
@@ -51,7 +55,9 @@ class Client:
         deadline=time.monotonic()+60
         while time.monotonic()<deadline:
             message=self.q.get(timeout=max(0.1,deadline-time.monotonic()))
-            if message.get('method')=='turn/completed':return
+            if message.get('method')=='turn/completed':
+                if message['params']['turn']['status']!='completed':raise RuntimeError(message['params']['turn'])
+                return
         raise TimeoutError('turn/completed')
     def close(self):
         self.p.stdin.close();self.p.wait(timeout=30);self.log.close()
@@ -59,13 +65,21 @@ try:
     first=Client();started=first.call('thread/start',{'cwd':str(workspace),'approvalPolicy':'never','sandbox':'read-only','model':'fixture-old','modelProvider':'fixture','persistExtendedHistory':True})
     task=started['thread']['id']
     first.call('turn/start',{'threadId':task,'input':[{'type':'text','text':'Synthetic task.','textElements':[]}],'effort':'high'})
-    first.finish_turn();first.close()
+    first.finish_turn()
+    if compact_mode:
+        phase='compaction'
+        first.call('thread/compact/start',{'threadId':task});first.finish_turn()
+        phase='ordinary'
+    first.close()
     before={p.name:p.read_bytes() for p in home.rglob('*.jsonl')}
     (home/'config.toml').write_text(config('fixture-new','low'))
     second=Client();resumed=second.call('thread/resume',{'threadId':task,'model':started['model'],'modelProvider':started['modelProvider'],'config':{'model_reasoning_effort':'high'}});second.close()
     after={p.name:p.read_bytes() for p in home.rglob('*.jsonl')}
     preserved=bool(before) and all(after.get(name,b'').startswith(raw) for name,raw in before.items())
     passed=resumed['model']=='fixture-old' and resumed['modelProvider']=='fixture' and resumed.get('reasoningEffort')=='high' and preserved
+    compaction_requests=sum(row['phase']=='compaction' for row in requests)
+    if compact_mode:passed=passed and compaction_requests==1
     result={'status':'passed' if passed else 'failed','backend_sha256':hashlib.sha256(binary.read_bytes()).hexdigest(),'global_model_changed':True,'retained_model':resumed['model'],'retained_effort':resumed.get('reasoningEffort'),'resume_uses_saved_task_settings':True,'existing_history_bytes_preserved':preserved,'real_task_data':False}
+    result.update(compaction_mode=compact_mode,compaction_requests=compaction_requests,ordinary_requests=sum(row['phase']=='ordinary' for row in requests))
     (root/'result.json').write_text(json.dumps(result,indent=2));print(json.dumps(result));sys.exit(0 if passed else 1)
 finally:server.shutdown();server.server_close()

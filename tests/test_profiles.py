@@ -7,6 +7,15 @@ spec=importlib.util.spec_from_file_location('recipe',ROOT/'build_backend.py')
 recipe=importlib.util.module_from_spec(spec);spec.loader.exec_module(recipe)
 
 class Profiles(unittest.TestCase):
+    def test_missing_pinned_rust_never_installs_a_toolchain(self):
+        with tempfile.TemporaryDirectory() as raw:
+            target=Path(raw)/'not-created'
+            with mock.patch.object(recipe,'checked',side_effect=['synthetic-commit','stable-x86_64-pc-windows-msvc (default)']) as checked, mock.patch.object(recipe.shutil,'which',return_value='synthetic-tool'):
+                with self.assertRaisesRegex(ValueError,'no_automatic_install'):
+                    recipe.build(None,target,'0.158.0-alpha.2')
+            self.assertEqual(checked.call_args_list[-1].args[0],['rustup','toolchain','list'])
+            self.assertFalse(target.exists())
+
     def test_dirty_and_duplicate_application_are_rejected(self):
         profile=recipe.load_profile('0.158.0-alpha.2')[1]
         with mock.patch.object(recipe,'checked',side_effect=[profile['upstream_commit'],' M codex-rs/core/src/lib.rs']):
