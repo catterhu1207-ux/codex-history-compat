@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "desktop_version": "26.924.2738.0",
+  "package": {
+    "url": "https://persistent.oaistatic.com/codex-app-prod/releases/26.924.2738.0/ChatGPT-x64.msix",
+    "sha256": "132431a26fe4de44d1fa3c6e148506dbb4c8d806dad40cfd48e3ed554f2755a2",
+    "architecture": "x64",
+    "signature_verified": true
+  },
+  "official_backend_sha256": "8f0554ede25bbc5450921897c468b2e84635aa513c5017457997af0954581f49",
+  "upstream": {
+    "repository": "https://github.com/openai/codex",
+    "tag": "rust-v0.158.0-alpha.2.1",
+    "commit": "0d9c7cbfa6cf1489f55a8a9542b75ddd2c061807",
+    "release_archive_sha256": "fb8d8f7963e491c72bbd52241066aa2d237c2235781d3c7f23b586527183fb86",
+    "release_url": "https://github.com/openai/codex/releases/tag/rust-v0.158.0-alpha.2.1",
+    "release_backend_sha256": "21f6fb0b01ba12a687f5fcd33546c0008ebd45654fdb23d84732ee8d62ee980b"
+  },
+  "comparison": {
+    "pe_equal_except_checksum_certificate_directory_and_certificate_bytes": true,
+    "migration_count": 57,
+    "migration_tree": "962525adf43d50c9068b4ce3db9118bbccba0466",
+    "all_migration_checksums_present_in_official_backend": true,
+    "compatibility_source_unchanged": true,
+    "external_dependency_lock_unchanged": true
+  }
+}

@@ -1,1 +1,6 @@
-{"version":"0.2.0","default_profile":"0.158.0-alpha.2","legacy_entrypoints_preserved":true}
+{
+  "version": "0.2.1",
+  "default_profile": "0.158.0-alpha.2",
+  "legacy_entrypoints_preserved": true,
+  "latest_desktop_profile": "desktop-26.924.2738.0"
+}

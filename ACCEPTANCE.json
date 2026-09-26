@@ -1,19 +1,22 @@
 {
   "schema_version": 1,
   "status": "passed",
-  "upstream_commit": "10382da79a2a2d6e8ae221fa63077215389c1ad2",
-  "version": "0.158.0-alpha.2",
+  "upstream_commit": "0d9c7cbfa6cf1489f55a8a9542b75ddd2c061807",
+  "version": "0.158.0-alpha.2.1",
   "module_tests": 15,
-  "packaging_tests": 7,
+  "packaging_tests": 9,
   "source_inputs": {
-    "build_backend.py": "6bbdcbbe7d65411096f5838471de6a11bb0401bbcb2ac8640d2e95cb9e6de5ee",
-    "profiles/0.158.0-alpha.2/deepseek_notice_batch.json": "70f97e6903f72f0011b5da54baf0208721cf664deca4aae4ea58ef229af38e21",
-    "profiles/0.158.0-alpha.2/integration.patch": "088825c68de0d7eec2816258e7dd444139e970a1dbb5ecd9758592d05580f9de",
-    "profiles/0.158.0-alpha.2/migrations.json": "dda57592f62173d386d636e65ec8f11e579d2e85a0d91c7b758f446896dd5065",
-    "profiles/0.158.0-alpha.2/profile.json": "7d155ead5290cfa7de562a3d0a576da366dde08cfdeef729f98b5e55d5c9bebe",
-    "profiles/0.158.0-alpha.2/prompt_history_compat.rs": "ea25d8dab7ac22d687d2e27bdc5dc8f3ad82106ea6581563427d14e3edb3cacb"
+    "build_backend.py": "a789344935246582b1f267ea8bcec2c63564bd9ff5a6bc99579bc9e67b4637b4",
+    "tests/local_replay.py": "e167e8b1e9dd37e135fa46c2e50c5ea08b226959d93d01ee041433d913ba1645",
+    "tests/cold_resume.py": "a104d9b961caddbad87c8c6bce4f62d2b3d19b0d9b5ec6c3b8193f9fd405774f",
+    "SOURCE_26.924.2738.0.json": "07370b6b14783a6b8d5a89843670338c463e322b304270ef30ecef34831e706c",
+    "profiles/desktop-26.924.2738.0/deepseek_notice_batch.json": "70f97e6903f72f0011b5da54baf0208721cf664deca4aae4ea58ef229af38e21",
+    "profiles/desktop-26.924.2738.0/integration.patch": "088825c68de0d7eec2816258e7dd444139e970a1dbb5ecd9758592d05580f9de",
+    "profiles/desktop-26.924.2738.0/migrations.json": "dda57592f62173d386d636e65ec8f11e579d2e85a0d91c7b758f446896dd5065",
+    "profiles/desktop-26.924.2738.0/profile.json": "409c0e67ef681fe3d96ed6af5135d027214b54a397d3f342f0175f25dc2b4db1",
+    "profiles/desktop-26.924.2738.0/prompt_history_compat.rs": "ea25d8dab7ac22d687d2e27bdc5dc8f3ad82106ea6581563427d14e3edb3cacb"
   },
-  "compiled_backend_sha256": "67fd8f1334dc66aba4d76fd59fa4a64db3ecc7801f074d452d63602b27a9ccfe",
+  "compiled_backend_sha256": "982f66e44ddad832afef577f9505c92b145004761644980d0b6c981a1fd569ac",
   "migrations": {
     "count": 57,
     "compiled_and_database_checksums_match": true,
@@ -22,8 +25,8 @@
   "runtime": {
     "http": {
       "status": "passed",
-      "binary_sha256": "67fd8f1334dc66aba4d76fd59fa4a64db3ecc7801f074d452d63602b27a9ccfe",
-      "binary_version": "codex-cli 0.158.0-alpha.2",
+      "binary_sha256": "982f66e44ddad832afef577f9505c92b145004761644980d0b6c981a1fd569ac",
+      "binary_version": "codex-cli 0.158.0-alpha.2.1",
       "exit_code": 0,
       "request_count": 2,
       "call_count": 4,
@@ -58,8 +61,8 @@
     },
     "websocket": {
       "status": "passed",
-      "binary_sha256": "67fd8f1334dc66aba4d76fd59fa4a64db3ecc7801f074d452d63602b27a9ccfe",
-      "binary_version": "codex-cli 0.158.0-alpha.2",
+      "binary_sha256": "982f66e44ddad832afef577f9505c92b145004761644980d0b6c981a1fd569ac",
+      "binary_version": "codex-cli 0.158.0-alpha.2.1",
       "exit_code": 0,
       "request_count": 2,
       "call_count": 4,
@@ -94,7 +97,7 @@
     },
     "cold-resume": {
       "status": "passed",
-      "backend_sha256": "67fd8f1334dc66aba4d76fd59fa4a64db3ecc7801f074d452d63602b27a9ccfe",
+      "backend_sha256": "982f66e44ddad832afef577f9505c92b145004761644980d0b6c981a1fd569ac",
       "global_model_changed": true,
       "retained_model": "fixture-old",
       "retained_effort": "high",
@@ -107,7 +110,7 @@
     },
     "local-compaction": {
       "status": "passed",
-      "backend_sha256": "67fd8f1334dc66aba4d76fd59fa4a64db3ecc7801f074d452d63602b27a9ccfe",
+      "backend_sha256": "982f66e44ddad832afef577f9505c92b145004761644980d0b6c981a1fd569ac",
       "global_model_changed": true,
       "retained_model": "fixture-old",
       "retained_effort": "high",
@@ -120,7 +123,7 @@
     },
     "remote-compaction-v2": {
       "status": "passed",
-      "backend_sha256": "67fd8f1334dc66aba4d76fd59fa4a64db3ecc7801f074d452d63602b27a9ccfe",
+      "backend_sha256": "982f66e44ddad832afef577f9505c92b145004761644980d0b6c981a1fd569ac",
       "global_model_changed": true,
       "retained_model": "fixture-old",
       "retained_effort": "high",
@@ -131,5 +134,98 @@
       "compaction_requests": 1,
       "ordinary_requests": 1
     }
-  }
+  },
+  "official_control": {
+    "http": {
+      "status": "passed",
+      "binary_sha256": "8f0554ede25bbc5450921897c468b2e84635aa513c5017457997af0954581f49",
+      "binary_version": "codex-cli 0.158.0-alpha.2.1",
+      "exit_code": 0,
+      "request_count": 2,
+      "call_count": 4,
+      "output_count": 4,
+      "call_output_pairing": "complete",
+      "call_positions": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "output_positions": [
+        7,
+        9,
+        11,
+        13
+      ],
+      "notice_message_positions": [
+        8,
+        10,
+        12,
+        14
+      ],
+      "message_immediately_before_output": [
+        9,
+        11,
+        13
+      ],
+      "folded_notice_output_count": 0,
+      "recorded_items": 15,
+      "content_logged": false,
+      "transport": [
+        "http"
+      ],
+      "fixture_sha256": {
+        "sample-a.png": "f45be4aaa8ce9807f46ebf2385e8bb88b0c9b4bf109c5d7c2e665ba9dc2c7f2d",
+        "sample-b.png": "f45be4aaa8ce9807f46ebf2385e8bb88b0c9b4bf109c5d7c2e665ba9dc2c7f2d",
+        "sample-c.png": "f45be4aaa8ce9807f46ebf2385e8bb88b0c9b4bf109c5d7c2e665ba9dc2c7f2d",
+        "sample-d.png": "f45be4aaa8ce9807f46ebf2385e8bb88b0c9b4bf109c5d7c2e665ba9dc2c7f2d"
+      }
+    },
+    "websocket": {
+      "status": "passed",
+      "binary_sha256": "8f0554ede25bbc5450921897c468b2e84635aa513c5017457997af0954581f49",
+      "binary_version": "codex-cli 0.158.0-alpha.2.1",
+      "exit_code": 0,
+      "request_count": 2,
+      "call_count": 4,
+      "output_count": 4,
+      "call_output_pairing": "complete",
+      "call_positions": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "output_positions": [
+        7,
+        9,
+        11,
+        13
+      ],
+      "notice_message_positions": [
+        8,
+        10,
+        12,
+        14
+      ],
+      "message_immediately_before_output": [
+        9,
+        11,
+        13
+      ],
+      "folded_notice_output_count": 0,
+      "recorded_items": 15,
+      "content_logged": false,
+      "transport": [
+        "websocket"
+      ],
+      "fixture_sha256": {
+        "sample-a.png": "f45be4aaa8ce9807f46ebf2385e8bb88b0c9b4bf109c5d7c2e665ba9dc2c7f2d",
+        "sample-b.png": "f45be4aaa8ce9807f46ebf2385e8bb88b0c9b4bf109c5d7c2e665ba9dc2c7f2d",
+        "sample-c.png": "f45be4aaa8ce9807f46ebf2385e8bb88b0c9b4bf109c5d7c2e665ba9dc2c7f2d",
+        "sample-d.png": "f45be4aaa8ce9807f46ebf2385e8bb88b0c9b4bf109c5d7c2e665ba9dc2c7f2d"
+      }
+    }
+  },
+  "desktop_version": "26.924.2738.0"
 }

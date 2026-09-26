@@ -1,13 +1,13 @@
 # codex-history-compat
 
-## v0.2.0: optional desktop backend profile
+## v0.2.1: Desktop 26.924.2738.0 profile
 
-The new profile targets Codex `0.158.0-alpha.2` at upstream commit `10382da79a2a2d6e8ae221fa63077215389c1ad2`, paired with Desktop `26.924.1866.0`. The legacy patch and its original default invocation remain available.
+The `desktop-26.924.2738.0` profile targets Codex `0.158.0-alpha.2.1` at upstream commit `0d9c7cbfa6cf1489f55a8a9542b75ddd2c061807`. The existing `0.158.0-alpha.2` profile for Desktop `26.924.1866.0` and the legacy apply entry points remain available. See [Compatibility](COMPATIBILITY.md) for profile selection.
 
-On Windows, use Python 3.11+, Git, Rust 1.95.0 and the x64 MSVC developer environment with Windows SDK. The build writes to a new target directory and runs the compatibility tests before compiling only the launcher-consumed `codex` binary:
+On Windows, use Python 3.11+, Git, Rust 1.95.0 and the x64 MSVC developer environment with Windows SDK. Run the build from a Git checkout of this repository so its exact commit is recorded in the manifest. The build writes to a new target directory and runs the compatibility tests before compiling the launcher-consumed `codex` binary:
 
 ```powershell
-py -3 build_backend.py --target C:\codex-compat\backend --official-backend C:\official\app\resources\codex.exe
+py -3 build_backend.py --profile desktop-26.924.2738.0 --target C:\codex-compat\backend --official-backend C:\official\app\resources\codex.exe
 ```
 
 You can supply `--source` with a local upstream Git repository; its exact pinned commit is still checked. The repository contains no compiled backend. The local result includes `codex.exe`, `manifest.json`, a source checkout and build logs. Inspect local reports before sharing them.
@@ -15,10 +15,10 @@ You can supply `--source` with a local upstream Git repository; its exact pinned
 To apply the new profile without building:
 
 ```powershell
-.\apply.ps1 -CodexRoot .\codex -Profile 0.158.0-alpha.2
+.\apply.ps1 -CodexRoot .\codex -Profile desktop-26.924.2738.0
 ```
 
-On Unix, use `./apply.sh /path/to/codex 0.158.0-alpha.2`. Omitting the profile retains the original upstream revision.
+On Unix, use `./apply.sh /path/to/codex desktop-26.924.2738.0`. Omitting the profile retains the original upstream revision.
 
 The current profile keeps tool-item metadata, normalizes only outbound history, and covers ordinary requests, WebSocket requests, local compaction and remote compaction V2. Remote compaction V1 no longer exists in this upstream version. Source-built Windows backends preserve the official migration-file bytes and verify their embedded checksums; they do not rewrite existing migration records.
 
@@ -33,12 +33,12 @@ This patch normalizes only the copy about to be sent and leaves durable local hi
 
 - Add outbound-history compatibility handling to the pinned Codex source revision when using a Responses-compatible service.
 - Handle encrypted reasoning items, orphaned tool calls or outputs, and image-resize notices placed between a call and its output without rewriting durable history.
-- Apply the same rule to ordinary requests, WebSocket requests, local compaction, and both remote compaction paths.
+- Apply the same rule to ordinary requests, WebSocket requests, local compaction, and the remote compaction paths available in each profile.
 - Reproduce the structure failure with synthetic fixtures only; no authentic request, session, image, or user path is included.
 
 It is for people who build Codex from source and maintain a custom provider connection. It is not for ordinary users of the official desktop application.
 
-To generate the desktop workflow mod from your own official Codex installation first, use [codex-desktop-workflow](https://github.com/catterhu1207-ux/codex-desktop-workflow). Desktop v0.3.0 introduces the explicit compatibility mode for the new profile; older desktop releases remain official-backend only.
+To generate the desktop workflow mod from your own official Codex installation first, use [codex-desktop-workflow](https://github.com/catterhu1207-ux/codex-desktop-workflow). Desktop v0.3.1 pins separate compatibility profiles for 26.924.2738.0 and 26.924.1866.0; earlier desktop profiles remain official-backend only.
 
 ## Which of the four repositories do I need?
 

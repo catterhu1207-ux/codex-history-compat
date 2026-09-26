@@ -1,4 +1,4 @@
-import importlib.util,json,subprocess,tempfile,unittest
+import importlib.util,json,subprocess,tempfile,unittest,shutil
 from pathlib import Path
 from unittest import mock
 
@@ -7,6 +7,30 @@ spec=importlib.util.spec_from_file_location('recipe',ROOT/'build_backend.py')
 recipe=importlib.util.module_from_spec(spec);spec.loader.exec_module(recipe)
 
 class Profiles(unittest.TestCase):
+    def test_2738_profile_is_independent_and_preserves_compatibility_semantics(self):
+        _, previous = recipe.load_profile('0.158.0-alpha.2')
+        _, current = recipe.load_profile('desktop-26.924.2738.0')
+        self.assertEqual(current['desktop_version'], '26.924.2738.0')
+        self.assertEqual(current['version'], '0.158.0-alpha.2.1')
+        self.assertEqual(current['official_backend_size'], 321953584)
+        self.assertEqual(current['upstream_commit'], '0d9c7cbfa6cf1489f55a8a9542b75ddd2c061807')
+        self.assertNotEqual(current['official_backend_sha256'], previous['official_backend_sha256'])
+        self.assertEqual(current['files'], previous['files'])
+        self.assertEqual(current['source_files'], previous['source_files'])
+
+    def test_corrupted_new_profile_patch_stops_before_application(self):
+        with tempfile.TemporaryDirectory() as raw:
+            root=Path(raw)
+            profile='desktop-26.924.2738.0'
+            folder=root/'profiles'/profile
+            shutil.copytree(ROOT/'profiles'/profile,folder)
+            patch=folder/'integration.patch'
+            patch.write_bytes(patch.read_bytes()+b'corrupt')
+            with mock.patch.object(recipe,'ROOT',root), mock.patch.object(recipe,'checked') as checked:
+                with self.assertRaisesRegex(ValueError,'profile_file_identity_mismatch'):
+                    recipe.apply(root/'untouched-source',profile)
+                checked.assert_not_called()
+
     def test_missing_pinned_rust_never_installs_a_toolchain(self):
         with tempfile.TemporaryDirectory() as raw:
             target=Path(raw)/'not-created'

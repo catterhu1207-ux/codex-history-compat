@@ -1,13 +1,13 @@
 # codex-history-compat
 
-## v0.2.0: optional desktop backend profile
+## v0.2.1: Desktop 26.924.2738.0 profile
 
-The new profile targets Codex `0.158.0-alpha.2` at upstream commit `10382da79a2a2d6e8ae221fa63077215389c1ad2`, paired with Desktop `26.924.1866.0`. The legacy patch and its original default invocation remain available.
+The `desktop-26.924.2738.0` profile targets Codex `0.158.0-alpha.2.1` at upstream commit `0d9c7cbfa6cf1489f55a8a9542b75ddd2c061807`. The existing `0.158.0-alpha.2` profile for Desktop `26.924.1866.0` and the legacy apply entry points remain available. See [Compatibility](COMPATIBILITY.md) for profile selection.
 
-On Windows, use Python 3.11+, Git, Rust 1.95.0 and the x64 MSVC developer environment with Windows SDK. The build writes to a new target directory and runs the compatibility tests before compiling only the launcher-consumed `codex` binary:
+On Windows, use Python 3.11+, Git, Rust 1.95.0 and the x64 MSVC developer environment with Windows SDK. Run the build from a Git checkout of this repository so its exact commit is recorded in the manifest. The build writes to a new target directory and runs the compatibility tests before compiling the launcher-consumed `codex` binary:
 
 ```powershell
-py -3 build_backend.py --target C:\codex-compat\backend --official-backend C:\official\app\resources\codex.exe
+py -3 build_backend.py --profile desktop-26.924.2738.0 --target C:\codex-compat\backend --official-backend C:\official\app\resources\codex.exe
 ```
 
 You can supply `--source` with a local upstream Git repository; its exact pinned commit is still checked. The repository contains no compiled backend. The local result includes `codex.exe`, `manifest.json`, a source checkout and build logs. Inspect local reports before sharing them.
@@ -15,10 +15,10 @@ You can supply `--source` with a local upstream Git repository; its exact pinned
 To apply the new profile without building:
 
 ```powershell
-.\apply.ps1 -CodexRoot .\codex -Profile 0.158.0-alpha.2
+.\apply.ps1 -CodexRoot .\codex -Profile desktop-26.924.2738.0
 ```
 
-On Unix, use `./apply.sh /path/to/codex 0.158.0-alpha.2`. Omitting the profile retains the original upstream revision.
+On Unix, use `./apply.sh /path/to/codex desktop-26.924.2738.0`. Omitting the profile retains the original upstream revision.
 
 The current profile keeps tool-item metadata, normalizes only outbound history, and covers ordinary requests, WebSocket requests, local compaction and remote compaction V2. Remote compaction V1 no longer exists in this upstream version. Source-built Windows backends preserve the official migration-file bytes and verify their embedded checksums; they do not rewrite existing migration records.
 
@@ -33,12 +33,12 @@ Desktop integration is provided by `codex-desktop-workflow` as an explicit `comp
 
 - 为绑定的 Codex 源码提交增加一层出站历史兼容处理，以对接 Responses 兼容服务。
 - 在不改写持久历史的前提下，处理第三方服务常拒绝的加密推理项、孤立工具调用/输出，以及夹在调用与输出之间的图片缩放提示。
-- 让普通请求、WebSocket、本地压缩和两条远程压缩路径使用同一套规则，减少“平时可用、压缩后失败”的差异。
+- 让普通请求、WebSocket、本地压缩和对应版本的远程压缩路径使用同一套规则，减少“平时可用、压缩后失败”的差异。
 - 用合成回归样例复现结构问题，不公开真实请求、会话、图片或用户路径。
 
 适合愿意自行编译 Codex、维护自定义模型服务连接的人。本仓库适合需要从源码构建、验证历史请求兼容后端的使用者。
 
-如果你要先用自己的官方 Codex 安装目录生成带界面工作流改造的魔改版，请使用 [codex-desktop-workflow](https://github.com/catterhu1207-ux/codex-desktop-workflow)。桌面工作流 v0.3.0 为新版配置提供显式兼容模式，旧版桌面配置继续使用官方后端。
+如果你要先用自己的官方 Codex 安装目录生成带界面工作流改造的魔改版，请使用 [codex-desktop-workflow](https://github.com/catterhu1207-ux/codex-desktop-workflow)。桌面工作流 v0.3.1 为 26.924.2738.0 和 26.924.1866.0 分别绑定兼容配置；较早的桌面配置继续使用官方后端。
 
 ## 四个仓库怎么选？
 
