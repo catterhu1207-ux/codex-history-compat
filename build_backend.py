@@ -77,27 +77,33 @@ def build(source,target,profile,official_backend=None,target_cache=None,dry_run=
             raise ValueError('patched_source_identity_mismatch:'+name)
     if reuse_verified_source:
         allowed=set(data['source_files'])|{'codex-rs/Cargo.toml','codex-rs/Cargo.lock'}
+        allowed.update('codex-rs/state/migrations/'+row['path'] for row in json.loads((folder/'migrations.json').read_text())['migrations'])
         changed=checked(['git','diff','HEAD','--name-only'],src).splitlines()
-        if any(name not in allowed and not name.startswith('codex-rs/state/migrations/') for name in changed):
+        if any(name not in allowed for name in changed):
             raise ValueError('unrelated_source_change_in_cached_build')
         untracked=checked(['git','ls-files','--others','--exclude-standard'],src).splitlines()
         if any(name not in data['source_files'] for name in untracked):
             raise ValueError('unrelated_untracked_source_in_cached_build')
     # The official Windows release embeds CRLF SQL migrations. Treat bytes as data.
     migrations=json.loads((folder/'migrations.json').read_text())['migrations']
+    if {p.name for p in (src/'codex-rs/state/migrations').glob('*.sql')}!={row['path'] for row in migrations}:
+        raise ValueError('migration_inventory_mismatch')
     for row in migrations:
         p=src/'codex-rs/state/migrations'/row['path']
         raw=p.read_bytes().replace(b'\r\n',b'\n').replace(b'\n',b'\r\n')
         if hashlib.sha256(raw).hexdigest()!=row['sha256'] or hashlib.sha384(raw).hexdigest()!=row['sqlx_sha384']:
             raise ValueError('migration_identity_mismatch:'+row['path'])
         if p.read_bytes()!=raw:p.write_bytes(raw)
-    cargo=src/'codex-rs/Cargo.toml';text=cargo.read_text()
+    cargo=src/'codex-rs/Cargo.toml'
+    text=subprocess.check_output(['git','show','HEAD:codex-rs/Cargo.toml'],cwd=src).decode().replace('\r\n','\n')
     text,count=re.subn(r'(?m)^version = "0\.0\.0"$', 'version = "'+data['version']+'"',text)
     if count not in (0,1) or __import__('tomllib').loads(text)['workspace']['package']['version']!=data['version']:
         raise ValueError('workspace_version_injection_ambiguous')
+    if reuse_verified_source and cargo.read_text()!=text:raise ValueError('cached_workspace_manifest_mismatch')
     if cargo.read_bytes()!=text.encode():cargo.write_text(text,encoding='utf8',newline='\n')
     lock=src/'codex-rs/Cargo.lock'
     desired_lock=upstream_lock.decode().replace('version = "0.0.0"','version = "'+data['version']+'"')
+    if reuse_verified_source and lock.read_bytes()!=desired_lock.encode():raise ValueError('cached_dependency_lock_mismatch')
     if lock.read_bytes()!=desired_lock.encode():lock.write_text(desired_lock,encoding='utf8',newline='\n')
     after_lock=__import__('tomllib').loads(lock.read_text())
     before_external=[v for v in upstream_lock_data['package'] if 'source' in v]
