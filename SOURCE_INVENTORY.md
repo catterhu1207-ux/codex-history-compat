@@ -8,3 +8,7 @@
 | `apply.ps1`, `apply.sh`, docs and CI | Original release tooling and documentation | Apache-2.0 project license |
 
 The repository excludes compiled binaries, official desktop packages, authentic requests, conversation identifiers, user paths, databases, and logs.
+
+## 0.158.0-alpha.2 additions
+
+`profiles/0.158.0-alpha.2/integration.patch` is a minimal Apache-2.0 upstream diff against commit `10382da79a2a2d6e8ae221fa63077215389c1ad2`. The compatibility module and synthetic fixture retain the project Apache-2.0 license. Profile and migration files contain public source identities only. `build_backend.py` and packaging tests are original release tooling. No private maintenance directory, real request, task record or compiled executable is included.

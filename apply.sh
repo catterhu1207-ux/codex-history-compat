@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
+if [ "${2:-}" != "" ]; then
+  python3 "$(dirname "$0")/build_backend.py" --profile "$2" --apply "$1"
+  exit $?
+fi
 root="${1:?usage: ./apply.sh /path/to/openai-codex}"
 expected=b5bffd3ec4db487e7e3dec59663875b0ef7b72ca
 actual="$(git -C "$root" rev-parse HEAD)"

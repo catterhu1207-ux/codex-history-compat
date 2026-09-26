@@ -1,5 +1,30 @@
 # codex-history-compat
 
+## v0.2.0: optional desktop backend profile
+
+The new profile targets Codex `0.158.0-alpha.2` at upstream commit `10382da79a2a2d6e8ae221fa63077215389c1ad2`, paired with Desktop `26.924.1866.0`. The legacy patch and its original default invocation remain available.
+
+On Windows, use Python 3.11+, Git, Rust 1.95.0 and the x64 MSVC developer environment with Windows SDK. The build writes to a new target directory and runs the compatibility tests before compiling only the launcher-consumed `codex` binary:
+
+```powershell
+py -3 build_backend.py --target C:\codex-compat\backend --official-backend C:\official\app\resources\codex.exe
+```
+
+You can supply `--source` with a local upstream Git repository; its exact pinned commit is still checked. The repository contains no compiled backend. The local result includes `codex.exe`, `manifest.json`, a source checkout and build logs. Inspect local reports before sharing them.
+
+To apply the new profile without building:
+
+```powershell
+.\apply.ps1 -CodexRoot .\codex -Profile 0.158.0-alpha.2
+```
+
+On Unix, use `./apply.sh /path/to/codex 0.158.0-alpha.2`. Omitting the profile retains the original upstream revision.
+
+The current profile keeps tool-item metadata, normalizes only outbound history, and covers ordinary requests, WebSocket requests, local compaction and remote compaction V2. Remote compaction V1 no longer exists in this upstream version. Source-built Windows backends preserve the official migration-file bytes and verify their embedded checksums; they do not rewrite existing migration records.
+
+Desktop integration is provided by `codex-desktop-workflow` as an explicit `compat` backend mode. Source patch tests, desktop renderer qualification and daily-user validation are separate results.
+
+
 While maintaining a ChatGPT/Codex desktop mod, I need both to follow official desktop updates and to keep different tasks on their established model services. A Responses-compatible service can reject history because of reasoning items, tool-call ordering, or image-resize notices. Fixing an ordinary request once does not prove that WebSocket or compacted history will still work.
 
 This patch normalizes only the copy about to be sent and leaves durable local history alone. It is the compatibility part of the maintenance workflow: [electron-update-safety](https://github.com/catterhu1207-ux/electron-update-safety) handles safe isolation of a candidate package, while [desktop-adaptation-lab](https://github.com/catterhu1207-ux/desktop-adaptation-lab) explains the task workflow and acceptance states.
@@ -13,7 +38,7 @@ This patch normalizes only the copy about to be sent and leaves durable local hi
 
 It is for people who build Codex from source and maintain a custom provider connection. It is not for ordinary users of the official desktop application.
 
-To generate the desktop workflow mod from your own official Codex installation first, use [codex-desktop-workflow](https://github.com/catterhu1207-ux/codex-desktop-workflow). Its v0.1.0 still marks this backend patch as an unsupported desktop combination; the existence of the source patch does not mean that integration has qualified.
+To generate the desktop workflow mod from your own official Codex installation first, use [codex-desktop-workflow](https://github.com/catterhu1207-ux/codex-desktop-workflow). Desktop v0.3.0 introduces the explicit compatibility mode for the new profile; older desktop releases remain official-backend only.
 
 ## Which of the four repositories do I need?
 

@@ -1,6 +1,11 @@
 [CmdletBinding()]
-param([Parameter(Mandatory=$true)][string]$CodexRoot)
+param([Parameter(Mandatory=$true)][string]$CodexRoot, [string]$Profile)
 $ErrorActionPreference='Stop'
+if ($Profile) {
+    py -3 (Join-Path $PSScriptRoot 'build_backend.py') --profile $Profile --apply $CodexRoot
+    if ($LASTEXITCODE -ne 0) { throw 'Pinned profile application failed.' }
+    exit 0
+}
 $expected='b5bffd3ec4db487e7e3dec59663875b0ef7b72ca'
 $root=[IO.Path]::GetFullPath($CodexRoot)
 $actual=(git -C $root rev-parse HEAD).Trim()

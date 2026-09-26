@@ -1,5 +1,30 @@
 # codex-history-compat
 
+## v0.2.0: optional desktop backend profile
+
+The new profile targets Codex `0.158.0-alpha.2` at upstream commit `10382da79a2a2d6e8ae221fa63077215389c1ad2`, paired with Desktop `26.924.1866.0`. The legacy patch and its original default invocation remain available.
+
+On Windows, use Python 3.11+, Git, Rust 1.95.0 and the x64 MSVC developer environment with Windows SDK. The build writes to a new target directory and runs the compatibility tests before compiling only the launcher-consumed `codex` binary:
+
+```powershell
+py -3 build_backend.py --target C:\codex-compat\backend --official-backend C:\official\app\resources\codex.exe
+```
+
+You can supply `--source` with a local upstream Git repository; its exact pinned commit is still checked. The repository contains no compiled backend. The local result includes `codex.exe`, `manifest.json`, a source checkout and build logs. Inspect local reports before sharing them.
+
+To apply the new profile without building:
+
+```powershell
+.\apply.ps1 -CodexRoot .\codex -Profile 0.158.0-alpha.2
+```
+
+On Unix, use `./apply.sh /path/to/codex 0.158.0-alpha.2`. Omitting the profile retains the original upstream revision.
+
+The current profile keeps tool-item metadata, normalizes only outbound history, and covers ordinary requests, WebSocket requests, local compaction and remote compaction V2. Remote compaction V1 no longer exists in this upstream version. Source-built Windows backends preserve the official migration-file bytes and verify their embedded checksums; they do not rewrite existing migration records.
+
+Desktop integration is provided by `codex-desktop-workflow` as an explicit `compat` backend mode. Source patch tests, desktop renderer qualification and daily-user validation are separate results.
+
+
 我维护 ChatGPT/Codex 魔改版时，既要跟上官方桌面版更新，也要让不同任务继续使用原来的模型服务。问题是，历史请求到了 Responses 兼容服务后，可能因为推理项、工具调用顺序或图片缩放提示被拒绝。一次临时修好普通请求，也不代表 WebSocket 或压缩后的历史还能工作。
 
 这个补丁把“将要发出的副本”整理成兼容服务更容易接受的结构，同时不改写本地历史。它是整套维护流程中的兼容环节：候选包的隔离安全由 [electron-update-safety](https://github.com/catterhu1207-ux/electron-update-safety) 处理，任务工作流与验收状态由 [desktop-adaptation-lab](https://github.com/catterhu1207-ux/desktop-adaptation-lab) 说明。
@@ -11,9 +36,9 @@
 - 让普通请求、WebSocket、本地压缩和两条远程压缩路径使用同一套规则，减少“平时可用、压缩后失败”的差异。
 - 用合成回归样例复现结构问题，不公开真实请求、会话、图片或用户路径。
 
-适合愿意自行编译 Codex、维护自定义模型服务连接的人。如果你只想使用官方桌面应用，或无法接受源码补丁与构建流程，本仓库不适合你。
+适合愿意自行编译 Codex、维护自定义模型服务连接的人。本仓库适合需要从源码构建、验证历史请求兼容后端的使用者。
 
-如果你要先用自己的官方 Codex 安装目录生成带界面工作流改造的魔改版，请使用 [codex-desktop-workflow](https://github.com/catterhu1207-ux/codex-desktop-workflow)。本仓库的后端补丁在该入口的 v0.1.0 中仍标为未支持组合，不能把源码补丁存在理解为桌面集成已经通过。
+如果你要先用自己的官方 Codex 安装目录生成带界面工作流改造的魔改版，请使用 [codex-desktop-workflow](https://github.com/catterhu1207-ux/codex-desktop-workflow)。桌面工作流 v0.3.0 为新版配置提供显式兼容模式，旧版桌面配置继续使用官方后端。
 
 ## 四个仓库怎么选？
 
@@ -59,7 +84,7 @@ cargo test --manifest-path .\codex\codex-rs\Cargo.toml -p codex-core prompt_hist
 
 Linux/macOS 可使用 `./apply.sh /path/to/codex`。应用脚本会复制兼容模块和合成样例，再应用五个现有请求路径的最小差异。
 
-## 它不能替你做什么？
+## 使用范围
 
 - 不提供 Codex 二进制、官方桌面包、完整前端补丁或自动更新。
 - 不替代第三方模型服务的协议兼容性测试；默认 CI 不调用真实远程服务。

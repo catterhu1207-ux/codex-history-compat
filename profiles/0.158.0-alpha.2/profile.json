@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "id": "0.158.0-alpha.2",
+  "upstream_repository": "https://github.com/openai/codex.git",
+  "upstream_commit": "10382da79a2a2d6e8ae221fa63077215389c1ad2",
+  "version": "0.158.0-alpha.2",
+  "rust_toolchain": "1.95.0",
+  "desktop_version": "26.924.1866.0",
+  "official_backend_sha256": "0122378c15dc0c3c0af0d6addf2dd278125c19676b41fadaa520f89d2c9e0079",
+  "files": {
+    "deepseek_notice_batch.json": "70f97e6903f72f0011b5da54baf0208721cf664deca4aae4ea58ef229af38e21",
+    "integration.patch": "088825c68de0d7eec2816258e7dd444139e970a1dbb5ecd9758592d05580f9de",
+    "migrations.json": "dda57592f62173d386d636e65ec8f11e579d2e85a0d91c7b758f446896dd5065",
+    "prompt_history_compat.rs": "ea25d8dab7ac22d687d2e27bdc5dc8f3ad82106ea6581563427d14e3edb3cacb"
+  },
+  "source_files": {
+    "codex-rs/core/src/lib.rs": "6d1bb77909a2b04ea866f605a305085be171eef5bedc0ddfb62199ae27468933",
+    "codex-rs/core/src/session/turn.rs": "0abd0a157b254a81436647bbcc6f9d494f8a2bf8b052a7396b312ede9a8a97ae",
+    "codex-rs/core/src/compact.rs": "92d55ebdc93f450a680b56f25af2c27d1413265ca44d80e2f05e396a531b83b4",
+    "codex-rs/core/src/compact_remote_v2_attempt.rs": "b9a86f18069f13141869d5878b9912952c1477b6b3283a78f26007367c2a04cb",
+    "codex-rs/core/src/prompt_history_compat.rs": "ea25d8dab7ac22d687d2e27bdc5dc8f3ad82106ea6581563427d14e3edb3cacb",
+    "codex-rs/core/src/prompt_history_compat_fixtures/deepseek_notice_batch.json": "70f97e6903f72f0011b5da54baf0208721cf664deca4aae4ea58ef229af38e21"
+  }
+}

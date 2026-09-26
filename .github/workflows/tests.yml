@@ -3,16 +3,42 @@ on: [push, pull_request]
 permissions:
   contents: read
 jobs:
+  packaging:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - run: python -m unittest discover -s tests -v
   patch-and-test:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - ref: b5bffd3ec4db487e7e3dec59663875b0ef7b72ca
+            profile: legacy
+          - ref: 10382da79a2a2d6e8ae221fa63077215389c1ad2
+            profile: 0.158.0-alpha.2
+    env:
+      CARGO_BUILD_JOBS: 2
+      CARGO_PROFILE_DEV_DEBUG: 0
+      CARGO_PROFILE_TEST_DEBUG: 0
     steps:
       - uses: actions/checkout@v4
         with: {path: patch}
       - uses: actions/checkout@v4
         with:
           repository: openai/codex
-          ref: b5bffd3ec4db487e7e3dec59663875b0ef7b72ca
+          ref: ${{ matrix.ref }}
           path: upstream
-      - run: ./patch/apply.sh ./upstream
-      - uses: dtolnay/rust-toolchain@stable
+      - uses: dtolnay/rust-toolchain@master
+        with: {toolchain: '1.95.0'}
+      - name: Apply pinned profile
+        run: |
+          if [ "${{ matrix.profile }}" = "legacy" ]; then
+            bash ./patch/apply.sh ./upstream
+          else
+            python3 ./patch/build_backend.py --profile "${{ matrix.profile }}" --apply ./upstream
+          fi
       - run: cargo test --manifest-path upstream/codex-rs/Cargo.toml -p codex-core prompt_history_compat --lib -- --test-threads 1

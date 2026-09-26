@@ -1,0 +1,31 @@
+name: release
+on:
+  push:
+    tags: ['v*']
+permissions:
+  contents: write
+jobs:
+  source:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - run: python -m unittest discover -s tests -v
+      - name: Package source only
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory dist | Out-Null
+          git archive --format=zip --output=dist/codex-history-compat-source.zip HEAD
+          $hash = (Get-FileHash dist/codex-history-compat-source.zip -Algorithm SHA256).Hash.ToLowerInvariant()
+          "$hash  codex-history-compat-source.zip" | Set-Content dist/SHA256SUMS.txt -Encoding utf8NoBOM
+      - name: Create new draft release
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api "repos/$env:GITHUB_REPOSITORY/releases" --jq '.[].tag_name' > dist/existing-tags.txt
+          if ($LASTEXITCODE -ne 0) { throw 'Release inventory could not be read.' }
+          if ((Get-Content dist/existing-tags.txt) -contains $env:GITHUB_REF_NAME) { throw 'Release already exists; assets will not be overwritten.' }
+          gh release create $env:GITHUB_REF_NAME dist/codex-history-compat-source.zip dist/SHA256SUMS.txt --draft --verify-tag --title $env:GITHUB_REF_NAME --notes-file RELEASE_NOTES.md
+          if ($LASTEXITCODE -ne 0) { throw 'Draft release creation failed.' }
