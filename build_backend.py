@@ -23,6 +23,33 @@ def load_profile(profile):
             raise ValueError('profile_file_identity_mismatch:'+name)
     return folder,data
 
+def migration_rows(folder, data):
+    """Keep legacy identities while qualifying every database in new profiles."""
+    name=data.get('sqlite_migrations', 'migrations.json')
+    if name not in data['files']:raise ValueError('migration_inventory_not_hash_bound')
+    rows=json.loads((folder/name).read_text())['migrations']
+    return [dict(row, source_path=row['path'] if data.get('sqlite_migrations') else 'codex-rs/state/migrations/'+row['path']) for row in rows]
+
+def qualify_migration_bytes(src, rows, *, all_databases=False, official_bytes=None):
+    root=(src/'codex-rs/state').resolve()
+    paths=[(src/row['source_path']).resolve() for row in rows]
+    if any(not p.is_relative_to(root) or p.suffix!='.sql' for p in paths) or len(set(paths))!=len(paths):
+        raise ValueError('migration_path_escape_or_duplicate')
+    actual=set(root.rglob('*.sql')) if all_databases else set((root/'migrations').glob('*.sql'))
+    if actual!=set(paths):raise ValueError('migration_inventory_mismatch')
+    planned=[]
+    for row,p in zip(rows,paths):
+        raw=p.read_bytes().replace(b'\r\n',b'\n').replace(b'\n',b'\r\n')
+        checksum=hashlib.sha384(raw).digest()
+        if hashlib.sha256(raw).hexdigest()!=row['sha256'] or checksum.hex()!=row['sqlx_sha384']:
+            raise ValueError('migration_identity_mismatch:'+row['source_path'])
+        if official_bytes is not None and checksum not in official_bytes:
+            raise ValueError('official_migration_missing:'+row['source_path'])
+        planned.append((p,raw))
+    # Check the complete inventory before changing even one source file.
+    for p,raw in planned:
+        if p.read_bytes()!=raw:p.write_bytes(raw)
+
 def apply(codex_root, profile):
     folder,data=load_profile(profile);source=codex_root.resolve()
     if checked(['git','rev-parse','HEAD'],source)!=data['upstream_commit']:
@@ -36,6 +63,18 @@ def apply(codex_root, profile):
     (core/'prompt_history_compat_fixtures').mkdir(exist_ok=True)
     shutil.copy2(folder/'deepseek_notice_batch.json',core/'prompt_history_compat_fixtures/deepseek_notice_batch.json')
     return data
+
+def invalidate_stale_migration_cache(src, binary, rows):
+    """SQLx embeds SQL outside Cargo's ordinary Rust dependency tracking."""
+    if not binary.is_file():
+        return False
+    raw=binary.read_bytes()
+    if all(bytes.fromhex(row['sqlx_sha384']) in raw for row in rows):
+        return False
+    # Change only the timestamp of the crate root, never source contents.
+    # Cargo then recompiles the crate that expands every migration macro.
+    (src/'codex-rs/state/src/lib.rs').touch()
+    return True
 
 def build(source,target,profile,official_backend=None,target_cache=None,dry_run=False,reuse_verified_source=False):
     folder,data=load_profile(profile)
@@ -62,7 +101,7 @@ def build(source,target,profile,official_backend=None,target_cache=None,dry_run=
     if dry_run:
         return {'status':'dry_run','profile':profile,'upstream_commit':data['upstream_commit'],'rustc':toolchain}
     target.mkdir(parents=True,exist_ok=reuse_verified_source)
-    src=target/'source'
+    src=source.resolve() if reuse_verified_source and source is not None else target/'source'
     if not reuse_verified_source:
         checked(['git','clone','--no-checkout',str(source or data['upstream_repository']),str(src)])
         checked(['git','config','core.longpaths','true'],src)
@@ -75,9 +114,10 @@ def build(source,target,profile,official_backend=None,target_cache=None,dry_run=
         path=(src/name).resolve()
         if not path.is_relative_to(src.resolve()) or hashlib.sha256(path.read_bytes().replace(b'\r\n',b'\n')).hexdigest()!=digest:
             raise ValueError('patched_source_identity_mismatch:'+name)
+    migrations=migration_rows(folder,data)
     if reuse_verified_source:
         allowed=set(data['source_files'])|{'codex-rs/Cargo.toml','codex-rs/Cargo.lock'}
-        allowed.update('codex-rs/state/migrations/'+row['path'] for row in json.loads((folder/'migrations.json').read_text())['migrations'])
+        allowed.update(row['source_path'] for row in migrations)
         changed=checked(['git','diff','HEAD','--name-only'],src).splitlines()
         if any(name not in allowed for name in changed):
             raise ValueError('unrelated_source_change_in_cached_build')
@@ -85,15 +125,8 @@ def build(source,target,profile,official_backend=None,target_cache=None,dry_run=
         if any(name not in data['source_files'] for name in untracked):
             raise ValueError('unrelated_untracked_source_in_cached_build')
     # The official Windows release embeds CRLF SQL migrations. Treat bytes as data.
-    migrations=json.loads((folder/'migrations.json').read_text())['migrations']
-    if {p.name for p in (src/'codex-rs/state/migrations').glob('*.sql')}!={row['path'] for row in migrations}:
-        raise ValueError('migration_inventory_mismatch')
-    for row in migrations:
-        p=src/'codex-rs/state/migrations'/row['path']
-        raw=p.read_bytes().replace(b'\r\n',b'\n').replace(b'\n',b'\r\n')
-        if hashlib.sha256(raw).hexdigest()!=row['sha256'] or hashlib.sha384(raw).hexdigest()!=row['sqlx_sha384']:
-            raise ValueError('migration_identity_mismatch:'+row['path'])
-        if p.read_bytes()!=raw:p.write_bytes(raw)
+    qualify_migration_bytes(src,migrations,all_databases=bool(data.get('sqlite_migrations')),
+        official_bytes=official_backend.read_bytes() if official_backend else None)
     cargo=src/'codex-rs/Cargo.toml'
     text=subprocess.check_output(['git','show','HEAD:codex-rs/Cargo.toml'],cwd=src).decode().replace('\r\n','\n')
     text,count=re.subn(r'(?m)^version = "0\.0\.0"$', 'version = "'+data['version']+'"',text)
@@ -112,6 +145,8 @@ def build(source,target,profile,official_backend=None,target_cache=None,dry_run=
     env=os.environ.copy();env['CARGO_TARGET_DIR']=str((target_cache or Path(env.get('CARGO_TARGET_DIR',str(target/'target')))).resolve())
     env['CARGO_BUILD_JOBS']='1';env['CARGO_PROFILE_DEV_DEBUG']='0';env['CARGO_PROFILE_TEST_DEBUG']='0'
     env['CARGO_PROFILE_RELEASE_LTO']='false';env['CARGO_PROFILE_RELEASE_DEBUG']='0';env['CARGO_PROFILE_RELEASE_STRIP']='symbols'
+    if data.get('sqlite_migrations'):
+        invalidate_stale_migration_cache(src,Path(env['CARGO_TARGET_DIR'])/'release/codex.exe',migrations)
     commands=[['cargo','+'+data['rust_toolchain'],'test','--locked','-p','codex-core','--lib','prompt_history_compat','--','--test-threads','1'],['cargo','+'+data['rust_toolchain'],'build','--locked','-p','codex-cli','--bin','codex','--release','-j','1']]
     for index,command in enumerate(commands):
         with (target/('test.log' if index==0 else 'build.log')).open('wb') as log:
@@ -135,7 +170,7 @@ def build(source,target,profile,official_backend=None,target_cache=None,dry_run=
     if cargo.read_bytes()!=text.encode() or lock.read_bytes()!=desired_lock.encode():
         raise ValueError('workspace_version_or_lock_changed_during_build')
     for row in migrations:
-        if sha(src/'codex-rs/state/migrations'/row['path'])!=row['sha256']:
+        if sha(src/row['source_path'])!=row['sha256']:
             raise ValueError('migration_source_changed_during_build:'+row['path'])
     manifest={'schema_version':2,'mode':'patched','patch_id':'public-source-'+profile,'compatibility':{'packages':[{'package_version':data['desktop_version'],'package_full_name':'OpenAI.Codex_'+data['desktop_version']+'_x64__2p2nqsd0c76g0'}]},
         'official':{'sha256':data['official_backend_sha256'],'size':official_backend.stat().st_size if official_backend else data.get('official_backend_size',321969456),'pe_machine':'amd64'},

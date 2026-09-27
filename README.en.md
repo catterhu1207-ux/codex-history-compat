@@ -1,13 +1,13 @@
 # codex-history-compat
 
-## v0.2.1: Desktop 26.924.2738.0 profile
+## v0.2.2: Desktop 26.924.2738.0 profile
 
-The `desktop-26.924.2738.0` profile targets Codex `0.158.0-alpha.2.1` at upstream commit `0d9c7cbfa6cf1489f55a8a9542b75ddd2c061807`. The existing `0.158.0-alpha.2` profile for Desktop `26.924.1866.0` and the legacy apply entry points remain available. See [Compatibility](COMPATIBILITY.md) for profile selection.
+The `desktop-26.924.2738.0-sqlite-v2` profile targets Codex `0.158.0-alpha.2.1` at upstream commit `0d9c7cbfa6cf1489f55a8a9542b75ddd2c061807`. The existing `0.158.0-alpha.2` profile for Desktop `26.924.1866.0` and the legacy apply entry points remain available. See [Compatibility](COMPATIBILITY.md) for profile selection.
 
 On Windows, use Python 3.11+, Git, Rust 1.95.0 and the x64 MSVC developer environment with Windows SDK. Run the build from a Git checkout of this repository so its exact commit is recorded in the manifest. The build writes to a new target directory and runs the compatibility tests before compiling the launcher-consumed `codex` binary:
 
 ```powershell
-py -3 build_backend.py --profile desktop-26.924.2738.0 --target C:\codex-compat\backend --official-backend C:\official\app\resources\codex.exe
+py -3 build_backend.py --profile desktop-26.924.2738.0-sqlite-v2 --target C:\codex-compat\backend --official-backend C:\official\app\resources\codex.exe
 ```
 
 You can supply `--source` with a local upstream Git repository; its exact pinned commit is still checked. The repository contains no compiled backend. The local result includes `codex.exe`, `manifest.json`, a source checkout and build logs. Inspect local reports before sharing them.
@@ -15,10 +15,10 @@ You can supply `--source` with a local upstream Git repository; its exact pinned
 To apply the new profile without building:
 
 ```powershell
-.\apply.ps1 -CodexRoot .\codex -Profile desktop-26.924.2738.0
+.\apply.ps1 -CodexRoot .\codex -Profile desktop-26.924.2738.0-sqlite-v2
 ```
 
-On Unix, use `./apply.sh /path/to/codex desktop-26.924.2738.0`. Omitting the profile retains the original upstream revision.
+On Unix, use `./apply.sh /path/to/codex desktop-26.924.2738.0-sqlite-v2`. Omitting the profile retains the original upstream revision.
 
 The current profile keeps tool-item metadata, normalizes only outbound history, and covers ordinary requests, WebSocket requests, local compaction and remote compaction V2. Remote compaction V1 no longer exists in this upstream version. Source-built Windows backends preserve the official migration-file bytes and verify their embedded checksums; they do not rewrite existing migration records.
 
@@ -91,3 +91,5 @@ On Linux or macOS, run `./apply.sh /path/to/codex`. The scripts copy the compati
 - It does not resolve conflicts for later upstream revisions. Recompare the patch and run the tests after every upgrade.
 
 The repository retains the applicable Apache-2.0 `LICENSE` and `NOTICE` and contains synthetic fixtures only. 中文说明见 [README.md](README.md).
+
+The sqlite-v2 profile checks all 72 migrations across state, logs, goals, memories, queue and thread history. Cached binaries missing any checksum trigger state-crate recompilation. Existing profiles retain their original identities.

@@ -1,5 +1,12 @@
 # Changelog
 
+## v0.2.2 - 2026-09-27
+
+- Add the independent sqlite-v2 profile covering all 72 migrations across six databases.
+- Verify the complete official migration inventory before changing source bytes.
+- Recompile stale SQLx migration caches and honor explicit source paths during verified reuse.
+- Retain upstream, dependency, legacy profile and apply-interface identities.
+
 ## v0.2.1 - 2026-09-27
 
 - Add the independent `desktop-26.924.2738.0` profile for upstream `0.158.0-alpha.2.1`.

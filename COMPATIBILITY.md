@@ -2,6 +2,7 @@
 
 | Profile | Upstream commit | Backend version | Desktop |
 |---|---|---|---|
+| `desktop-26.924.2738.0-sqlite-v2` | `0d9c7cbfa6cf1489f55a8a9542b75ddd2c061807` | `0.158.0-alpha.2.1` | `26.924.2738.0` (72 migrations) |
 | `desktop-26.924.2738.0` | `0d9c7cbfa6cf1489f55a8a9542b75ddd2c061807` | `0.158.0-alpha.2.1` | `26.924.2738.0` |
 | `0.158.0-alpha.2` | `10382da79a2a2d6e8ae221fa63077215389c1ad2` | `0.158.0-alpha.2` | `26.924.1866.0` |
 | Legacy apply entry point | `b5bffd3ec4db487e7e3dec59663875b0ef7b72ca` | Commit-bound | Original patch |

@@ -1,0 +1,655 @@
+{
+  "schema_version": 1,
+  "official_backend_sha256": "8f0554ede25bbc5450921897c468b2e84635aa513c5017457997af0954581f49",
+  "upstream_commit": "0d9c7cbfa6cf1489f55a8a9542b75ddd2c061807",
+  "migrations": [
+    {
+      "path": "codex-rs/state/migrations/0001_threads.sql",
+      "database": "state_5.sqlite",
+      "version": 1,
+      "sha256": "a7cef5414f13052952713b81005b6c3e6ae386bcfa82154de795727e75f01009",
+      "sqlx_sha384": "54bbd6f47905a4e4c674034575963d82da7b534e66e9a37a81ec2afb6a4b56ce6de9b3ecf3032796a800f650239847d4",
+      "upstream_sha256": "7a89ab37ba540b92781868aec12e7dc0a49eeb9a4b81125236e500534b012758",
+      "line_ending": "crlf"
+    },
+    {
+      "path": "codex-rs/state/migrations/0002_logs.sql",
+      "database": "state_5.sqlite",
+      "version": 2,
+      "sha256": "14d344ad1018944bf539ca954e84e90d882489903d12d110882937cc57b9bafc",
+      "sqlx_sha384": "4f866d7ecd0e71d3bf2a0e9cf183761bb556df69e244dbc9fa2ecc1bfd7278f340aab8c1d31036bc39aaca03f73867de",
+      "upstream_sha256": "975fa08795fd985091d67af98f6c7832763c0ad04f875be758fe2171d294015d",
+      "line_ending": "crlf"
+    },
+    {
+      "path": "codex-rs/state/migrations/0003_logs_thread_id.sql",
+      "database": "state_5.sqlite",
+      "version": 3,
+      "sha256": "4ca8e4598caa777edf28125311856011b49294aaf8fa34c013bc5b11ff6fb499",
+      "sqlx_sha384": "5ba8ce5778eb03a8932f9609956e352f2738820e16f5cc7cca55418cf8782fb566d27fb7afd9fe9fa701f752a1776b52",
+      "upstream_sha256": "c905b4affdc8cc99c21f7eceaed93e62b913c9aef789e862ad1cc0faab64a387",
+      "line_ending": "crlf"
+    },
+    {
+      "path": "codex-rs/state/migrations/0004_thread_dynamic_tools.sql",
+      "database": "state_5.sqlite",
+      "version": 4,
+      "sha256": "21ef6a1b33e00611f191bf6c7bfe19edd1c503253b9c1787090b002c85d9998f",
+      "sqlx_sha384": "ec5413b05d68aeff6d0f354ed8c3855b7bab3abf4ea351a44d34099947e852533af752cab919aaafa3a3a04e46060268",
+      "upstream_sha256": "89a39b8c371624551eafee412f683fab77459c503c48ec6cea8231d1e8c995fe",
+      "line_ending": "crlf"
+    },
+    {
+      "path": "codex-rs/state/migrations/0005_threads_cli_version.sql",
+      "database": "state_5.sqlite",
+      "version": 5,
+      "sha256": "3090e6dd78d494eed064977681914580e690285a0b77065b2eac168a366682ec",
+      "sqlx_sha384": "5b9674726067e633a00ad2d22475b355c351d5ce62c617af736eea0a2781acf1b09c9561b62c0bb1a10c7cf86434df33",
+      "upstream_sha256": "faf7b05b3f20ef2e5bf2cc30367fc9c8aaa8031a259173e500d065677d08c606",
+      "line_ending": "crlf"
+    },
+    {
+      "path": "codex-rs/state/migrations/0006_memories.sql",
+      "database": "state_5.sqlite",
+      "version": 6,
+      "sha256": "41960d63159540025a810e7f9240e9624643c929f7c7f60dcced091994422257",
+      "sqlx_sha384": "dc507991fac6554a31eed165090d1902f86990bc6bccb2751e79e0286d3019640071a470c90a781808beae53ec2a06e2",
+      "upstream_sha256": "1dc4424b5bd647a9c6195d8f7fc4c6a2da3f2ea35e6c105c1c8486cfbd9f98e2",
+      "line_ending": "crlf"
+    },
+    {
+      "path": "codex-rs/state/migrations/0007_threads_first_user_message.sql",
+      "database": "state_5.sqlite",
+      "version": 7,
+      "sha256": "d64af7d3c561b50ac0215d7726d833cdba8181a2c4a529df5658fb7e7a33f4aa",
+      "sqlx_sha384": "d8bfee50161e8bf71bad452b2e369e293b8456a89bd480502b42c70f38ff1a561832b5fc50716f2412d5859fc440f4ea",
+      "upstream_sha256": "352f5f47318c3b60ed3f130f6416a9a8c5ea3e0441b6b636ba73f7d57d8c9074",
+      "line_ending": "crlf"
+    },
+    {
+      "path": "codex-rs/state/migrations/0008_backfill_state.sql",
+      "database": "state_5.sqlite",
+      "version": 8,
+      "sha256": "dd16f0b4ecd8df9c4d6af395bf053c59de24e564aee7449b3fced75d258be047",
+      "sqlx_sha384": "e48b6cfdfe480a9b0aceea619e1a14df03aa3852d5572c443cb7f14e5893cdfaa9249074c95201bd49e9495179982ec6",
+      "upstream_sha256": "357c26e13979956dae3bdbb4f516834175a9b24ed751907b9132b921e6e3b02b",
+      "line_ending": "crlf"
+    },
+    {
+      "path": "codex-rs/state/migrations/0009_stage1_outputs_rollout_slug.sql",
+      "database": "state_5.sqlite",
+      "version": 9,
+      "sha256": "d7b44dadbf798e965d0afa548b591ecfa7ab5dbf13faf8a57620a5a03eb1d430",
+      "sqlx_sha384": "4acf556b21f49dfc54b49932bc0907d8c9db51da3d8ea2ba96847b8a7c0a3674508f46078961b2bbf3062ea2d1662de4",
+      "upstream_sha256": "3554841d39c7f791aeccad770894c96b2161c3c87d38aed7ce3c9c753ab818f5",
+      "line_ending": "crlf"
+    },
+    {
+      "path": "codex-rs/state/migrations/0010_logs_process_id.sql",
+      "database": "state_5.sqlite",
+      "version": 10,
+      "sha256": "0854de2eac79ba1244d1fceaa6b4047334e7bbd2b731a07aa76731a41882de4c",
+      "sqlx_sha384": "a132200cf74910db91b4447880fd500871d75f0b7732ad6c9a44cbb16454d25134b3a3aa8586744cb22830ae642d7537",
+      "upstream_sha256": "68bc6771638f826f1cc8e136d8004d787ea8c519935578eddd76348657d4013d",
+      "line_ending": "crlf"
+    },
+    {
+      "path": "codex-rs/state/migrations/0011_logs_partition_prune_indexes.sql",
+      "database": "state_5.sqlite",
+      "version": 11,
+      "sha256": "023088d93883645eeaaa16652689998127aad97ce8f7032b3c034d3c60f94127",
+      "sqlx_sha384": "4e3237fbad8d643ad17b6b595d450d3750c1b5cbee457cdbb9bf101349379fdd5d448dbc5667e8623ecefe5e5f09134d",
+      "upstream_sha256": "de8f56961cf06c292aa42c35aaa5508409431148726b972c11c5e6211aaa0e08",
+      "line_ending": "crlf"
+    },
+    {
+      "path": "codex-rs/state/migrations/0012_logs_estimated_bytes.sql",
+      "database": "state_5.sqlite",
+      "version": 12,
+      "sha256": "3535530fdf7ce06908cbefa649de35eaca2c1ed327904bf1fc55d13ad2122260",
+      "sqlx_sha384": "39cc998ae8b835a773ad96e374c9909cee36ec3f21f578dcd0a95c367a15591877dc2c2f9261c32061974aa708f22d01",
+      "upstream_sha256": "483c20e16126ca938beee39ae0901e0aaa8770b756f1c872ec5b81eea5793933",
+      "line_ending": "crlf"
+    },
+    {
+      "path": "codex-rs/state/migrations/0013_threads_agent_nickname.sql",
+      "database": "state_5.sqlite",
+      "version": 13,
+      "sha256": "b35d1830d031f6864c5468f7a8909bc5357228dd86bfbb70ec9147b1797fc7b3",
+      "sqlx_sha384": "86910312e7931de468d5bc97f404ef3bfdbedb5d3c01a8fde0105d0e2c3c2b109d6859a007e3b485ae9257086768e459",
+      "upstream_sha256": "45a2e3e68297fc2dad5061890cca16059e7fd2692c3da733fe2eb845e5ca98bb",
+      "line_ending": "crlf"
+    },
+    {
+      "path": "codex-rs/state/migrations/0014_agent_jobs.sql",
+      "database": "state_5.sqlite",
+      "version": 14,
+      "sha256": "cf0aa03b009c27342d9293f1d19966fa8f7450f3653cd95f9bbb5627d5790961",
+      "sqlx_sha384": "12275bdf6bd1685525dbb54c37ddf62608d10f9f66110d7bb0de55ee25a8b283e46d97cb8eabed7564f9752e3967ba8a",
+      "upstream_sha256": "a0bcc52368ee5f212771874eaafcbca23708755e62e931e57cec5431780e71b2",
+      "line_ending": "crlf"
+    },
+    {
+      "path": "codex-rs/state/migrations/0015_agent_jobs_max_runtime_seconds.sql",
+      "database": "state_5.sqlite",
+      "version": 15,
+      "sha256": "a9f1efe41f206ebb276828808f2f64549ad4c6984df71b3050f436d5c9b9badc",
+      "sqlx_sha384": "8104857bcb63e9665c77ddcb8186be1bb630d9472fe215a0fadd62566fe33abda9cb223602506f2187f2bdd09d01105e",
+      "upstream_sha256": "bdf15aca46cd30556a8fa2f4afbf0d223be9eade4816cc98209b8093852ea4e8",
+      "line_ending": "crlf"
+    },
+    {
+      "path": "codex-rs/state/migrations/0016_memory_usage.sql",
+      "database": "state_5.sqlite",
+      "version": 16,
+      "sha256": "d34ed0f12597014c97084fba6322522111a5efccabaf934abfe062bc6f83dfdc",
+      "sqlx_sha384": "a6aa6c86b2594802d6c3075543c358b5c36b789786a715252d5723d2135993f1cbdbbc6965b06559395a487f60b44a47",
+      "upstream_sha256": "2e85813f2688af759d474f9d2ad6eb85f5790042c515ce0caaec52b76b3beb7d",
+      "line_ending": "crlf"
+    },
+    {
+      "path": "codex-rs/state/migrations/0017_phase2_selection_flag.sql",
+      "database": "state_5.sqlite",
+      "version": 17,
+      "sha256": "95416120594d1bbfaf482f3344841952da3716d8540868d92775363d0f15a144",
+      "sqlx_sha384": "6fe02a550e205a8d1fb600d1cda2c889766d9d614737a631ef7444c6824f3d4552f5abed532e5b740eede3c92e058ea0",
+      "upstream_sha256": "8da522646dc0813d802fc7ffb651a45ceea30454c2858004350dec17afc5f162",
+      "line_ending": "crlf"
+    },
+    {
+      "path": "codex-rs/state/migrations/0018_phase2_selection_snapshot.sql",
+      "database": "state_5.sqlite",
+      "version": 18,
+      "sha256": "5d95ba56ec38084aedc6a74821b6a183c5018e7b9f201043e0ea3df69a53dfd7",
+      "sqlx_sha384": "52c982fa4da6e05c65ee7a501d3aff95c09cdd16317d05284d1ab424a5a5950ceef073461c9627387c7b59576a2a71a4",
+      "upstream_sha256": "88a523608a3d02e27ada7df2f118868d9ca4e0514565dd1139a9673a7d0dbbcd",
+      "line_ending": "crlf"
+    },
+    {
+      "path": "codex-rs/state/migrations/0019_thread_dynamic_tools_defer_loading.sql",
+      "database": "state_5.sqlite",
+      "version": 19,
+      "sha256": "f3c9c9c48f1a62f538d4051772da731fe83338641c3506f3b8b6340cfc2d2db7",
+      "sqlx_sha384": "570f9e6b85368a4aaf6d930ff7360efbead869ade569d6cade5578eb93a41c265da0f76e81ce88aa5fa0374b61570f1d",
+      "upstream_sha256": "7315465158900ae372f9a0fee30927e0af15e54efc536e70e78a667fd16d91af",
+      "line_ending": "crlf"
+    },
+    {
+      "path": "codex-rs/state/migrations/0020_threads_model_reasoning_effort.sql",
+      "database": "state_5.sqlite",
+      "version": 20,
+      "sha256": "a0a6449a95dcb80615b3556ab1fbff2947c54040b13114d842324c9cd7202963",
+      "sqlx_sha384": "f3ae77b21667b4bdcb61d65d53ed053fd3838edd4df2856568ffbc74ccc84b153f6bba30ce01bf92e8479eeac74cbb3a",
+      "upstream_sha256": "7ab7820e54c4a882e96bcdbf878c366cc49ec7b643e2bfdf527786a790516dd0",
+      "line_ending": "crlf"
+    },
+    {
+      "path": "codex-rs/state/migrations/0021_thread_spawn_edges.sql",
+      "database": "state_5.sqlite",
+      "version": 21,
+      "sha256": "2e848f56e26f7dcf2fee27288d0c133dbdafcdfcb66734e965495cdf37b6c204",
+      "sqlx_sha384": "983c1fca08da60b83cdbd39cbb19d3f988abafed3fa79e5025b14bcca89f9ab69cd9798fcdb2a2ce8fd83c0c3cbd4af2",
+      "upstream_sha256": "5c03fe4571b35f8d9181834327608bb4c2c7239cb9eeda2e4ee6dc0b57599f12",
+      "line_ending": "crlf"
+    },
+    {
+      "path": "codex-rs/state/migrations/0022_threads_agent_path.sql",
+      "database": "state_5.sqlite",
+      "version": 22,
+      "sha256": "33a8fcaa37c70b3dcf2278ef3c539d07429a1d1f804b6a185541eab7aa3171c3",
+      "sqlx_sha384": "49dd725de92864e377c4829a80683f1a4f17c29d1fd94b585da1a5cda7df791c36451b1ae658b0842ae0a52017bddf6a",
+      "upstream_sha256": "06d5e30aa7650525c48a440fb4d173717ba70c03a23b024b2f94153991c7c4c8",
+      "line_ending": "crlf"
+    },
+    {
+      "path": "codex-rs/state/migrations/0023_drop_logs.sql",
+      "database": "state_5.sqlite",
+      "version": 23,
+      "sha256": "d525106d1e3fe432e5591388069a0a570dcb1b354973f85231ef7b13a65ff595",
+      "sqlx_sha384": "e84e5ddfa298882814f2528dc83691798cd855270781a3abffaf03089915702c9a41fdc3b58d382d53cbd56c0fb5d2da",
+      "upstream_sha256": "fd2c70f31ea21bd49ca6638e04e87fc31951fb2c50c8baa4e662d6700f8ea402",
+      "line_ending": "crlf"
+    },
+    {
+      "path": "codex-rs/state/migrations/0024_remote_control_enrollments.sql",
+      "database": "state_5.sqlite",
+      "version": 24,
+      "sha256": "bc4ee96d355686be873442650abf6ddf3b2386c971f77f7dc12782107b437af5",
+      "sqlx_sha384": "26f2a3548bfefa919337017cf0d2db76803100f50ba088d6cbf18ce268fa7c25f2a8cc965064b26df262085265f41114",
+      "upstream_sha256": "26fa628fb73b652e9604bf0fc16f699e15bc2d052e4f27991125a56c32d1a0dc",
+      "line_ending": "crlf"
+    },
+    {
+      "path": "codex-rs/state/migrations/0025_thread_timestamps_millis.sql",
+      "database": "state_5.sqlite",
+      "version": 25,
+      "sha256": "82a3713ea370816c9f35abd2aa4e28786e18da8b9c71b8012c11c92466961b8c",
+      "sqlx_sha384": "c9b9138a1592b3b7e181b4d6c5f71a19ea6b3149de367c1fe58f6ce7c30b9283fbd03a617c48b8e10e2f801d1156f188",
+      "upstream_sha256": "d95ecd7f4ae8161013c9baf2a4f9759bc67254c4cd7fcdb318b322ccbc588357",
+      "line_ending": "crlf"
+    },
+    {
+      "path": "codex-rs/state/migrations/0026_thread_dynamic_tools_namespace.sql",
+      "database": "state_5.sqlite",
+      "version": 26,
+      "sha256": "43e2b8bc8e756fd0844e364339dd5f94152779142fe4bcf5466da3843668a78c",
+      "sqlx_sha384": "83cd22369f0b5146dd0e466bf8d9730be8dbc60f5f865d1efdd8971d5ec1062e022c403da42db5e76108a5115c5744ea",
+      "upstream_sha256": "abb44aa8d6faba71b86b2be748de1216231e91d8edb9c99e2d9ad2279d9c9814",
+      "line_ending": "crlf"
+    },
+    {
+      "path": "codex-rs/state/migrations/0027_threads_cwd_sort_indexes.sql",
+      "database": "state_5.sqlite",
+      "version": 27,
+      "sha256": "1241ed16177d89e45a5b70d88d308c91665d54a29aa9a0064ec9456d51acd824",
+      "sqlx_sha384": "08d17426b921f3ffc88d0cfd554a6fc256fbca67040660436847f8e3e08b84caa847e12ee8557db9463ee55c3cf1ce85",
+      "upstream_sha256": "243539752730a106717ea571be8dbe723dbf6c10dd942c8a0e6f0a15f0a8a1ea",
+      "line_ending": "crlf"
+    },
+    {
+      "path": "codex-rs/state/migrations/0028_device_key_bindings.sql",
+      "database": "state_5.sqlite",
+      "version": 28,
+      "sha256": "561c6fa9064d07127a3f5f0f71a9707460af74493a5cf9bf390935de0373fd8f",
+      "sqlx_sha384": "dc89cb6011729570c1069210e95398bc73b3f463124da5fe8f9119eb829cf468c1d36f1cf31dd0f96192fabb9d56a9b7",
+      "upstream_sha256": "889fc55bbb5f6526c22fa7fa0c5c55867bd506036836a852821ffd584bb47053",
+      "line_ending": "crlf"
+    },
+    {
+      "path": "codex-rs/state/migrations/0029_thread_goals.sql",
+      "database": "state_5.sqlite",
+      "version": 29,
+      "sha256": "8ea6bf736b523bc1ac4c265b706630eb2ec49853c2e98329137aeca89451f440",
+      "sqlx_sha384": "48d0745631d4ed868591a1da86c0ad71685b88cbd7d7dbe974eea011c53830a392ff67518659558dc2f4a4210928a3cc",
+      "upstream_sha256": "80b081ba8f8970e8e8db5929c493038e151569d356aed5d594288fb6327f563a",
+      "line_ending": "crlf"
+    },
+    {
+      "path": "codex-rs/state/migrations/0030_threads_thread_source.sql",
+      "database": "state_5.sqlite",
+      "version": 30,
+      "sha256": "c949a8f58ff13f2649ffcd296b793bbea7036e6a83446c1034234852ce7ea309",
+      "sqlx_sha384": "884936a3bbbe9732088886db238a7bd69f43161fe36adb3b41bb4d517b64565b74ee437a2803235e3705f6598e6b23c3",
+      "upstream_sha256": "e87de1eac897ae43489bf1d6f00845591594e564df01d1f8c78ca4a51399c95e",
+      "line_ending": "crlf"
+    },
+    {
+      "path": "codex-rs/state/migrations/0031_drop_device_key_bindings.sql",
+      "database": "state_5.sqlite",
+      "version": 31,
+      "sha256": "780f62e8c5cd5da32da9556fa244844a2b44b97608118fb92fef60463937c7d9",
+      "sqlx_sha384": "709a7c7171422075736fe02c65008343b28b90a5cf01a4d12335d510aeae3dd510d9d3614baef5f5ab86be991de230c5",
+      "upstream_sha256": "9467a2e1791c53de41dc6920b685273c9cafda4ca2458c7207ba777431298e51",
+      "line_ending": "crlf"
+    },
+    {
+      "path": "codex-rs/state/migrations/0032_threads_preview.sql",
+      "database": "state_5.sqlite",
+      "version": 32,
+      "sha256": "459e10f956ef0400f3dd802a8ceb1ef4ea4ce6e34a15747681d3b0ffc3e9451f",
+      "sqlx_sha384": "a1d3a079eb183895924cc4b7a663e71d185b5e4b23f629d7b1b36f3e725ac777667e1123761fbae67598e070896ac093",
+      "upstream_sha256": "2c9daccb0fad1df0440908e7f0a4b4204d86c4a0a8448501eed97321fb03ae60",
+      "line_ending": "crlf"
+    },
+    {
+      "path": "codex-rs/state/migrations/0033_thread_goal_stopped_statuses.sql",
+      "database": "state_5.sqlite",
+      "version": 33,
+      "sha256": "04f4e2f2e04af4aaad1a8347f6901d813dad719c33889367f9aef195baa2f948",
+      "sqlx_sha384": "059d9619558ba112bcd06197f17b52ec7fec9e55b37dd976e62465822286d7645fc3e49ac191abbcaf08fdb10cb361cb",
+      "upstream_sha256": "3db0d7782887aa5a92434b54cb6df2feae7e4495464bd7bfedcd8b20dccd24ba",
+      "line_ending": "crlf"
+    },
+    {
+      "path": "codex-rs/state/migrations/0034_drop_thread_goals.sql",
+      "database": "state_5.sqlite",
+      "version": 34,
+      "sha256": "e2e19a3f290784c317a9cba3665c6392ef69f01b7f753fa162c7e523dfd24cd4",
+      "sqlx_sha384": "43d68f835032ecbe2c79e131726c6ad4bc7a3b0ecd2da149177a9b6bd9008dbd5e4f853d6a1386695744b53759d8cd2c",
+      "upstream_sha256": "295da9f93c079981f3179ddadfc39c306c58c03f5d9237e01eb85c94c5068456",
+      "line_ending": "crlf"
+    },
+    {
+      "path": "codex-rs/state/migrations/0035_drop_memory_tables.sql",
+      "database": "state_5.sqlite",
+      "version": 35,
+      "sha256": "c6c9f1bf3a9872abc2c7e7f82a77e135354727a2d25ae289382fc4d45feca09b",
+      "sqlx_sha384": "511cf81620de449ed4143eebd3f5aa8bf3077ed61ed5e23ce2468cdc45ab69fc8606643b6d3af68dffded5f4bd46815e",
+      "upstream_sha256": "17bd1881ee569b4359367bec4340d7a5c7c79abd453a0de5feb813f7f60b6910",
+      "line_ending": "crlf"
+    },
+    {
+      "path": "codex-rs/state/migrations/0036_threads_visible_sort_indexes.sql",
+      "database": "state_5.sqlite",
+      "version": 36,
+      "sha256": "590099d847c796e15c6886e0ca1c8a2b6438eaedbe7300691ac313ecbe53a84c",
+      "sqlx_sha384": "53369c6f679ae28c0c562bd4ae68b9f0ef3639779a01c3804be3afeace56152d3978e1110b9efc2e3f376a59ce3538a9",
+      "upstream_sha256": "f5bb4040625918f75a03008c1ef077d864b97e839ebc2728a0045aac8c5c676a",
+      "line_ending": "crlf"
+    },
+    {
+      "path": "codex-rs/state/migrations/0037_remote_control_enrollments_enabled.sql",
+      "database": "state_5.sqlite",
+      "version": 37,
+      "sha256": "a8f462042a4550de48fac1c2af72d0182e7be52ffc8415028ac259749e2bdc8a",
+      "sqlx_sha384": "438c5ae9ce503c483c72f87b64a9001d683d143976085173652f96ba5810a6b2f2f6bda5892800e3243479dac8a27b6d",
+      "upstream_sha256": "cbc61642c572386a2763c3c3cc7b8be64bf57f016200289b405ab90d0c21efc0",
+      "line_ending": "crlf"
+    },
+    {
+      "path": "codex-rs/state/migrations/0038_external_agent_config_imports.sql",
+      "database": "state_5.sqlite",
+      "version": 38,
+      "sha256": "b1327c0faf41e0d583ac4234d0c405a03f81866214306e4aa154bb44b6e9fc6c",
+      "sqlx_sha384": "c6e28f890545146f3749e29dd9eb5e87b6dfbf754f70b67c6f2d653c2d6d8c950baaf9c0500bd90f48c9e95f5585239b",
+      "upstream_sha256": "737105af23231e0d02cc39da6a04477ff459828cdbc40722100fb45ad272fc1f",
+      "line_ending": "crlf"
+    },
+    {
+      "path": "codex-rs/state/migrations/0039_threads_recency_at.sql",
+      "database": "state_5.sqlite",
+      "version": 39,
+      "sha256": "bab65c95545322be282400f0ede8003f30df80d9c740e1c8316125748f97bf35",
+      "sqlx_sha384": "1147d36849ddd43bb2fb7335ccb917c86c4299d491582be541545319a04b7d4870a1844c9405948f4e4b90eb3ac202c9",
+      "upstream_sha256": "8fda8be15f6a30782b6646b46105e43f634236cae208d26b827dbe0d4c465b20",
+      "line_ending": "crlf"
+    },
+    {
+      "path": "codex-rs/state/migrations/0040_threads_history_mode.sql",
+      "database": "state_5.sqlite",
+      "version": 40,
+      "sha256": "0126728fba5829921181477d8123d8ac5407d33cbc8a48889ac447dec74f9174",
+      "sqlx_sha384": "242209d2a240e8601ef6ab7ad70e8d88f272eec828d1c72f1716c801ee16759ecd1d29ba79099cfedfb484e5994ee240",
+      "upstream_sha256": "d4d91b7dbc175232773980b1cc5e88ff0668f674d6aa03b47e3d383a540a2e7d",
+      "line_ending": "crlf"
+    },
+    {
+      "path": "codex-rs/state/migrations/0041_threads_name.sql",
+      "database": "state_5.sqlite",
+      "version": 41,
+      "sha256": "5b2ba5f61790cfa1bb4731a2ccbf68c0a4a03744af82b50a2383014e3eb0633c",
+      "sqlx_sha384": "14fb95715f7e597e410f96a90db3875b5dbb0d0e124b8e4587c5dd46145f58b218a85a8b9cc42a40c96b0f0e15ac441c",
+      "upstream_sha256": "1ff6f52ccbcbf5546a9d2bd6c27980e371ef340504fbbde33fc63a1d803d897f",
+      "line_ending": "crlf"
+    },
+    {
+      "path": "codex-rs/state/migrations/0042_drop_agent_jobs.sql",
+      "database": "state_5.sqlite",
+      "version": 42,
+      "sha256": "b252ae516f639138c480da7816b02f855290d50fcfa571169184eccce69319c6",
+      "sqlx_sha384": "815a1f0cbe21ac7f0653fb67c8e9702fd0ebb5f0a54ce644893b66d18614d9c8988510458b68fbd671b8632ef363b36a",
+      "upstream_sha256": "4a2e852b3a990cd0729e185a84547209fccb1e6eddba7161946060252ee42481",
+      "line_ending": "crlf"
+    },
+    {
+      "path": "codex-rs/state/migrations/0043_threads_is_pinned.sql",
+      "database": "state_5.sqlite",
+      "version": 43,
+      "sha256": "bdc8d85e1450cca63a35993033ebe8b0b01ca58cedadf8d07325ec2a9ffb176c",
+      "sqlx_sha384": "9b2a199a557f5a92b0e27574e8bfc01dce5ef28f106a3c16dfb3b8a6cd5679f3b8bc26b63e09c461a9a0c1364f0b04bf",
+      "upstream_sha256": "6e906667df2d3e2417a93e4de81d3b5c363cc8dd5db5cbd9902d5604451f0ddf",
+      "line_ending": "crlf"
+    },
+    {
+      "path": "codex-rs/state/migrations/0044_external_agent_config_imports_provider_id.sql",
+      "database": "state_5.sqlite",
+      "version": 44,
+      "sha256": "422c98d3b385b181dff784e39d1d2ca0d7cc54be613a9bb40eda1376d6470686",
+      "sqlx_sha384": "dfa22384943e691a089b9e8a6a8da988ef1e25ff51db7975ca42c3ec4be474370f262caa77aeb5877eeeabbff2c3ceb1",
+      "upstream_sha256": "47637b79aa95349402898f6ac01b1a60e00cbeb4acf3a941bee2a7d177592e06",
+      "line_ending": "crlf"
+    },
+    {
+      "path": "codex-rs/state/migrations/0045_threads_section.sql",
+      "database": "state_5.sqlite",
+      "version": 45,
+      "sha256": "96bf688e6c5225e3c2c10159f5bd5a77582d0117156f97c6c33126401702570a",
+      "sqlx_sha384": "d99495ac371f2f50dacaf4880abb8317d7d51866d68649b39f73e1307fa119250643cc8e899b8c19a70bee99acd9ba59",
+      "upstream_sha256": "50a7269c0b0b82d773431dccd22302b9c448fda42cd4a92b67ad050198b9526c",
+      "line_ending": "crlf"
+    },
+    {
+      "path": "codex-rs/state/migrations/0046_threads_section_order.sql",
+      "database": "state_5.sqlite",
+      "version": 46,
+      "sha256": "cf35e73718eff1b16cf4ff2cf32d9e1730d20f1ff4f8857e0358a6496bb3fa50",
+      "sqlx_sha384": "d41bfc128c10e85ffd2e4696723ebdf47360497e39812797d25d740593581dff10cb6af7d41826fbbea6e1663ac04780",
+      "upstream_sha256": "71db2dc709d5aab0d62c1320bcb4ad7a77d0fb0a66a2a467d2de4bb5a3ed38ad",
+      "line_ending": "crlf"
+    },
+    {
+      "path": "codex-rs/state/migrations/0047_rollout_migration_state.sql",
+      "database": "state_5.sqlite",
+      "version": 47,
+      "sha256": "906bc1148093dea241c224ac16065ce2fe02a20516d7a3142df4d681afe7fa45",
+      "sqlx_sha384": "0588f3862c25af8a6100af005805d125aa3be61931f4488c959eaea59d6cac906e69089253107aec9f2b35a3ebb8eed4",
+      "upstream_sha256": "7232f33df9e3dad03d4cab0c794d76c50dba8192c954823d59216764f25ec5eb",
+      "line_ending": "crlf"
+    },
+    {
+      "path": "codex-rs/state/migrations/0048_thread_section_appearance.sql",
+      "database": "state_5.sqlite",
+      "version": 48,
+      "sha256": "165bccf1c0d3388c94b2d66a69256ebca14719c65acd9a4e60885e1b98b3c8cf",
+      "sqlx_sha384": "0882fc76871ef5e5d3613cbfd4f5a89166b12956837fb9d22ac91940a8fe63abee41eaa9a97fb578a7310b672a989d04",
+      "upstream_sha256": "8e2046dffa8a46f5042baec983300af1dc19b01ac7d740a1cedc5d1f91ce99fd",
+      "line_ending": "crlf"
+    },
+    {
+      "path": "codex-rs/state/migrations/0049_projects.sql",
+      "database": "state_5.sqlite",
+      "version": 49,
+      "sha256": "730d52ca5774e45a8a9d78d417114fbd8b5349a6db9fa4ffbc33d626e4e29861",
+      "sqlx_sha384": "6027cdb383c85014e29c08176a785e0768dc5ea2c3e727e94e3f0a1628d423af958316cdc1bf77a7062a57eaf3ac0cb8",
+      "upstream_sha256": "f07d68d3feeefd599c80ee2f1206a69a34ce882777de5f82a03c6ac997c1dcad",
+      "line_ending": "crlf"
+    },
+    {
+      "path": "codex-rs/state/migrations/0050_threads_section_empty_preview_indexes.sql",
+      "database": "state_5.sqlite",
+      "version": 50,
+      "sha256": "8090119f6710df7aa699d850b72ec36350ba4e5a54c41835153332f7573643bd",
+      "sqlx_sha384": "130cad59f2cd5b326007719de48c6426e03a4073123995b2886278b627a1d1e50f3ba46b48d079fe795c9f96390e8eab",
+      "upstream_sha256": "be51e1e22cb7b9f4039cdf23baa95c734f0b7993c0e452e285db10b669402889",
+      "line_ending": "crlf"
+    },
+    {
+      "path": "codex-rs/state/migrations/0051_thread_artifacts.sql",
+      "database": "state_5.sqlite",
+      "version": 51,
+      "sha256": "0ef2c8398e33dc57976f379febed675bb2c3f98e0fb4bc9c81c7a163156e5867",
+      "sqlx_sha384": "23cd26d16f40cc6b4e4f9f24b44334b5831a30e290d9df51a4c8d173bfee8a2f8966e604392777ec4bbe04de7d472205",
+      "upstream_sha256": "efe186d7676d199609260993e577ed59500c96b3c26a181762e1dbc15453bf9e",
+      "line_ending": "crlf"
+    },
+    {
+      "path": "codex-rs/state/migrations/0052_projects_recency.sql",
+      "database": "state_5.sqlite",
+      "version": 52,
+      "sha256": "eec86bd0cd036e79a7d52a74f43b44293c07c5a06e1875ae9cf578e5d71f0ca1",
+      "sqlx_sha384": "6f4998df2c3de4e43153e99014bdf76b514418724a3b209ee894d4aa738f422f57341a848a58a0be4a66eb9ac6a4c0e8",
+      "upstream_sha256": "f0355ab2e1ee4eef8ebd521f252bb0755339bf45c47aae2fd692f763d94cf6da",
+      "line_ending": "crlf"
+    },
+    {
+      "path": "codex-rs/state/migrations/0053_threads_originator.sql",
+      "database": "state_5.sqlite",
+      "version": 53,
+      "sha256": "a49e5b31a0fbbf8901787053898aa479f1dab85643ab6f4717d6a43f0648f86a",
+      "sqlx_sha384": "1a77af904abb9581e18b64753002a1c2a66c587b7c02a85039b885b32408176f298867677a371e230729999e9d631712",
+      "upstream_sha256": "1ef0518a4c03844b0b610e37ee0cadc5729050ed0b45f5bc57d6ed6941d111c7",
+      "line_ending": "crlf"
+    },
+    {
+      "path": "codex-rs/state/migrations/0054_threads_daybreak_enabled.sql",
+      "database": "state_5.sqlite",
+      "version": 54,
+      "sha256": "8a2302d47ceb6bc7dd1690ce9be8be393c17c2aec32a4ff2356133990b032c2f",
+      "sqlx_sha384": "ba91ec1ae9e505ec285e38a9b4c95e74a8f4dd42ceb08b66029b9afd6eb0064fd2d71b8fa03fe9d1c375599d22f1ac12",
+      "upstream_sha256": "9e3f00da9b2e27fb286ed5ba1ab17e44a11d1b0e69a01c0e053fecdeb0df5c11",
+      "line_ending": "crlf"
+    },
+    {
+      "path": "codex-rs/state/migrations/0055_thread_attachments.sql",
+      "database": "state_5.sqlite",
+      "version": 55,
+      "sha256": "e7d715cc2454fcfa11b20e4ca76cfb4b62f4fb33be98fae5cecfa52ec4e16a96",
+      "sqlx_sha384": "2ec70c72dbe2c8adea84670bd9e8d127f4cec33fcd2e0852d5b8558c9d81d8da057b76eeee2f7cfc54ce4d0dd4b8fcea",
+      "upstream_sha256": "f8066b833560b527a546d3d34a746e66a4432e6f3ad940e3d006b141646667f6",
+      "line_ending": "crlf"
+    },
+    {
+      "path": "codex-rs/state/migrations/0056_threads_creator_identity.sql",
+      "database": "state_5.sqlite",
+      "version": 56,
+      "sha256": "cf5bd49c8e3dd736e53a752a49aa7c361b95336e98f27ac2da091a6b5f45b8c3",
+      "sqlx_sha384": "4ef7100da8a52d8d536ebd4bd78a1ec41596c8d29987a5ea63652f7cf36dd998f9080e4fc47c4ef5741931608714b829",
+      "upstream_sha256": "f0b94efc6f66e03839ba1a66b52a6b51c5256d37292f14f75c46923e63e115ad",
+      "line_ending": "crlf"
+    },
+    {
+      "path": "codex-rs/state/migrations/0057_cleanup_guardian_thread_metadata.sql",
+      "database": "state_5.sqlite",
+      "version": 57,
+      "sha256": "63e23d6a64a687930737d8866bc29c95bbb4075468d6bc3121ea387d796d8268",
+      "sqlx_sha384": "f84885b4f2f6649213059bf8ddb23a9335f99f606cc69d95f501e2e7cddc0f8cb68672bbbd6ccd6f75430fb0ee167e96",
+      "upstream_sha256": "f481ba2e7ba5694f6600452dbd1495c167e28a4336816106918ea3ad4c9672bf",
+      "line_ending": "crlf"
+    },
+    {
+      "path": "codex-rs/state/logs_migrations/0001_logs.sql",
+      "database": "logs_2.sqlite",
+      "version": 1,
+      "sha256": "6bf6c3a03ad3c821fc5a9d5d8d21b12a14c4bfd3c4751a3d23e28671c464b9a3",
+      "sqlx_sha384": "f477e6056db490de009f392c16761f4719b17ba37d043ca92d907b5ff885846f6e8c821a357475d74b6d0d6f511eb279",
+      "upstream_sha256": "3ac717a6db0fc2d138f485ea4e5798f1367d5c2811db87a80ddd8b7bf8526ca0",
+      "line_ending": "crlf"
+    },
+    {
+      "path": "codex-rs/state/logs_migrations/0002_logs_feedback_log_body.sql",
+      "database": "logs_2.sqlite",
+      "version": 2,
+      "sha256": "911e68706ebce642adb051990255026b00142267912ee65ff352381943c3764e",
+      "sqlx_sha384": "ceb8935d858fdef35f38354c4f31cd6e9c26b869ac5f0a029e80d37ca02695ab9dc8958848d5193c3becc4238cb3b043",
+      "upstream_sha256": "1cdeb6c3cddcf2f4b81995fb4f227f8578c0624568d27407c2fa2bddb7f7ba77",
+      "line_ending": "crlf"
+    },
+    {
+      "path": "codex-rs/state/goals_migrations/0001_thread_goals.sql",
+      "database": "goals_1.sqlite",
+      "version": 1,
+      "sha256": "609494be863e259dc9508f850fc7ce5dec4f0fe74c8fa12b534cbb33aad4f962",
+      "sqlx_sha384": "9d4af4ba7688052dd22a508b567b977e6d79ba20cd49c8989e7bc828ac947cd7344be7d2559d3e901cc81a3793ea66d2",
+      "upstream_sha256": "b3aac485fec27eaefbdd3e68651bdf6d640908fb10226f3562cc5ffe92ca3d1f",
+      "line_ending": "crlf"
+    },
+    {
+      "path": "codex-rs/state/goals_migrations/0002_thread_goal_continuation_deferrals.sql",
+      "database": "goals_1.sqlite",
+      "version": 2,
+      "sha256": "6012d99e9c9bc82179aad4a0b6819a23537ef7d0eeb6c02e0bc816adff9c40aa",
+      "sqlx_sha384": "718f2d3d4978fc29ed7aa50024ad30cdd172ab3c8cc7b0d572318350df529870ca9458f832def9aff634a0378addedd9",
+      "upstream_sha256": "c16a57f895f7b2731ba24a9c618a435a84cb815f25d60be974c7e0d3e5afa351",
+      "line_ending": "crlf"
+    },
+    {
+      "path": "codex-rs/state/memory_migrations/0001_memories.sql",
+      "database": "memories_1.sqlite",
+      "version": 1,
+      "sha256": "fc164f55a22942b55a26f971561d309c34e8aedd48c13c542953d40fd240f87a",
+      "sqlx_sha384": "7178a6d5072f7aa00e036aad06cc53143b834b68c84ba17285277a8ee68652a8ee1d6a9ff9965c7dafe8193293641769",
+      "upstream_sha256": "5cf9a18faec0a71aae5c42d17fda97d2fc8ea018fde4729ab5e782ed44c6b706",
+      "line_ending": "crlf"
+    },
+    {
+      "path": "codex-rs/state/memory_migrations/0002_consolidation_progress.sql",
+      "database": "memories_1.sqlite",
+      "version": 2,
+      "sha256": "41beffdf02ae1d5eb8adff7165200e5942ac4c59295eb68a1a1b46b1fc2cecb2",
+      "sqlx_sha384": "0bb29c63a0065f64ef9686a20c184a968442e847c3cd715bcc56b335a9cb578bb8d52afb98b7b116191e244c2b3797ab",
+      "upstream_sha256": "fa423fb8dd2bd571a605cd7160e7041be954feb5cbe876069db1d818ef26565b",
+      "line_ending": "crlf"
+    },
+    {
+      "path": "codex-rs/state/queue_migrations/0001_queued_items.sql",
+      "database": "queue_1.sqlite",
+      "version": 1,
+      "sha256": "4f1924728ef4efb58500a3decd2509b0f123f29a9fed0f732c8d90821d517b0c",
+      "sqlx_sha384": "21910955e848becb4eeee41d3a2c9ac395f183d26fdfc86aea7222e58e007db3d450ae20c9372f659d9cd4bf0787e904",
+      "upstream_sha256": "a7c5dadb4f1e17c6dd35395f0dd1b2cbf04500d6e5cb08ba5a9868f2d3c04ba7",
+      "line_ending": "crlf"
+    },
+    {
+      "path": "codex-rs/state/queue_migrations/0002_queued_thread_revisions.sql",
+      "database": "queue_1.sqlite",
+      "version": 2,
+      "sha256": "409c5b6700548d33a0194dc6f073b888b1de191ce70227ae3bef85168a78c0fd",
+      "sqlx_sha384": "c56ac47da8377bd8fc79541e01629228d98875884373148f5e42622d7f31d7384528bb4882c6013f5fcb0475a56476f5",
+      "upstream_sha256": "b48a7950e54dc4b0545bab6240fe858aac3565f08c38f73488503f95aa88eaca",
+      "line_ending": "crlf"
+    },
+    {
+      "path": "codex-rs/state/thread_history_migrations/0001_thread_history.sql",
+      "database": "thread_history_1.sqlite",
+      "version": 1,
+      "sha256": "a0d90918bed5d59672e82b1dd58630f87a6e322b86c58150d83dcf9a72d4ab25",
+      "sqlx_sha384": "3d81349432ecbf6e5255dbe0a075d27811144fd3c32941ac1cbba640a83e278fa562309fb3b226964ee4251e97b4b513",
+      "upstream_sha256": "9e92130a3cefcaa4e8350241f4b92e9433314560ade6dc78a8cecf9e5c17f2a6",
+      "line_ending": "crlf"
+    },
+    {
+      "path": "codex-rs/state/thread_history_migrations/0002_thread_items_item_type.sql",
+      "database": "thread_history_1.sqlite",
+      "version": 2,
+      "sha256": "669f02c6e0c6a76fa2a573c8f5be6b34f3db2dd08ea54955037cea156d143272",
+      "sqlx_sha384": "1461cffa3015c335f993c4afeecb729714fc741d663038ebe18288b968aef006649eb1ef3a0716ce47fe6d08c06045a5",
+      "upstream_sha256": "b37fded911e7d25cbc8ac4a94769da03f2e5fd2d37a89d2532331ade87a87e72",
+      "line_ending": "crlf"
+    },
+    {
+      "path": "codex-rs/state/thread_history_migrations/0003_turn_rollout_positions.sql",
+      "database": "thread_history_1.sqlite",
+      "version": 3,
+      "sha256": "676409d8dbffd3a154ba8fed542200e5461ba24bb5fed8f813a7e08ee03f3287",
+      "sqlx_sha384": "cce3adb187490e2822a759c2668337cb277656f1fc1a1713542a4f15d23fd5e7e444328a58be7906067006fac870a574",
+      "upstream_sha256": "1792f54f33eaec73ff38cbe747de79a4ded4b1260f214e989513ccf393b2887f",
+      "line_ending": "crlf"
+    },
+    {
+      "path": "codex-rs/state/thread_history_migrations/0004_thread_items_updated_at_ordinal.sql",
+      "database": "thread_history_1.sqlite",
+      "version": 4,
+      "sha256": "181f379b6ae0110bb521a92d3a77f5b8c800eb701e7b65f8dde4267a94bdd612",
+      "sqlx_sha384": "6a2824bee2b0670c6bb3bb5ae990f015863c5f6548540834eddcde94c470d6affa040a6e1e50ab81d75f0a149d19bb77",
+      "upstream_sha256": "1355c4963de77bb2b8d446b8222030ce7f646266a7183111d5355741d1104ef2",
+      "line_ending": "crlf"
+    },
+    {
+      "path": "codex-rs/state/thread_history_migrations/0005_thread_realtime_items.sql",
+      "database": "thread_history_1.sqlite",
+      "version": 5,
+      "sha256": "98ef01e5de2078a85e4e4d07b3f0448bd7ae2919307df46c97fecea2bbd1e8d6",
+      "sqlx_sha384": "bdfaf405f3b733cf7455ca5aa0afae13869fd2ad2cf75245e6e268b9b110f331d3d69b01224bffa66d1107ff938e9d6b",
+      "upstream_sha256": "200c252782919aa5cb867bcc9c83ae3baefe706bd84473d867e7874b2a8e5387",
+      "line_ending": "crlf"
+    },
+    {
+      "path": "codex-rs/state/thread_history_migrations/0006_thread_turn_ends.sql",
+      "database": "thread_history_1.sqlite",
+      "version": 6,
+      "sha256": "975e57e706afbf899fa17c7ff2d963305b09b0626bfa78179c2756e0f6624fad",
+      "sqlx_sha384": "7ae052fd42a8ab1e7d0fe33127157b9cf2552ab1c8010a3adeca49b9dd314163dc19663639a4a6bf479b9f25d1a5a16a",
+      "upstream_sha256": "12c8cbcd0a258a42cd05aa7d925568aee6c691312e0507f67ff1edea77dc1982",
+      "line_ending": "crlf"
+    },
+    {
+      "path": "codex-rs/state/thread_history_migrations/0007_thread_item_lifecycle_timestamps.sql",
+      "database": "thread_history_1.sqlite",
+      "version": 7,
+      "sha256": "62b771713852c4dddd1f9b1413e2ab87f87aa5ba82f3b09155d98642e6bfab65",
+      "sqlx_sha384": "852814c808c7a62178029739ca41c38b9c86f4c366c6c436dfd9e905031f43ffef927f5c3dcbb7b17f9e5ac04124fc7c",
+      "upstream_sha256": "2e346fdea5fbfcdba6ebeb0f244f64eafcda891bc023331a8e18d71569b38518",
+      "line_ending": "crlf"
+    }
+  ]
+}
