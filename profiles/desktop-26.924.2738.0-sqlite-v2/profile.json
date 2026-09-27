@@ -12,7 +12,7 @@
     "integration.patch": "088825c68de0d7eec2816258e7dd444139e970a1dbb5ecd9758592d05580f9de",
     "migrations.json": "dda57592f62173d386d636e65ec8f11e579d2e85a0d91c7b758f446896dd5065",
     "prompt_history_compat.rs": "ea25d8dab7ac22d687d2e27bdc5dc8f3ad82106ea6581563427d14e3edb3cacb",
-    "sqlite-migrations.json": "309b79214df5288adade876fbf34055770d8dc4a50112852494b60d0ea999620"
+    "sqlite-migrations.json": "e92d40b61c27a7ce26e8a219c6d73049ea2c0ebbffa4f918ec59dfb4e1239892"
   },
   "source_files": {
     "codex-rs/core/src/lib.rs": "6d1bb77909a2b04ea866f605a305085be171eef5bedc0ddfb62199ae27468933",

@@ -15,7 +15,7 @@
     "profiles/desktop-26.924.2738.0-sqlite-v2/deepseek_notice_batch.json": "70f97e6903f72f0011b5da54baf0208721cf664deca4aae4ea58ef229af38e21",
     "profiles/desktop-26.924.2738.0-sqlite-v2/integration.patch": "088825c68de0d7eec2816258e7dd444139e970a1dbb5ecd9758592d05580f9de",
     "profiles/desktop-26.924.2738.0-sqlite-v2/migrations.json": "dda57592f62173d386d636e65ec8f11e579d2e85a0d91c7b758f446896dd5065",
-    "profiles/desktop-26.924.2738.0-sqlite-v2/profile.json": "496826b478618cf36df9263c34fd7f504730cb4dd51c67d65c2df6ca20cef5ed",
+    "profiles/desktop-26.924.2738.0-sqlite-v2/profile.json": "02fa5ee6af6ea3be68901ef1152725d4722c9a26df21dec48fe853526d8debc8",
     "profiles/desktop-26.924.2738.0-sqlite-v2/prompt_history_compat.rs": "ea25d8dab7ac22d687d2e27bdc5dc8f3ad82106ea6581563427d14e3edb3cacb",
     "profiles/desktop-26.924.2738.0-sqlite-v2/sqlite-migrations.json": "e92d40b61c27a7ce26e8a219c6d73049ea2c0ebbffa4f918ec59dfb4e1239892"
   },
