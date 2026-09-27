@@ -1,19 +1,16 @@
-# v0.2.1 acceptance
+# v0.2.2 acceptance
 
-The Windows x64 public-source backend was built from upstream commit `0d9c7cbfa6cf1489f55a8a9542b75ddd2c061807` with Rust 1.95.0 and the desktop-26.924.2738.0 profile.
+The sqlite-v2 public source profile was built with the pinned upstream revision, Rust 1.95.0 and unchanged external dependencies.
 
 | Check | Result |
 |---|---|
-| Packaging and rejection tests | 9 passed |
-| Compatibility module tests | 15 passed |
-| Ordinary HTTP and real WebSocket replay | Both passed; four image tool calls remained paired with four outputs; notices were folded into their corresponding outputs |
-| Cold task restoration | Saved model and high reasoning effort retained after the global defaults changed |
-| Local compaction and remote compaction V2 | Both completed and restored the task in a fresh app-server process |
-| Database migrations | All 57 source, compiled and synthetic database migration checksums matched |
-| External dependencies | Locked package versions unchanged |
+| Packaging, rejection and cached-migration regression | 16 passed |
+| Rust compatibility module | 15 passed |
+| Ordinary HTTP and real WebSocket | Passed; four image tool calls and outputs remained paired |
+| Local compaction and remote compaction V2 | Passed against the loopback service |
+| Cold task restoration | Saved model and reasoning effort retained after default changes |
+| SQLite compatibility | 72 source and compiled checksums matched across six databases; native app-server startup and normal exit passed; migration records unchanged |
 
-The replay used four generated images, synthetic tasks and a loopback service. Request content remained in memory. The official backend was checked against the same request scenario as a control. No credentials or paid model service were used.
+All tasks, images and databases were synthetic. The source recipe revalidated the cached binary and its official migration identities. `ACCEPTANCE.json` binds these checks to the public source inputs and identifies this local build.
 
-[v0.2.0 acceptance](acceptance/v0.2.0.md) remains available as the historical record for the previous profile.
-
-`ACCEPTANCE.json` binds the results to the public source inputs. The recorded binary digest identifies this Windows build; another machine's source build may have a different binary digest.
+[v0.2.1 acceptance](acceptance/v0.2.1.md) is retained as historical evidence. That release checked 57 state migrations; this release also covers the 15 auxiliary migrations.

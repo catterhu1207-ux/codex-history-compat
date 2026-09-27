@@ -1,31 +1,38 @@
 {
   "schema_version": 1,
   "status": "passed",
+  "desktop_version": "26.924.2738.0",
   "upstream_commit": "0d9c7cbfa6cf1489f55a8a9542b75ddd2c061807",
   "version": "0.158.0-alpha.2.1",
   "module_tests": 15,
-  "packaging_tests": 9,
+  "packaging_tests": 16,
   "source_inputs": {
-    "build_backend.py": "a789344935246582b1f267ea8bcec2c63564bd9ff5a6bc99579bc9e67b4637b4",
+    "build_backend.py": "57ec4150f2d0ece3e1ce6a12c9cf42aa0006265e6f84f3bc183aa79d0156959e",
     "tests/local_replay.py": "e167e8b1e9dd37e135fa46c2e50c5ea08b226959d93d01ee041433d913ba1645",
     "tests/cold_resume.py": "a104d9b961caddbad87c8c6bce4f62d2b3d19b0d9b5ec6c3b8193f9fd405774f",
-    "SOURCE_26.924.2738.0.json": "07370b6b14783a6b8d5a89843670338c463e322b304270ef30ecef34831e706c",
-    "profiles/desktop-26.924.2738.0/deepseek_notice_batch.json": "70f97e6903f72f0011b5da54baf0208721cf664deca4aae4ea58ef229af38e21",
-    "profiles/desktop-26.924.2738.0/integration.patch": "088825c68de0d7eec2816258e7dd444139e970a1dbb5ecd9758592d05580f9de",
-    "profiles/desktop-26.924.2738.0/migrations.json": "dda57592f62173d386d636e65ec8f11e579d2e85a0d91c7b758f446896dd5065",
-    "profiles/desktop-26.924.2738.0/profile.json": "409c0e67ef681fe3d96ed6af5135d027214b54a397d3f342f0175f25dc2b4db1",
-    "profiles/desktop-26.924.2738.0/prompt_history_compat.rs": "ea25d8dab7ac22d687d2e27bdc5dc8f3ad82106ea6581563427d14e3edb3cacb"
+    "tests/migration_replay.py": "37a2f769f60c4ad9a40e9cc3b38e4f6f76bdf8b93a45cf468dbd055bc9f72717",
+    "tests/test_sqlite_migrations.py": "b7dcdf0545e68ab8950e61f6a1abc545da44c7fc8bb9a1158954534728f1d269",
+    "profiles/desktop-26.924.2738.0-sqlite-v2/deepseek_notice_batch.json": "70f97e6903f72f0011b5da54baf0208721cf664deca4aae4ea58ef229af38e21",
+    "profiles/desktop-26.924.2738.0-sqlite-v2/integration.patch": "088825c68de0d7eec2816258e7dd444139e970a1dbb5ecd9758592d05580f9de",
+    "profiles/desktop-26.924.2738.0-sqlite-v2/migrations.json": "dda57592f62173d386d636e65ec8f11e579d2e85a0d91c7b758f446896dd5065",
+    "profiles/desktop-26.924.2738.0-sqlite-v2/profile.json": "496826b478618cf36df9263c34fd7f504730cb4dd51c67d65c2df6ca20cef5ed",
+    "profiles/desktop-26.924.2738.0-sqlite-v2/prompt_history_compat.rs": "ea25d8dab7ac22d687d2e27bdc5dc8f3ad82106ea6581563427d14e3edb3cacb",
+    "profiles/desktop-26.924.2738.0-sqlite-v2/sqlite-migrations.json": "e92d40b61c27a7ce26e8a219c6d73049ea2c0ebbffa4f918ec59dfb4e1239892"
   },
-  "compiled_backend_sha256": "982f66e44ddad832afef577f9505c92b145004761644980d0b6c981a1fd569ac",
+  "compiled_backend_sha256": "729587f9cd039d9184ee335c65bb090bf3cc410b3bed7572370f020a60331ebf",
   "migrations": {
-    "count": 57,
-    "compiled_and_database_checksums_match": true,
-    "cold_databases_checked": 3
+    "status": "passed",
+    "database_count": 6,
+    "migration_count": 72,
+    "migration_records_unchanged": true,
+    "real_data_used": false,
+    "normal_exit": true,
+    "backend_sha256": "729587f9cd039d9184ee335c65bb090bf3cc410b3bed7572370f020a60331ebf"
   },
   "runtime": {
     "http": {
       "status": "passed",
-      "binary_sha256": "982f66e44ddad832afef577f9505c92b145004761644980d0b6c981a1fd569ac",
+      "binary_sha256": "729587f9cd039d9184ee335c65bb090bf3cc410b3bed7572370f020a60331ebf",
       "binary_version": "codex-cli 0.158.0-alpha.2.1",
       "exit_code": 0,
       "request_count": 2,
@@ -57,11 +64,12 @@
         "sample-b.png": "f45be4aaa8ce9807f46ebf2385e8bb88b0c9b4bf109c5d7c2e665ba9dc2c7f2d",
         "sample-c.png": "f45be4aaa8ce9807f46ebf2385e8bb88b0c9b4bf109c5d7c2e665ba9dc2c7f2d",
         "sample-d.png": "f45be4aaa8ce9807f46ebf2385e8bb88b0c9b4bf109c5d7c2e665ba9dc2c7f2d"
-      }
+      },
+      "backend_sha256": "729587f9cd039d9184ee335c65bb090bf3cc410b3bed7572370f020a60331ebf"
     },
     "websocket": {
       "status": "passed",
-      "binary_sha256": "982f66e44ddad832afef577f9505c92b145004761644980d0b6c981a1fd569ac",
+      "binary_sha256": "729587f9cd039d9184ee335c65bb090bf3cc410b3bed7572370f020a60331ebf",
       "binary_version": "codex-cli 0.158.0-alpha.2.1",
       "exit_code": 0,
       "request_count": 2,
@@ -93,11 +101,12 @@
         "sample-b.png": "f45be4aaa8ce9807f46ebf2385e8bb88b0c9b4bf109c5d7c2e665ba9dc2c7f2d",
         "sample-c.png": "f45be4aaa8ce9807f46ebf2385e8bb88b0c9b4bf109c5d7c2e665ba9dc2c7f2d",
         "sample-d.png": "f45be4aaa8ce9807f46ebf2385e8bb88b0c9b4bf109c5d7c2e665ba9dc2c7f2d"
-      }
+      },
+      "backend_sha256": "729587f9cd039d9184ee335c65bb090bf3cc410b3bed7572370f020a60331ebf"
     },
     "cold-resume": {
       "status": "passed",
-      "backend_sha256": "982f66e44ddad832afef577f9505c92b145004761644980d0b6c981a1fd569ac",
+      "backend_sha256": "729587f9cd039d9184ee335c65bb090bf3cc410b3bed7572370f020a60331ebf",
       "global_model_changed": true,
       "retained_model": "fixture-old",
       "retained_effort": "high",
@@ -110,7 +119,7 @@
     },
     "local-compaction": {
       "status": "passed",
-      "backend_sha256": "982f66e44ddad832afef577f9505c92b145004761644980d0b6c981a1fd569ac",
+      "backend_sha256": "729587f9cd039d9184ee335c65bb090bf3cc410b3bed7572370f020a60331ebf",
       "global_model_changed": true,
       "retained_model": "fixture-old",
       "retained_effort": "high",
@@ -123,7 +132,7 @@
     },
     "remote-compaction-v2": {
       "status": "passed",
-      "backend_sha256": "982f66e44ddad832afef577f9505c92b145004761644980d0b6c981a1fd569ac",
+      "backend_sha256": "729587f9cd039d9184ee335c65bb090bf3cc410b3bed7572370f020a60331ebf",
       "global_model_changed": true,
       "retained_model": "fixture-old",
       "retained_effort": "high",
@@ -135,97 +144,5 @@
       "ordinary_requests": 1
     }
   },
-  "official_control": {
-    "http": {
-      "status": "passed",
-      "binary_sha256": "8f0554ede25bbc5450921897c468b2e84635aa513c5017457997af0954581f49",
-      "binary_version": "codex-cli 0.158.0-alpha.2.1",
-      "exit_code": 0,
-      "request_count": 2,
-      "call_count": 4,
-      "output_count": 4,
-      "call_output_pairing": "complete",
-      "call_positions": [
-        3,
-        4,
-        5,
-        6
-      ],
-      "output_positions": [
-        7,
-        9,
-        11,
-        13
-      ],
-      "notice_message_positions": [
-        8,
-        10,
-        12,
-        14
-      ],
-      "message_immediately_before_output": [
-        9,
-        11,
-        13
-      ],
-      "folded_notice_output_count": 0,
-      "recorded_items": 15,
-      "content_logged": false,
-      "transport": [
-        "http"
-      ],
-      "fixture_sha256": {
-        "sample-a.png": "f45be4aaa8ce9807f46ebf2385e8bb88b0c9b4bf109c5d7c2e665ba9dc2c7f2d",
-        "sample-b.png": "f45be4aaa8ce9807f46ebf2385e8bb88b0c9b4bf109c5d7c2e665ba9dc2c7f2d",
-        "sample-c.png": "f45be4aaa8ce9807f46ebf2385e8bb88b0c9b4bf109c5d7c2e665ba9dc2c7f2d",
-        "sample-d.png": "f45be4aaa8ce9807f46ebf2385e8bb88b0c9b4bf109c5d7c2e665ba9dc2c7f2d"
-      }
-    },
-    "websocket": {
-      "status": "passed",
-      "binary_sha256": "8f0554ede25bbc5450921897c468b2e84635aa513c5017457997af0954581f49",
-      "binary_version": "codex-cli 0.158.0-alpha.2.1",
-      "exit_code": 0,
-      "request_count": 2,
-      "call_count": 4,
-      "output_count": 4,
-      "call_output_pairing": "complete",
-      "call_positions": [
-        3,
-        4,
-        5,
-        6
-      ],
-      "output_positions": [
-        7,
-        9,
-        11,
-        13
-      ],
-      "notice_message_positions": [
-        8,
-        10,
-        12,
-        14
-      ],
-      "message_immediately_before_output": [
-        9,
-        11,
-        13
-      ],
-      "folded_notice_output_count": 0,
-      "recorded_items": 15,
-      "content_logged": false,
-      "transport": [
-        "websocket"
-      ],
-      "fixture_sha256": {
-        "sample-a.png": "f45be4aaa8ce9807f46ebf2385e8bb88b0c9b4bf109c5d7c2e665ba9dc2c7f2d",
-        "sample-b.png": "f45be4aaa8ce9807f46ebf2385e8bb88b0c9b4bf109c5d7c2e665ba9dc2c7f2d",
-        "sample-c.png": "f45be4aaa8ce9807f46ebf2385e8bb88b0c9b4bf109c5d7c2e665ba9dc2c7f2d",
-        "sample-d.png": "f45be4aaa8ce9807f46ebf2385e8bb88b0c9b4bf109c5d7c2e665ba9dc2c7f2d"
-      }
-    }
-  },
-  "desktop_version": "26.924.2738.0"
+  "external_dependencies_unchanged": true
 }
