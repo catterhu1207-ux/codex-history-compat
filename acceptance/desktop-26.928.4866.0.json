@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "status": "passed",
+  "profile": "desktop-26.928.4866.0-sqlite-v2",
+  "compat_commit": "f14ab65de66b4e107f962ced5022be07c8a36cc1",
+  "upstream_commit": "ff6aec96948b70d94983af2641a6b67c94faeff5",
+  "build_recipe_sha256": "f4d040133b02e32c6422a8d51f808c8e19c752ca31f6e8cf6fc462102c236e12",
+  "binary_sha256": "bead9944236d7f08687d75c14313212aef7d70ca67534e57510d8ca12742f08a",
+  "runtime_cases": {
+    "http": {
+      "status": "passed",
+      "backend_sha256": "bead9944236d7f08687d75c14313212aef7d70ca67534e57510d8ca12742f08a",
+      "script_sha256": "13733899338808f57bfeb711b087d40d2f52cb319eec9257f02d3693bd7be4cd",
+      "folded_notice_output_count": 4
+    },
+    "websocket": {
+      "status": "passed",
+      "backend_sha256": "bead9944236d7f08687d75c14313212aef7d70ca67534e57510d8ca12742f08a",
+      "script_sha256": "13733899338808f57bfeb711b087d40d2f52cb319eec9257f02d3693bd7be4cd",
+      "folded_notice_output_count": 4
+    },
+    "cold-resume": {
+      "status": "passed",
+      "backend_sha256": "bead9944236d7f08687d75c14313212aef7d70ca67534e57510d8ca12742f08a",
+      "script_sha256": "f5514313a0377304a3c654c1a4256d4f84d0ce7a8d82ec542578cb4000631e14"
+    },
+    "local-compaction": {
+      "status": "passed",
+      "backend_sha256": "bead9944236d7f08687d75c14313212aef7d70ca67534e57510d8ca12742f08a",
+      "script_sha256": "f5514313a0377304a3c654c1a4256d4f84d0ce7a8d82ec542578cb4000631e14"
+    },
+    "remote-compaction": {
+      "status": "passed",
+      "backend_sha256": "bead9944236d7f08687d75c14313212aef7d70ca67534e57510d8ca12742f08a",
+      "script_sha256": "f5514313a0377304a3c654c1a4256d4f84d0ce7a8d82ec542578cb4000631e14"
+    },
+    "migrations": {
+      "status": "passed",
+      "backend_sha256": "bead9944236d7f08687d75c14313212aef7d70ca67534e57510d8ca12742f08a",
+      "script_sha256": "894fe66c3d543c351b2103238aec61147bd5ce164d90f4f201dd4a0d9a175c81",
+      "migration_count": 73,
+      "database_count": 6,
+      "migration_records_unchanged": true
+    }
+  },
+  "test_data": "synthetic",
+  "test_service": "isolated local",
+  "binary_distributed": false,
+  "packaging_and_migration_regression_tests": 17
+}

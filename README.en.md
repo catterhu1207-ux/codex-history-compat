@@ -1,5 +1,17 @@
 # codex-history-compat
 
+## Desktop 26.928.4866.0 profile
+
+The `desktop-26.928.4866.0-sqlite-v2` profile targets `codex-cli 0.159.2` at upstream commit `ff6aec96948b70d94983af2641a6b67c94faeff5`. The qualified compatibility source is commit `f14ab65de66b4e107f962ced5022be07c8a36cc1`.
+
+```powershell
+py -3 build_backend.py --profile desktop-26.928.4866.0-sqlite-v2 --target C:\codex-compat\backend-4866 --official-backend C:\official\app\resources\codex.exe
+```
+
+Use Rust 1.95.0 and an x64 MSVC developer environment. This profile builds only the launcher-consumed `codex` binary. Its independent acceptance covers HTTP, WebSocket, cold restoration, local and remote compaction, and all 73 migrations across six databases. Existing database migration records are preserved. These checks use synthetic data and a local test service; they do not establish compatibility with every external provider.
+
+Desktop integration uses the explicit `compat` mode in [codex-desktop-workflow](https://github.com/catterhu1207-ux/codex-desktop-workflow). The official backend remains that project's default. Previous profiles retain their own pinned revisions and build behavior.
+
 ## v0.2.2: Desktop 26.924.2738.0 profile
 
 The `desktop-26.924.2738.0-sqlite-v2` profile targets Codex `0.158.0-alpha.2.1` at upstream commit `0d9c7cbfa6cf1489f55a8a9542b75ddd2c061807`. The existing `0.158.0-alpha.2` profile for Desktop `26.924.1866.0` and the legacy apply entry points remain available. See [Compatibility](COMPATIBILITY.md) for profile selection.
