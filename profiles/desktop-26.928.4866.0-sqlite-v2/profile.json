@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "id": "desktop-26.928.4866.0-sqlite-v2",
+  "upstream_repository": "https://github.com/openai/codex.git",
+  "upstream_commit": "ff6aec96948b70d94983af2641a6b67c94faeff5",
+  "version": "0.159.2",
+  "rust_toolchain": "1.95.0",
+  "desktop_version": "26.928.4866.0",
+  "official_backend_sha256": "fcd5eafefb4ff4a607f244e099e0974f66e17966b6ffda6948de2ef3a7a79530",
+  "official_backend_size": 324702000,
+  "sqlite_migrations": "sqlite-migrations.json",
+  "files": {
+    "deepseek_notice_batch.json": "70f97e6903f72f0011b5da54baf0208721cf664deca4aae4ea58ef229af38e21",
+    "integration.patch": "eb7f15d6692046b000388c7a01413da9411ef41153ecaf6b056cabe937e546d9",
+    "prompt_history_compat.rs": "ea25d8dab7ac22d687d2e27bdc5dc8f3ad82106ea6581563427d14e3edb3cacb",
+    "sqlite-migrations.json": "6a3fe5f2ec6b31ca46aaac789fe8208356361b0007bde5e0a3fefa1c2f6680a2"
+  },
+  "source_files": {
+    "codex-rs/core/src/lib.rs": "2ef3edb3b0f8bbddfd95e1df2b099e94d37c371d575c8873567a7b151ff38f98",
+    "codex-rs/core/src/session/turn.rs": "bba40f28f6842736d2d901dc3b559313d5e7cf0f8b7df433ae7c7ab57f8c7430",
+    "codex-rs/core/src/compact.rs": "15f23319b2d39f6d4d8117f844eefb1b0562dd426413dced8ea8c374721aa8cf",
+    "codex-rs/core/src/compact_remote_v2_attempt.rs": "b9a86f18069f13141869d5878b9912952c1477b6b3283a78f26007367c2a04cb",
+    "codex-rs/core/src/prompt_history_compat.rs": "ea25d8dab7ac22d687d2e27bdc5dc8f3ad82106ea6581563427d14e3edb3cacb",
+    "codex-rs/core/src/prompt_history_compat_fixtures/deepseek_notice_batch.json": "70f97e6903f72f0011b5da54baf0208721cf664deca4aae4ea58ef229af38e21"
+  },
+  "build_binary_only": true
+}

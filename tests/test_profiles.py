@@ -7,6 +7,15 @@ spec=importlib.util.spec_from_file_location('recipe',ROOT/'build_backend.py')
 recipe=importlib.util.module_from_spec(spec);spec.loader.exec_module(recipe)
 
 class Profiles(unittest.TestCase):
+    def test_4866_profile_is_exact_and_contains_all_73_migrations(self):
+        folder, profile = recipe.load_profile('desktop-26.928.4866.0-sqlite-v2')
+        self.assertEqual(profile['upstream_commit'], 'ff6aec96948b70d94983af2641a6b67c94faeff5')
+        self.assertEqual(profile['version'], '0.159.2')
+        self.assertTrue(profile['build_binary_only'])
+        self.assertEqual(len(recipe.migration_rows(folder, profile)), 73)
+        self.assertEqual(len(profile['source_files']), 6)
+        self.assertEqual(profile['official_backend_sha256'], 'fcd5eafefb4ff4a607f244e099e0974f66e17966b6ffda6948de2ef3a7a79530')
+
     def test_2738_profile_is_independent_and_preserves_compatibility_semantics(self):
         _, previous = recipe.load_profile('0.158.0-alpha.2')
         _, current = recipe.load_profile('desktop-26.924.2738.0')

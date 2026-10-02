@@ -147,11 +147,17 @@ def build(source,target,profile,official_backend=None,target_cache=None,dry_run=
     env['CARGO_PROFILE_RELEASE_LTO']='false';env['CARGO_PROFILE_RELEASE_DEBUG']='0';env['CARGO_PROFILE_RELEASE_STRIP']='symbols'
     if data.get('sqlite_migrations'):
         invalidate_stale_migration_cache(src,Path(env['CARGO_TARGET_DIR'])/'release/codex.exe',migrations)
-    commands=[['cargo','+'+data['rust_toolchain'],'test','--locked','-p','codex-core','--lib','prompt_history_compat','--','--test-threads','1'],['cargo','+'+data['rust_toolchain'],'build','--locked','-p','codex-cli','--bin','codex','--release','-j','1']]
-    for index,command in enumerate(commands):
-        with (target/('test.log' if index==0 else 'build.log')).open('wb') as log:
+    commands=[('test',['cargo','+'+data['rust_toolchain'],'test','--locked','-p','codex-core','--lib','prompt_history_compat','--','--test-threads','1']),('build',['cargo','+'+data['rust_toolchain'],'build','--locked','-p','codex-cli','--bin','codex','--release','-j','1'])]
+    if data.get('build_binary_only'):
+        if data['desktop_version'] != '26.928.4866.0' or data['upstream_commit'] != 'ff6aec96948b70d94983af2641a6b67c94faeff5':
+            raise ValueError('binary_only_recipe_version_mismatch')
+        # This desktop recipe builds only the consumed binary. Runtime replay
+        # and migration acceptance remain mandatory release gates.
+        commands=commands[1:]
+    for stage,command in commands:
+        with (target/(stage+'.log')).open('wb') as log:
             cp=subprocess.run(command,cwd=src/'codex-rs',env=env,stdout=log,stderr=subprocess.STDOUT)
-        if cp.returncode:raise ValueError('backend_'+('tests' if index==0 else 'build')+'_failed:'+str(cp.returncode))
+        if cp.returncode:raise ValueError('backend_'+stage+'_failed:'+str(cp.returncode))
     binary=Path(env['CARGO_TARGET_DIR'])/'release/codex.exe'
     raw=binary.read_bytes()
     pe_offset=int.from_bytes(raw[60:64],'little')
