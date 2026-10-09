@@ -22,6 +22,8 @@ jobs:
             profile: 0.158.0-alpha.2
           - ref: 0d9c7cbfa6cf1489f55a8a9542b75ddd2c061807
             profile: desktop-26.924.2738.0
+          - ref: 74e804deeb1241d5fe699b31fb319f7d46454c42
+            profile: desktop-26.1002.7124.0-sqlite-v2
     env:
       CARGO_BUILD_JOBS: 2
       CARGO_PROFILE_DEV_DEBUG: 0
