@@ -103,7 +103,7 @@ def build(source,target,profile,official_backend=None,target_cache=None,dry_run=
     target.mkdir(parents=True,exist_ok=reuse_verified_source)
     src=source.resolve() if reuse_verified_source and source is not None else target/'source'
     if not reuse_verified_source:
-        checked(['git','clone','--no-checkout',str(source or data['upstream_repository']),str(src)])
+        checked(['git','clone','--filter=blob:none','--no-checkout',str(source or data['upstream_repository']),str(src)])
         checked(['git','config','core.longpaths','true'],src)
         checked(['git','-c','core.autocrlf=false','checkout','--detach',data['upstream_commit']],src)
     if checked(['git','rev-parse','HEAD'],src)!=data['upstream_commit']:raise ValueError('upstream_commit_mismatch')
@@ -149,7 +149,10 @@ def build(source,target,profile,official_backend=None,target_cache=None,dry_run=
         invalidate_stale_migration_cache(src,Path(env['CARGO_TARGET_DIR'])/'release/codex.exe',migrations)
     commands=[('test',['cargo','+'+data['rust_toolchain'],'test','--locked','-p','codex-core','--lib','prompt_history_compat','--','--test-threads','1']),('build',['cargo','+'+data['rust_toolchain'],'build','--locked','-p','codex-cli','--bin','codex','--release','-j','1'])]
     if data.get('build_binary_only'):
-        if data['desktop_version'] != '26.928.4866.0' or data['upstream_commit'] != 'ff6aec96948b70d94983af2641a6b67c94faeff5':
+        if (data['desktop_version'],data['upstream_commit']) not in {
+            ('26.928.4866.0','ff6aec96948b70d94983af2641a6b67c94faeff5'),
+            ('26.1007.9446.0','740e5af33c71225640e0c1c1555c514c2c93ab74'),
+        }:
             raise ValueError('binary_only_recipe_version_mismatch')
         # This desktop recipe builds only the consumed binary. Runtime replay
         # and migration acceptance remain mandatory release gates.

@@ -7,6 +7,18 @@ spec=importlib.util.spec_from_file_location('recipe',ROOT/'build_backend.py')
 recipe=importlib.util.module_from_spec(spec);spec.loader.exec_module(recipe)
 
 class Profiles(unittest.TestCase):
+    def test_9446_profile_binds_exact_source_and_75_migrations(self):
+        folder, profile = recipe.load_profile('desktop-26.1007.9446.0-sqlite-v2')
+        self.assertEqual(profile['upstream_commit'], '740e5af33c71225640e0c1c1555c514c2c93ab74')
+        self.assertEqual(profile['version'], '0.162.0-alpha.17.2')
+        rows=recipe.migration_rows(folder,profile)
+        self.assertEqual(len(rows),75)
+        self.assertEqual(len({row['source_path'] for row in rows}),75)
+        self.assertEqual(len({row['database'] for row in rows}),6)
+        self.assertEqual(profile['official_backend_sha256'],'e98c516f1c8935789aabe9122ee7e05ec4c3efd1ba6acf179242e031c495b99e')
+        self.assertEqual(len(profile['source_files']),7)
+        self.assertNotIn('Cargo.lock',(folder/'integration.patch').read_text())
+
     def test_4866_profile_is_exact_and_contains_all_73_migrations(self):
         folder, profile = recipe.load_profile('desktop-26.928.4866.0-sqlite-v2')
         self.assertEqual(profile['upstream_commit'], 'ff6aec96948b70d94983af2641a6b67c94faeff5')
