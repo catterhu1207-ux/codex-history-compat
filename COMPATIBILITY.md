@@ -2,6 +2,7 @@
 
 | Profile | Upstream commit | Backend version | Desktop |
 |---|---|---|---|
+| `desktop-26.1007.9446.0-sqlite-v2` | `740e5af33c71225640e0c1c1555c514c2c93ab74` | `0.162.0-alpha.17.2` | `26.1007.9446.0` (75 migrations) |
 | `desktop-26.928.4866.0-sqlite-v2` | `ff6aec96948b70d94983af2641a6b67c94faeff5` | `0.159.2` | `26.928.4866.0` (73 migrations) |
 | `desktop-26.924.2738.0-sqlite-v2` | `0d9c7cbfa6cf1489f55a8a9542b75ddd2c061807` | `0.158.0-alpha.2.1` | `26.924.2738.0` (72 migrations) |
 | `desktop-26.924.2738.0` | `0d9c7cbfa6cf1489f55a8a9542b75ddd2c061807` | `0.158.0-alpha.2.1` | `26.924.2738.0` |

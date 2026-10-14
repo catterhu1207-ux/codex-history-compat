@@ -1,5 +1,18 @@
 # codex-history-compat
 
+## Desktop 26.1007.9446.0 source profile
+
+The `desktop-26.1007.9446.0-sqlite-v2` profile targets `codex-cli 0.162.0-alpha.17.2` at upstream commit `740e5af33c71225640e0c1c1555c514c2c93ab74`. Its build inputs are frozen at compatibility-source commit `a47c618b5b2b9e4438a8208decdada12935fd78f`. Use that exact revision when building for the corresponding desktop integration:
+
+```powershell
+git checkout a47c618b5b2b9e4438a8208decdada12935fd78f
+py -3 build_backend.py --profile desktop-26.1007.9446.0-sqlite-v2 --target C:\codex-compat\backend-9446 --official-backend C:\official\app\resources\codex.exe
+```
+
+Use Rust 1.95.0, an x64 MSVC developer environment and Windows SDK. The profile builds only `codex`, with locked dependencies and one compilation job. Its independent public-source build passed HTTP, WebSocket, cold model restoration, local and remote compaction, tool/output pairing and all 75 migrations across six database families. A saved legacy chat with a missing history file was rejected; its synthetic source was restored after the check. The tests use synthetic data and local model-service fixtures.
+
+The official backend remains the default in the desktop installer. Select this compatibility profile only with a desktop release that explicitly supports the exact package. [Desktop release compatibility](https://github.com/catterhu1207-ux/codex-desktop-workflow/blob/main/COMPATIBILITY.md) records installer availability separately from these source profiles.
+
 ## Desktop 26.928.4866.0 profile
 
 The `desktop-26.928.4866.0-sqlite-v2` profile targets `codex-cli 0.159.2` at upstream commit `ff6aec96948b70d94983af2641a6b67c94faeff5`. The qualified compatibility source is commit `f14ab65de66b4e107f962ced5022be07c8a36cc1`.
