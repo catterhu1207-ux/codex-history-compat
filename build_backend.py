@@ -143,11 +143,17 @@ def build(source,target,profile,official_backend=None,target_cache=None,dry_run=
     after_external=[v for v in after_lock['package'] if 'source' in v]
     if before_external!=after_external:raise ValueError('external_dependencies_changed')
     env=os.environ.copy();env['CARGO_TARGET_DIR']=str((target_cache or Path(env.get('CARGO_TARGET_DIR',str(target/'target')))).resolve())
-    env['CARGO_BUILD_JOBS']='1';env['CARGO_PROFILE_DEV_DEBUG']='0';env['CARGO_PROFILE_TEST_DEBUG']='0'
+    jobs = data.get('build_jobs', 1)
+    if type(jobs) is not int or not 1 <= jobs <= 2:raise ValueError('invalid_build_parallelism')
+    env['CARGO_BUILD_JOBS']=str(jobs);env['CARGO_PROFILE_DEV_DEBUG']='0';env['CARGO_PROFILE_TEST_DEBUG']='0'
     env['CARGO_PROFILE_RELEASE_LTO']='false';env['CARGO_PROFILE_RELEASE_DEBUG']='0';env['CARGO_PROFILE_RELEASE_STRIP']='symbols'
     if data.get('sqlite_migrations'):
         invalidate_stale_migration_cache(src,Path(env['CARGO_TARGET_DIR'])/'release/codex.exe',migrations)
     commands=[('test',['cargo','+'+data['rust_toolchain'],'test','--locked','-p','codex-core','--lib','prompt_history_compat','--','--test-threads','1']),('build',['cargo','+'+data['rust_toolchain'],'build','--locked','-p','codex-cli','--bin','codex','--release','-j','1'])]
+    if data.get('focused_release_tests'):
+        if (data['desktop_version'],data['upstream_commit']) not in {('26.930.3930.0','a956835d020762cb2b570053af06f643a11c0ecc'),('26.1002.7124.0','74e804deeb1241d5fe699b31fb319f7d46454c42')}:raise ValueError('focused_release_recipe_version_mismatch')
+        if not shutil.which('cargo-nextest'):raise ValueError('cargo_nextest_required_for_focused_release_tests')
+        commands=[('test',['cargo','+'+data['rust_toolchain'],'nextest','run','--locked','-p','codex-core','--lib','--cargo-profile','release','-E','test(prompt_history_compat)']),('build',['cargo','+'+data['rust_toolchain'],'build','--locked','-p','codex-cli','--bin','codex','--release','-j',str(jobs)])]
     if data.get('build_binary_only'):
         if (data['desktop_version'],data['upstream_commit']) not in {
             ('26.928.4866.0','ff6aec96948b70d94983af2641a6b67c94faeff5'),
