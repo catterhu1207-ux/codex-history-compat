@@ -18,7 +18,11 @@ def inject_workspace_version(manifest, lock, data):
     updated,count=re.subn(r'(?m)^version = "'+re.escape(source_version)+r'"$',
                          'version = "'+data['version']+'"',manifest)
     if count!=1:raise ValueError('workspace_version_injection_ambiguous')
-    updated_lock=lock.replace('version = "'+source_version+'"','version = "'+data['version']+'"')
+    lock_version=data.get('upstream_lock_workspace_version',source_version)
+    packages=tomllib.loads(lock)['package']
+    if not any('source' not in p and p['version']==lock_version for p in packages):
+        raise ValueError('upstream_lock_workspace_version_mismatch')
+    updated_lock=lock.replace('version = "'+lock_version+'"','version = "'+data['version']+'"')
     before=tomllib.loads(lock)['package'];after=tomllib.loads(updated_lock)['package']
     if [p for p in before if 'source' in p]!=[p for p in after if 'source' in p]:
         raise ValueError('external_dependencies_changed')

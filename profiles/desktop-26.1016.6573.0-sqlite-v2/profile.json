@@ -34,5 +34,6 @@
     "all_named_sections_identical": true,
     "difference_scope": "PE checksum and Authenticode certificate only"
   },
-  "upstream_version": "0.163.0-alpha.11"
+  "upstream_version": "0.163.0-alpha.11",
+  "upstream_lock_workspace_version": "0.0.0"
 }

@@ -19,6 +19,12 @@ class Profiles(unittest.TestCase):
                 recipe.inject_workspace_version(manifest,lock,{**data,'upstream_version':'wrong'})
             with self.assertRaisesRegex(ValueError,'external_dependencies_changed'):
                 recipe.inject_workspace_version(manifest,lock.replace('version = "1.0.0"','version = "'+old+'"'),data)
+        manifest='[workspace.package]\nversion = "0.163.0-alpha.11"\n'
+        lock='[[package]]\nname = "codex-core"\nversion = "0.0.0"\n'
+        changed,changed_lock=recipe.inject_workspace_version(manifest,lock,{
+            'version':'0.163.0-alpha.11.1','upstream_version':'0.163.0-alpha.11',
+            'upstream_lock_workspace_version':'0.0.0'})
+        self.assertIn('version = "0.163.0-alpha.11.1"',changed_lock)
 
     def test_6573_profile_binds_new_upstream_and_preserves_migrations(self):
         folder, current = recipe.load_profile('desktop-26.1016.6573.0-sqlite-v2')
