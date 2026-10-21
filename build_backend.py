@@ -79,7 +79,7 @@ def invalidate_stale_migration_cache(src, binary, rows):
     (src/'codex-rs/state/src/lib.rs').touch()
     return True
 
-def build(source,target,profile,official_backend=None,target_cache=None,dry_run=False,reuse_verified_source=False):
+def build(source,target,profile,official_backend=None,target_cache=None,dry_run=False,reuse_verified_source=False,release_target_cache=None):
     folder,data=load_profile(profile)
     profile_digest=sha(folder/'profile.json')
     if sys.version_info < (3,11):raise ValueError('python_3_11_required_for_source_build')
@@ -148,8 +148,9 @@ def build(source,target,profile,official_backend=None,target_cache=None,dry_run=
     env=os.environ.copy();env['CARGO_TARGET_DIR']=str((target_cache or Path(env.get('CARGO_TARGET_DIR',str(target/'target')))).resolve())
     env['CARGO_BUILD_JOBS']='1';env['CARGO_PROFILE_DEV_DEBUG']='0';env['CARGO_PROFILE_TEST_DEBUG']='0'
     env['CARGO_PROFILE_RELEASE_LTO']='false';env['CARGO_PROFILE_RELEASE_DEBUG']='0';env['CARGO_PROFILE_RELEASE_STRIP']='symbols'
+    release_cache = (release_target_cache or Path(env['CARGO_TARGET_DIR'])).resolve()
     if data.get('sqlite_migrations'):
-        invalidate_stale_migration_cache(src,Path(env['CARGO_TARGET_DIR'])/'release/codex.exe',migrations)
+        invalidate_stale_migration_cache(src,release_cache/'release/codex.exe',migrations)
     commands=[('test',['cargo','+'+data['rust_toolchain'],'test','--locked','-p','codex-core','--lib','prompt_history_compat','--','--test-threads','1']),('build',['cargo','+'+data['rust_toolchain'],'build','--locked','-p','codex-cli','--bin','codex','--release','-j','1'])]
     if data.get('build_binary_only'):
         if (data['desktop_version'],data['upstream_commit']) not in {
@@ -161,10 +162,12 @@ def build(source,target,profile,official_backend=None,target_cache=None,dry_run=
         # and migration acceptance remain mandatory release gates.
         commands=commands[1:]
     for stage,command in commands:
+        stage_env = dict(env)
+        if stage == 'build': stage_env['CARGO_TARGET_DIR'] = str(release_cache)
         with (target/(stage+'.log')).open('wb') as log:
-            cp=subprocess.run(command,cwd=src/'codex-rs',env=env,stdout=log,stderr=subprocess.STDOUT)
+            cp=subprocess.run(command,cwd=src/'codex-rs',env=stage_env,stdout=log,stderr=subprocess.STDOUT)
         if cp.returncode:raise ValueError('backend_'+stage+'_failed:'+str(cp.returncode))
-    binary=Path(env['CARGO_TARGET_DIR'])/'release/codex.exe'
+    binary=release_cache/'release/codex.exe'
     raw=binary.read_bytes()
     pe_offset=int.from_bytes(raw[60:64],'little')
     if raw[:2]!=b'MZ' or raw[pe_offset:pe_offset+4]!=b'PE\0\0' or int.from_bytes(raw[pe_offset+4:pe_offset+6],'little')!=0x8664:
@@ -194,12 +197,12 @@ def build(source,target,profile,official_backend=None,target_cache=None,dry_run=
     return {'status':'built','manifest':str(target/'manifest.json'),'backend_sha256':manifest['patched']['sha256']}
 
 def main():
-    p=argparse.ArgumentParser();p.add_argument('--profile',default='0.158.0-alpha.2');p.add_argument('--source',type=Path);p.add_argument('--target',type=Path);p.add_argument('--official-backend',type=Path);p.add_argument('--target-cache',type=Path);p.add_argument('--apply',type=Path);p.add_argument('--dry-run',action='store_true');p.add_argument('--reuse-verified-source',action='store_true');a=p.parse_args()
+    p=argparse.ArgumentParser();p.add_argument('--profile',default='0.158.0-alpha.2');p.add_argument('--source',type=Path);p.add_argument('--target',type=Path);p.add_argument('--official-backend',type=Path);p.add_argument('--target-cache',type=Path);p.add_argument('--release-target-cache',type=Path);p.add_argument('--apply',type=Path);p.add_argument('--dry-run',action='store_true');p.add_argument('--reuse-verified-source',action='store_true');a=p.parse_args()
     try:
         if a.apply:result=apply(a.apply,a.profile);print(json.dumps({'status':'applied','profile':result['id']}))
         else:
             if not a.target:raise ValueError('target_required')
-            print(json.dumps(build(a.source,a.target.resolve(),a.profile,a.official_backend,a.target_cache,a.dry_run,a.reuse_verified_source)))
+            print(json.dumps(build(a.source,a.target.resolve(),a.profile,a.official_backend,a.target_cache,a.dry_run,a.reuse_verified_source,a.release_target_cache)))
         return 0
     except (ValueError,OSError,subprocess.CalledProcessError) as error:
         print(json.dumps({'status':'blocked','reason':str(error)}),file=sys.stderr);return 2
