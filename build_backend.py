@@ -79,7 +79,7 @@ def invalidate_stale_migration_cache(src, binary, rows):
     (src/'codex-rs/state/src/lib.rs').touch()
     return True
 
-def build(source,target,profile,official_backend=None,target_cache=None,dry_run=False,reuse_verified_source=False,release_target_cache=None):
+def build(source,target,profile,official_backend=None,target_cache=None,dry_run=False,reuse_verified_source=False,release_target_cache=None,toolchain_root=None):
     folder,data=load_profile(profile)
     profile_digest=sha(folder/'profile.json')
     if sys.version_info < (3,11):raise ValueError('python_3_11_required_for_source_build')
@@ -87,12 +87,25 @@ def build(source,target,profile,official_backend=None,target_cache=None,dry_run=
     compat_commit=checked(['git','rev-parse','HEAD'],ROOT)
     if os.name!='nt':raise ValueError('windows_build_required')
     if target.exists() and not reuse_verified_source:raise ValueError('target_must_not_exist')
-    if not shutil.which('git') or not shutil.which('cargo') or not shutil.which('rustc') or not shutil.which('rustup'):
-        raise ValueError('git_and_rust_toolchain_required')
-    installed=checked(['rustup','toolchain','list'])
-    if not any(line.startswith(data['rust_toolchain']+'-x86_64-pc-windows-msvc ') or line==data['rust_toolchain']+'-x86_64-pc-windows-msvc' for line in installed.splitlines()):
-        raise ValueError('pinned_Rust_toolchain_not_installed_no_automatic_install')
-    toolchain=checked(['rustc','+'+data['rust_toolchain'],'--version'])
+    if not shutil.which('git'):raise ValueError('git_and_rust_toolchain_required')
+    if toolchain_root is not None:
+        toolchain_root=toolchain_root.resolve(strict=True)
+        rustc=toolchain_root/'bin/rustc.exe';cargo_bin=toolchain_root/'bin/cargo.exe'
+        if not rustc.is_file() or not cargo_bin.is_file():raise ValueError('explicit_toolchain_binaries_missing')
+        toolchain=checked([str(rustc),'--version'])
+        details=checked([str(rustc),'-vV'])
+        if not toolchain.startswith('rustc '+data['rust_toolchain']+' ') or 'host: x86_64-pc-windows-msvc' not in details:
+            raise ValueError('explicit_toolchain_version_or_host_mismatch')
+        if Path(checked([str(rustc),'--print','sysroot'])).resolve()!=toolchain_root:
+            raise ValueError('explicit_toolchain_sysroot_mismatch')
+        cargo_prefix=[str(cargo_bin)]
+    else:
+        if not all(shutil.which(x) for x in ('cargo','rustc','rustup')):raise ValueError('git_and_rust_toolchain_required')
+        installed=checked(['rustup','toolchain','list'])
+        if not any(line.startswith(data['rust_toolchain']+'-x86_64-pc-windows-msvc ') or line==data['rust_toolchain']+'-x86_64-pc-windows-msvc' for line in installed.splitlines()):
+            raise ValueError('pinned_Rust_toolchain_not_installed_no_automatic_install')
+        toolchain=checked(['rustc','+'+data['rust_toolchain'],'--version'])
+        cargo_prefix=['cargo','+'+data['rust_toolchain']]
     if not shutil.which('cl'):
         raise ValueError('run_from_x64_MSVC_developer_environment_with_Windows_SDK')
     sdk_version=os.environ.get('WindowsSDKVersion','').rstrip('\\/')
@@ -146,12 +159,15 @@ def build(source,target,profile,official_backend=None,target_cache=None,dry_run=
     after_external=[v for v in after_lock['package'] if 'source' in v]
     if before_external!=after_external:raise ValueError('external_dependencies_changed')
     env=os.environ.copy();env['CARGO_TARGET_DIR']=str((target_cache or Path(env.get('CARGO_TARGET_DIR',str(target/'target')))).resolve())
+    if toolchain_root is not None:
+        env['RUSTC']=str(rustc);env['RUSTDOC']=str(toolchain_root/'bin/rustdoc.exe')
+        env['PATH']=str(toolchain_root/'bin')+os.pathsep+env['PATH']
     env['CARGO_BUILD_JOBS']='1';env['CARGO_PROFILE_DEV_DEBUG']='0';env['CARGO_PROFILE_TEST_DEBUG']='0'
     env['CARGO_PROFILE_RELEASE_LTO']='false';env['CARGO_PROFILE_RELEASE_DEBUG']='0';env['CARGO_PROFILE_RELEASE_STRIP']='symbols'
     release_cache = (release_target_cache or Path(env['CARGO_TARGET_DIR'])).resolve()
     if data.get('sqlite_migrations'):
         invalidate_stale_migration_cache(src,release_cache/'release/codex.exe',migrations)
-    commands=[('test',['cargo','+'+data['rust_toolchain'],'test','--locked','-p','codex-core','--lib','prompt_history_compat','--','--test-threads','1']),('build',['cargo','+'+data['rust_toolchain'],'build','--locked','-p','codex-cli','--bin','codex','--release','-j','1'])]
+    commands=[('test',cargo_prefix+['test','--locked','-p','codex-core','--lib','prompt_history_compat','--','--test-threads','1']),('build',cargo_prefix+['build','--locked','-p','codex-cli','--bin','codex','--release','-j','1'])]
     if data.get('build_binary_only'):
         if (data['desktop_version'],data['upstream_commit']) not in {
             ('26.928.4866.0','ff6aec96948b70d94983af2641a6b67c94faeff5'),
@@ -197,12 +213,12 @@ def build(source,target,profile,official_backend=None,target_cache=None,dry_run=
     return {'status':'built','manifest':str(target/'manifest.json'),'backend_sha256':manifest['patched']['sha256']}
 
 def main():
-    p=argparse.ArgumentParser();p.add_argument('--profile',default='0.158.0-alpha.2');p.add_argument('--source',type=Path);p.add_argument('--target',type=Path);p.add_argument('--official-backend',type=Path);p.add_argument('--target-cache',type=Path);p.add_argument('--release-target-cache',type=Path);p.add_argument('--apply',type=Path);p.add_argument('--dry-run',action='store_true');p.add_argument('--reuse-verified-source',action='store_true');a=p.parse_args()
+    p=argparse.ArgumentParser();p.add_argument('--profile',default='0.158.0-alpha.2');p.add_argument('--source',type=Path);p.add_argument('--target',type=Path);p.add_argument('--official-backend',type=Path);p.add_argument('--target-cache',type=Path);p.add_argument('--release-target-cache',type=Path);p.add_argument('--toolchain-root',type=Path);p.add_argument('--apply',type=Path);p.add_argument('--dry-run',action='store_true');p.add_argument('--reuse-verified-source',action='store_true');a=p.parse_args()
     try:
         if a.apply:result=apply(a.apply,a.profile);print(json.dumps({'status':'applied','profile':result['id']}))
         else:
             if not a.target:raise ValueError('target_required')
-            print(json.dumps(build(a.source,a.target.resolve(),a.profile,a.official_backend,a.target_cache,a.dry_run,a.reuse_verified_source,a.release_target_cache)))
+            print(json.dumps(build(a.source,a.target.resolve(),a.profile,a.official_backend,a.target_cache,a.dry_run,a.reuse_verified_source,a.release_target_cache,a.toolchain_root)))
         return 0
     except (ValueError,OSError,subprocess.CalledProcessError) as error:
         print(json.dumps({'status':'blocked','reason':str(error)}),file=sys.stderr);return 2
