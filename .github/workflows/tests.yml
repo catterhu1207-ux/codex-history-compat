@@ -24,6 +24,8 @@ jobs:
             profile: desktop-26.924.2738.0
           - ref: 4ebc485ca321243727539187169425fcf972f2c4
             profile: desktop-26.1013.4894.0-sqlite-v2
+          - ref: 5425d3e625daa58eea3ad1de27c087eb3b2ffbd3
+            profile: desktop-26.1016.6573.0-sqlite-v2
     env:
       CARGO_BUILD_JOBS: 2
       CARGO_PROFILE_DEV_DEBUG: 0
@@ -45,4 +47,26 @@ jobs:
           else
             python3 ./patch/build_backend.py --profile "${{ matrix.profile }}" --apply ./upstream
           fi
-      - run: cargo test --manifest-path upstream/codex-rs/Cargo.toml -p codex-core prompt_history_compat --lib -- --test-threads 1
+      - name: Match the current Windows source-build inputs
+        if: matrix.profile == 'desktop-26.1016.6573.0-sqlite-v2'
+        run: |
+          python3 - <<'PY'
+          import sys
+          from pathlib import Path
+          sys.path.insert(0, 'patch')
+          import build_backend as build
+          source = Path('upstream')
+          folder, profile = build.load_profile('desktop-26.1016.6573.0-sqlite-v2')
+          manifest = source / 'codex-rs/Cargo.toml'
+          lock = source / 'codex-rs/Cargo.lock'
+          text, locked = build.inject_workspace_version(manifest.read_text(), lock.read_text(), profile)
+          manifest.write_text(text)
+          lock.write_text(locked)
+          build.qualify_migration_bytes(source, build.migration_rows(folder, profile), all_databases=True)
+          PY
+      - name: Test current compatibility module with locked dependencies
+        if: matrix.profile == 'desktop-26.1016.6573.0-sqlite-v2'
+        run: cargo test --locked --manifest-path upstream/codex-rs/Cargo.toml -p codex-core prompt_history_compat --lib -- --test-threads 1
+      - name: Test retained profiles
+        if: matrix.profile != 'desktop-26.1016.6573.0-sqlite-v2'
+        run: cargo test --manifest-path upstream/codex-rs/Cargo.toml -p codex-core prompt_history_compat --lib -- --test-threads 1

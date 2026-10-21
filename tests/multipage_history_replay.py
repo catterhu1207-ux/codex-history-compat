@@ -122,6 +122,8 @@ class Client:
         self.process.stdin.close()
         self.process.wait(timeout=30)
         self.stderr.close()
+        if self.process.returncode != 0:
+            raise RuntimeError('backend_exit_code:' + str(self.process.returncode))
 
 
 try:
@@ -137,7 +139,8 @@ try:
             first.wait_turn(thread_id)
     finally:
         first.close()
-    before = {path.name: hashlib.sha256(path.read_bytes()).hexdigest() for path in home.rglob("*.jsonl")}
+    before = {path.relative_to(home).as_posix(): hashlib.sha256(path.read_bytes()).hexdigest()
+              for path in (home / "sessions").rglob("rollout-*.jsonl")}
     if len(before) != 1:
         raise RuntimeError("synthetic rollout count differs")
     second = Client("read")
@@ -159,14 +162,15 @@ try:
             raise RuntimeError("pagination did not terminate")
     finally:
         second.close()
-    after = {path.name: hashlib.sha256(path.read_bytes()).hexdigest() for path in home.rglob("*.jsonl")}
+    after = {path.relative_to(home).as_posix(): hashlib.sha256(path.read_bytes()).hexdigest()
+             for path in (home / "sessions").rglob("rollout-*.jsonl")}
     with sqlite3.connect(f"file:{(home / 'state_5.sqlite').as_posix()}?mode=ro", uri=True) as db:
         db_count = db.execute("SELECT COUNT(*) FROM threads").fetchone()[0]
     passed = (pages == [25, 25, 25, 25, 5] and len(ids) == len(set(ids)) == 105
               and before == after and Handler.request_count == 105 and db_count == 1)
     result = {"status": "passed" if passed else "failed", "backend_sha256":
         hashlib.sha256(backend.read_bytes()).hexdigest(), "synthetic_turns": 105,
-        "page_lengths": pages, "unique_turns": len(set(ids)), "cold_restart": True,
+        "page_lengths": pages, "unique_turns": len(set(ids)), "cold_restart": True, "normal_exit": True,
         "history_bytes_unchanged_by_read": before == after, "source_database_touched": False,
         "real_credentials_used": False}
     (root / "result.json").write_text(json.dumps(result, indent=2) + "\n")

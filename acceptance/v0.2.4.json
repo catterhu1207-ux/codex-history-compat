@@ -1,0 +1,199 @@
+{
+  "schema_version": 1,
+  "status": "passed",
+  "release_version": "0.2.4",
+  "desktop_version": "26.1013.4894.0",
+  "upstream_commit": "4ebc485ca321243727539187169425fcf972f2c4",
+  "version": "0.163.0-alpha.10.2",
+  "build_source_commit": "1ce7f5f12e912596195f70dede49c3a50c452fbc",
+  "module_tests": 15,
+  "packaging_tests": 20,
+  "source_inputs": {
+    "build_backend.py": "f57081b4868ec38afb2fb1b81ca809738953ab65f0962bba58b9786a63bccb65",
+    "profiles/desktop-26.1013.4894.0-sqlite-v2/deepseek_notice_batch.json": "70f97e6903f72f0011b5da54baf0208721cf664deca4aae4ea58ef229af38e21",
+    "profiles/desktop-26.1013.4894.0-sqlite-v2/integration.patch": "03b0257af9d88ce9d6e606ea1dab7d6cc3dc15b44cc5e025af89537cd40f5ebc",
+    "profiles/desktop-26.1013.4894.0-sqlite-v2/profile.json": "e636ae55771e6d62a3191a4908f06f1e860eb61417696c00435689fd9d2e284c",
+    "profiles/desktop-26.1013.4894.0-sqlite-v2/prompt_history_compat.rs": "b2e552993a7b72100483680498bf9034642cb0344bccb7e5dd65d277eea932f1",
+    "profiles/desktop-26.1013.4894.0-sqlite-v2/sqlite-migrations.json": "cd4925ed6c7b1bf33749e5ff0c487da99d2b51a6d5436f3f29444f50981dbf5a",
+    "tests/cold_resume.py": "a104d9b961caddbad87c8c6bce4f62d2b3d19b0d9b5ec6c3b8193f9fd405774f",
+    "tests/local_replay.py": "5c1c105f0464b81fd2ef79c354f7efff314490b5805cf7d68c9fc914f23d8652",
+    "tests/migration_replay.py": "e968258b71dc91f2789cb0e6f9007471bd023bc0d606f41bcfe75125ad0fd88d",
+    "tests/multipage_history_replay.py": "ec275db2f3a96c8d9709f1127cc17c1357682e318f993ed02243f94e7817180a",
+    "tests/test_profiles.py": "333391c7eaa558a8a10514f2ca9a63708736726d3254054c8e05e1f63034c2b8",
+    "tests/test_sqlite_migrations.py": "b7dcdf0545e68ab8950e61f6a1abc545da44c7fc8bb9a1158954534728f1d269"
+  },
+  "compiled_backend_sha256": "dd48af22fa1952cec7847d5edaf1ede6b531feab117213d24065c5fdb34141e2",
+  "migrations": {
+    "status": "passed",
+    "database_count": 6,
+    "migration_count": 77,
+    "migration_records_unchanged": true,
+    "real_data_used": false,
+    "normal_exit": true,
+    "backend_sha256": "dd48af22fa1952cec7847d5edaf1ede6b531feab117213d24065c5fdb34141e2"
+  },
+  "runtime": {
+    "cold_local": {
+      "status": "passed",
+      "backend_sha256": "dd48af22fa1952cec7847d5edaf1ede6b531feab117213d24065c5fdb34141e2",
+      "global_model_changed": true,
+      "retained_model": "fixture-old",
+      "retained_effort": "high",
+      "resume_uses_saved_task_settings": true,
+      "existing_history_bytes_preserved": true,
+      "real_task_data": false,
+      "compaction_mode": "local",
+      "compaction_requests": 1,
+      "ordinary_requests": 1
+    },
+    "cold_remote": {
+      "status": "passed",
+      "backend_sha256": "dd48af22fa1952cec7847d5edaf1ede6b531feab117213d24065c5fdb34141e2",
+      "global_model_changed": true,
+      "retained_model": "fixture-old",
+      "retained_effort": "high",
+      "resume_uses_saved_task_settings": true,
+      "existing_history_bytes_preserved": true,
+      "real_task_data": false,
+      "compaction_mode": "remote",
+      "compaction_requests": 1,
+      "ordinary_requests": 1
+    },
+    "http": {
+      "status": "passed",
+      "binary_sha256": "dd48af22fa1952cec7847d5edaf1ede6b531feab117213d24065c5fdb34141e2",
+      "binary_version": "codex-cli 0.163.0-alpha.10.2",
+      "exit_code": 0,
+      "request_count": 2,
+      "call_count": 4,
+      "output_count": 4,
+      "call_output_pairing": "complete",
+      "call_positions": [
+        4,
+        5,
+        6,
+        7
+      ],
+      "output_positions": [
+        8,
+        9,
+        10,
+        11
+      ],
+      "notice_message_positions": [],
+      "message_immediately_before_output": [],
+      "folded_notice_output_count": 4,
+      "recorded_items": 12,
+      "content_logged": false,
+      "transport": [
+        "http"
+      ],
+      "fixture_sha256": {
+        "sample-a.png": "f45be4aaa8ce9807f46ebf2385e8bb88b0c9b4bf109c5d7c2e665ba9dc2c7f2d",
+        "sample-b.png": "f45be4aaa8ce9807f46ebf2385e8bb88b0c9b4bf109c5d7c2e665ba9dc2c7f2d",
+        "sample-c.png": "f45be4aaa8ce9807f46ebf2385e8bb88b0c9b4bf109c5d7c2e665ba9dc2c7f2d",
+        "sample-d.png": "f45be4aaa8ce9807f46ebf2385e8bb88b0c9b4bf109c5d7c2e665ba9dc2c7f2d"
+      }
+    },
+    "websocket": {
+      "status": "passed",
+      "binary_sha256": "dd48af22fa1952cec7847d5edaf1ede6b531feab117213d24065c5fdb34141e2",
+      "binary_version": "codex-cli 0.163.0-alpha.10.2",
+      "exit_code": 0,
+      "request_count": 2,
+      "call_count": 4,
+      "output_count": 4,
+      "call_output_pairing": "complete",
+      "call_positions": [
+        4,
+        5,
+        6,
+        7
+      ],
+      "output_positions": [
+        8,
+        9,
+        10,
+        11
+      ],
+      "notice_message_positions": [],
+      "message_immediately_before_output": [],
+      "folded_notice_output_count": 4,
+      "recorded_items": 12,
+      "content_logged": false,
+      "transport": [
+        "websocket"
+      ],
+      "fixture_sha256": {
+        "sample-a.png": "f45be4aaa8ce9807f46ebf2385e8bb88b0c9b4bf109c5d7c2e665ba9dc2c7f2d",
+        "sample-b.png": "f45be4aaa8ce9807f46ebf2385e8bb88b0c9b4bf109c5d7c2e665ba9dc2c7f2d",
+        "sample-c.png": "f45be4aaa8ce9807f46ebf2385e8bb88b0c9b4bf109c5d7c2e665ba9dc2c7f2d",
+        "sample-d.png": "f45be4aaa8ce9807f46ebf2385e8bb88b0c9b4bf109c5d7c2e665ba9dc2c7f2d"
+      }
+    },
+    "multipage": {
+      "status": "passed",
+      "backend_sha256": "dd48af22fa1952cec7847d5edaf1ede6b531feab117213d24065c5fdb34141e2",
+      "synthetic_turns": 105,
+      "page_lengths": [
+        25,
+        25,
+        25,
+        25,
+        5
+      ],
+      "unique_turns": 105,
+      "cold_restart": true,
+      "history_bytes_unchanged_by_read": true,
+      "source_database_touched": false,
+      "real_credentials_used": false
+    },
+    "official_http_control": {
+      "status": "passed",
+      "binary_sha256": "f6dbf48cb70f62649c645f26c87dc9bf84cc36986202dfad8e12fb5b8ca70312",
+      "binary_version": "codex-cli 0.163.0-alpha.10.2",
+      "exit_code": 0,
+      "request_count": 2,
+      "call_count": 4,
+      "output_count": 4,
+      "call_output_pairing": "complete",
+      "call_positions": [
+        4,
+        5,
+        6,
+        7
+      ],
+      "output_positions": [
+        8,
+        10,
+        12,
+        14
+      ],
+      "notice_message_positions": [
+        9,
+        11,
+        13,
+        15
+      ],
+      "message_immediately_before_output": [
+        10,
+        12,
+        14
+      ],
+      "folded_notice_output_count": 0,
+      "recorded_items": 16,
+      "content_logged": false,
+      "transport": [
+        "http"
+      ],
+      "fixture_sha256": {
+        "sample-a.png": "f45be4aaa8ce9807f46ebf2385e8bb88b0c9b4bf109c5d7c2e665ba9dc2c7f2d",
+        "sample-b.png": "f45be4aaa8ce9807f46ebf2385e8bb88b0c9b4bf109c5d7c2e665ba9dc2c7f2d",
+        "sample-c.png": "f45be4aaa8ce9807f46ebf2385e8bb88b0c9b4bf109c5d7c2e665ba9dc2c7f2d",
+        "sample-d.png": "f45be4aaa8ce9807f46ebf2385e8bb88b0c9b4bf109c5d7c2e665ba9dc2c7f2d"
+      }
+    }
+  },
+  "real_credentials_used": false,
+  "model_services": "loopback_only"
+}

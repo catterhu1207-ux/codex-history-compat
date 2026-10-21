@@ -1,7 +1,7 @@
-# v0.2.4
+# v0.2.5
 
-Adds the independent `desktop-26.1013.4894.0-sqlite-v2` profile for `codex-cli 0.163.0-alpha.10.2`. It preserves all 77 official database migration checksums and existing profiles.
+Adds the independent `desktop-26.1016.6573.0-sqlite-v2` configuration for `codex-cli 0.163.0-alpha.11.1`, with unchanged compatibility semantics and all 77 official migration checksums. Previous profiles remain available.
 
-An independently built Windows backend passed compatibility module tests, HTTP and real WebSocket replay, local and remote V2 compaction, task-setting restoration, and 105-turn paginated history checks. All model-service tests used local synthetic fixtures.
+The Windows source build passed 15 module tests, HTTP and real WebSocket replay, cold task-setting restoration, local and remote V2 compaction, database startup and 105-turn pagination. Tests used synthetic data and local services. Public build inputs are pinned to `7cf7c00b0b7ce435e2264c04f5b88e0068e41ae2`.
 
-Build inputs are pinned to `1ce7f5f12e912596195f70dede49c3a50c452fbc`; documentation and acceptance records follow that revision. The optional existing-toolchain and separate-release-cache arguments make Windows builds reproducible without installing tools. Assets contain source and checksums. The desktop installer is released separately after its own runtime checks.
+Assets contain source and checksums. Build the optional backend locally; the desktop installer continues to use the official backend by default.

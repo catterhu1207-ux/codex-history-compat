@@ -61,6 +61,7 @@ class Client:
         raise TimeoutError('turn/completed')
     def close(self):
         self.p.stdin.close();self.p.wait(timeout=30);self.log.close()
+        if self.p.returncode!=0:raise RuntimeError('backend_exit_code:'+str(self.p.returncode))
 try:
     first=Client();started=first.call('thread/start',{'cwd':str(workspace),'approvalPolicy':'never','sandbox':'read-only','model':'fixture-old','modelProvider':'fixture','persistExtendedHistory':True})
     task=started['thread']['id']
@@ -80,6 +81,6 @@ try:
     compaction_requests=sum(row['phase']=='compaction' for row in requests)
     if compact_mode:passed=passed and compaction_requests==1
     result={'status':'passed' if passed else 'failed','backend_sha256':hashlib.sha256(binary.read_bytes()).hexdigest(),'global_model_changed':True,'retained_model':resumed['model'],'retained_effort':resumed.get('reasoningEffort'),'resume_uses_saved_task_settings':True,'existing_history_bytes_preserved':preserved,'real_task_data':False}
-    result.update(compaction_mode=compact_mode,compaction_requests=compaction_requests,ordinary_requests=sum(row['phase']=='ordinary' for row in requests))
+    result.update(normal_exit=True,compaction_mode=compact_mode,compaction_requests=compaction_requests,ordinary_requests=sum(row['phase']=='ordinary' for row in requests))
     (root/'result.json').write_text(json.dumps(result,indent=2));print(json.dumps(result));sys.exit(0 if passed else 1)
 finally:server.shutdown();server.server_close()

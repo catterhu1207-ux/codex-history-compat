@@ -1,5 +1,18 @@
 # codex-history-compat
 
+## Desktop 26.1016.6573.0
+
+Profile `desktop-26.1016.6573.0-sqlite-v2` builds `codex-cli 0.163.0-alpha.11.1` from upstream commit `5425d3e625daa58eea3ad1de27c087eb3b2ffbd3`. Its public build inputs are pinned to `7cf7c00b0b7ce435e2264c04f5b88e0068e41ae2`. Use Python 3.11+, Rust 1.95.0, x64 MSVC and Windows SDK.
+
+```powershell
+git checkout 7cf7c00b0b7ce435e2264c04f5b88e0068e41ae2
+py -3 build_backend.py --profile desktop-26.1016.6573.0-sqlite-v2 --target C:\codex-compat\backend-6573 --official-backend C:\official\app\resources\codex.exe
+```
+
+The independent Windows build passed 15 compatibility-module tests and seven runtime groups: HTTP, real WebSocket, saved task settings after cold restart, local compaction, remote compaction V2, 77 migrations across six database families, and 105-turn paginated history. All model-service traffic used synthetic loopback fixtures. Existing profiles and apply entry points retain their identities. [Acceptance](ACCEPTANCE.json) binds the tested source and build; [desktop releases](https://github.com/catterhu1207-ux/codex-desktop-workflow/releases) provide the separate installer.
+
+中文：新增 26.1016.6573.0 独立配置。兼容处理只规范化发出的请求副本，保留工具元数据、持久历史和任务设置；旧配置及调用方式继续保留。发行资产提供源码及校验和，兼容后端由使用者选择后在本机编译。
+
 ## Desktop 26.1013.4894.0 source profile
 
 The `desktop-26.1013.4894.0-sqlite-v2` profile targets `codex-cli 0.163.0-alpha.10.2` at upstream commit `4ebc485ca321243727539187169425fcf972f2c4`. Build from compatibility-source commit `1ce7f5f12e912596195f70dede49c3a50c452fbc`:
@@ -134,4 +147,4 @@ Linux/macOS 可使用 `./apply.sh /path/to/codex`。应用脚本会复制兼容�
 
 The sqlite-v2 profile checks all 72 migrations across state, logs, goals, memories, queue and thread history. Cached binaries missing any checksum trigger state-crate recompilation. Existing profiles retain their original identities.
 
-26.1013.3656.0 与 26.1013.4894.0 的开发源码配置见[开发说明](docs/development-26.1013.md)。当前稳定发行版仍为 v0.2.3。
+26.1013.3656.0 与 26.1013.4894.0 的开发源码配置见[开发说明](docs/development-26.1013.md)。各版本的验收范围见兼容矩阵和发行记录。

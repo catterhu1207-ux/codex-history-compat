@@ -1,3 +1,9 @@
+# Desktop 26.1016.6573.0 acceptance
+
+The independent public-source build passed 22 profile/packaging tests, 15 Rust module tests and all seven runtime groups recorded in [ACCEPTANCE.json](ACCEPTANCE.json). Ordinary and WebSocket tests were also run against the exact official backend. No real chat data or paid model services were used. Existing history and migration records remained unchanged.
+
+The prior [v0.2.4 record](acceptance/v0.2.4.json) is retained separately.
+
 # Desktop 26.928.4866.0 acceptance
 
 An independent Windows build from compatibility commit `f14ab65de66b4e107f962ced5022be07c8a36cc1` passed all six runtime checks:
