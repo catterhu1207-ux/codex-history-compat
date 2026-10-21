@@ -33,5 +33,6 @@
     "unsigned_body_sha256_with_zero_checksum": "63de3c1629c165276e3a83ac042c35c6fe5b4d7ed0dcaed217209390b46b87f5",
     "all_named_sections_identical": true,
     "difference_scope": "PE checksum and Authenticode certificate only"
-  }
+  },
+  "upstream_version": "0.163.0-alpha.11"
 }

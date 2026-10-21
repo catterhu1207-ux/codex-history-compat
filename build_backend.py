@@ -9,6 +9,21 @@ def sha(path):
     with path.open('rb') as stream:
         return hashlib.file_digest(stream,'sha256').hexdigest()
 
+def inject_workspace_version(manifest, lock, data):
+    """Bind release-tag versions as well as the development 0.0.0 workspace."""
+    import tomllib
+    source_version=data.get('upstream_version','0.0.0')
+    if tomllib.loads(manifest)['workspace']['package']['version']!=source_version:
+        raise ValueError('upstream_workspace_version_mismatch')
+    updated,count=re.subn(r'(?m)^version = "'+re.escape(source_version)+r'"$',
+                         'version = "'+data['version']+'"',manifest)
+    if count!=1:raise ValueError('workspace_version_injection_ambiguous')
+    updated_lock=lock.replace('version = "'+source_version+'"','version = "'+data['version']+'"')
+    before=tomllib.loads(lock)['package'];after=tomllib.loads(updated_lock)['package']
+    if [p for p in before if 'source' in p]!=[p for p in after if 'source' in p]:
+        raise ValueError('external_dependencies_changed')
+    return updated,updated_lock
+
 def checked(args, cwd=None, env=None):
     return subprocess.check_output(args,cwd=cwd,env=env,text=True,encoding='utf8',errors='replace').strip()
 
@@ -145,13 +160,10 @@ def build(source,target,profile,official_backend=None,target_cache=None,dry_run=
         official_bytes=official_backend.read_bytes() if official_backend else None)
     cargo=src/'codex-rs/Cargo.toml'
     text=subprocess.check_output(['git','show','HEAD:codex-rs/Cargo.toml'],cwd=src).decode().replace('\r\n','\n')
-    text,count=re.subn(r'(?m)^version = "0\.0\.0"$', 'version = "'+data['version']+'"',text)
-    if count not in (0,1) or __import__('tomllib').loads(text)['workspace']['package']['version']!=data['version']:
-        raise ValueError('workspace_version_injection_ambiguous')
+    text,desired_lock=inject_workspace_version(text,upstream_lock.decode().replace('\r\n','\n'),data)
     if reuse_verified_source and cargo.read_text()!=text:raise ValueError('cached_workspace_manifest_mismatch')
     if cargo.read_bytes()!=text.encode():cargo.write_text(text,encoding='utf8',newline='\n')
     lock=src/'codex-rs/Cargo.lock'
-    desired_lock=upstream_lock.decode().replace('version = "0.0.0"','version = "'+data['version']+'"')
     if reuse_verified_source and lock.read_bytes()!=desired_lock.encode():raise ValueError('cached_dependency_lock_mismatch')
     if lock.read_bytes()!=desired_lock.encode():lock.write_text(desired_lock,encoding='utf8',newline='\n')
     after_lock=__import__('tomllib').loads(lock.read_text())

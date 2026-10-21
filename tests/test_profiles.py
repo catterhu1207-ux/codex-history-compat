@@ -7,6 +7,19 @@ spec=importlib.util.spec_from_file_location('recipe',ROOT/'build_backend.py')
 recipe=importlib.util.module_from_spec(spec);spec.loader.exec_module(recipe)
 
 class Profiles(unittest.TestCase):
+    def test_version_injection_binds_release_tags_and_preserves_external_packages(self):
+        for old in ('0.0.0', '0.163.0-alpha.11'):
+            manifest='[workspace.package]\nversion = "'+old+'"\n'
+            lock='[[package]]\nname = "codex-core"\nversion = "'+old+'"\n[[package]]\nname = "external"\nversion = "1.0.0"\nsource = "registry+fixture"\n'
+            data={'version':'0.163.0-alpha.11.1','upstream_version':old}
+            changed,changed_lock=recipe.inject_workspace_version(manifest,lock,data)
+            self.assertIn('version = "0.163.0-alpha.11.1"',changed)
+            self.assertIn('version = "1.0.0"',changed_lock)
+            with self.assertRaisesRegex(ValueError,'upstream_workspace_version_mismatch'):
+                recipe.inject_workspace_version(manifest,lock,{**data,'upstream_version':'wrong'})
+            with self.assertRaisesRegex(ValueError,'external_dependencies_changed'):
+                recipe.inject_workspace_version(manifest,lock.replace('version = "1.0.0"','version = "'+old+'"'),data)
+
     def test_6573_profile_binds_new_upstream_and_preserves_migrations(self):
         folder, current = recipe.load_profile('desktop-26.1016.6573.0-sqlite-v2')
         previous_folder, previous = recipe.load_profile('desktop-26.1013.4894.0-sqlite-v2')
