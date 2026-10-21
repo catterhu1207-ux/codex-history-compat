@@ -7,6 +7,19 @@ spec=importlib.util.spec_from_file_location('recipe',ROOT/'build_backend.py')
 recipe=importlib.util.module_from_spec(spec);spec.loader.exec_module(recipe)
 
 class Profiles(unittest.TestCase):
+    def test_6573_profile_binds_new_upstream_and_preserves_migrations(self):
+        folder, current = recipe.load_profile('desktop-26.1016.6573.0-sqlite-v2')
+        previous_folder, previous = recipe.load_profile('desktop-26.1013.4894.0-sqlite-v2')
+        self.assertNotEqual(current['upstream_commit'], previous['upstream_commit'])
+        self.assertEqual(current['upstream_commit'], '5425d3e625daa58eea3ad1de27c087eb3b2ffbd3')
+        self.assertEqual(current['version'], '0.163.0-alpha.11.1')
+        self.assertEqual(current['source_files'], previous['source_files'])
+        self.assertEqual(recipe.migration_rows(folder, current), recipe.migration_rows(previous_folder, previous))
+        inventory = json.loads((folder / current['sqlite_migrations']).read_text())
+        self.assertEqual(inventory['upstream_commit'], current['upstream_commit'])
+        self.assertEqual(inventory['official_backend_sha256'], current['official_backend_sha256'])
+        self.assertEqual(current['official_backend_equivalence']['upstream_release_commit'], current['upstream_commit'])
+
     def test_4894_profile_reuses_identical_unsigned_backend_code(self):
         new_folder, current = recipe.load_profile('desktop-26.1013.4894.0-sqlite-v2')
         old_folder, previous = recipe.load_profile('desktop-26.1013.3656.0-sqlite-v2')
