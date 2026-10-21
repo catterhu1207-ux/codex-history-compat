@@ -20,3 +20,7 @@ Source profiles `desktop-26.1013.3656.0-sqlite-v2` and `desktop-26.1013.4894.0-s
 These are development source profiles. The stable release remains v0.2.3; a new installable desktop release requires independent public-source build, installer and runtime acceptance. Existing profile identities, default selection and legacy apply entry points are preserved.
 
 The synthetic multi-page replay accepts an explicitly supplied backend and checks cold history restoration against a loopback service. It creates only synthetic task data and makes no paid model requests.
+
+## Desktop 26.1013.4894.0
+
+Profile: `desktop-26.1013.4894.0-sqlite-v2`; upstream `4ebc485ca321243727539187169425fcf972f2c4`; compatibility source `1ce7f5f12e912596195f70dede49c3a50c452fbc`; Rust 1.95.0; 77 unchanged migrations. Existing profiles remain available.

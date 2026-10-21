@@ -20,3 +20,9 @@
 ## v0.1.0
 
 - Publish the original commit-bound history compatibility patch and synthetic fixture.
+
+## 0.2.4
+
+- Add Desktop 26.1013.4894.0 profile and paginated-history validation.
+- Support an existing pinned Rust toolchain and separate release cache.
+- Isolate the version probe in replay tests from the normal user profile.

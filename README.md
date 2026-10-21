@@ -1,5 +1,20 @@
 # codex-history-compat
 
+## Desktop 26.1013.4894.0 source profile
+
+The `desktop-26.1013.4894.0-sqlite-v2` profile targets `codex-cli 0.163.0-alpha.10.2` at upstream commit `4ebc485ca321243727539187169425fcf972f2c4`. Build from compatibility-source commit `1ce7f5f12e912596195f70dede49c3a50c452fbc`:
+
+```powershell
+git checkout 1ce7f5f12e912596195f70dede49c3a50c452fbc
+py -3 build_backend.py --profile desktop-26.1013.4894.0-sqlite-v2 --target C:\codex-compat\backend-4894 --official-backend C:\official\app\resources\codex.exe
+```
+
+The Windows build requires Rust 1.95.0, MSVC and Windows SDK. Optional `--toolchain-root` selects an existing matching toolchain; `--release-target-cache` separates release artifacts from test artifacts. Neither option installs tools or changes the pinned dependencies. The official backend SHA-256 is `f6dbf48cb70f62649c645f26c87dc9bf84cc36986202dfad8e12fb5b8ca70312`.
+
+The independent public-source build passed 15 compatibility module tests, HTTP and real WebSocket loopback replay, local and remote V2 compaction, cold restoration of task settings, 105-turn pagination, and all 77 migration checksums across six databases. [Acceptance](ACCEPTANCE.json) records these results. Desktop installer availability is tracked separately in the [desktop compatibility matrix](https://github.com/catterhu1207-ux/codex-desktop-workflow/blob/main/COMPATIBILITY.md).
+
+中文：新增 26.1013.4894.0 独立配置，保留旧版入口和配置。兼容处理只修改发出的请求副本。源码构建、模拟回放、分页历史、任务设置冷恢复及 77 项迁移摘要已通过；桌面安装包的验收和发行状态请查看桌面仓库。
+
 ## Desktop 26.1007.9446.0 source profile
 
 The `desktop-26.1007.9446.0-sqlite-v2` profile targets `codex-cli 0.162.0-alpha.17.2` at upstream commit `740e5af33c71225640e0c1c1555c514c2c93ab74`. Its build inputs are frozen at compatibility-source commit `a47c618b5b2b9e4438a8208decdada12935fd78f`. Use that exact revision when building for the corresponding desktop integration:
