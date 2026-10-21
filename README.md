@@ -118,3 +118,5 @@ Linux/macOS 可使用 `./apply.sh /path/to/codex`。应用脚本会复制兼容�
 仓库保留适用的 Apache-2.0 `LICENSE` 和 `NOTICE`，并且只包含合成样例。英文说明见 [README.en.md](README.en.md)。
 
 The sqlite-v2 profile checks all 72 migrations across state, logs, goals, memories, queue and thread history. Cached binaries missing any checksum trigger state-crate recompilation. Existing profiles retain their original identities.
+
+26.1013.3656.0 与 26.1013.4894.0 的开发源码配置见[开发说明](docs/development-26.1013.md)。当前稳定发行版仍为 v0.2.3。

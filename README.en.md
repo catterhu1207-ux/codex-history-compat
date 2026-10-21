@@ -105,3 +105,5 @@ On Linux or macOS, run `./apply.sh /path/to/codex`. The scripts copy the compati
 The repository retains the applicable Apache-2.0 `LICENSE` and `NOTICE` and contains synthetic fixtures only. 中文说明见 [README.md](README.md).
 
 The sqlite-v2 profile checks all 72 migrations across state, logs, goals, memories, queue and thread history. Cached binaries missing any checksum trigger state-crate recompilation. Existing profiles retain their original identities.
+
+Development source profiles for 26.1013.3656.0 and 26.1013.4894.0 are documented in [the development notes](docs/development-26.1013.md). Stable releases are listed separately.

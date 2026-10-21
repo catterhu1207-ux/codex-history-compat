@@ -1,0 +1,93 @@
+diff --git a/codex-rs/core/BUILD.bazel b/codex-rs/core/BUILD.bazel
+index 662d643..7f64b65 100644
+--- a/codex-rs/core/BUILD.bazel
++++ b/codex-rs/core/BUILD.bazel
+@@ -2,7 +2,9 @@ load("//:defs.bzl", "codex_rust_crate")
+ 
+ codex_rust_crate(
+     name = "core",
+-    compile_data = glob(["assets/**"]),
++    compile_data = glob(["assets/**"]) + [
++        "src/prompt_history_compat_fixtures/deepseek_notice_batch.json",
++    ],
+     crate_name = "codex_core",
+     crate_srcs = glob(["src/**/*.rs"]) + [
+         "//codex-rs/ext/guardian-v2:src/sync_reviewer/reviewer_config.rs",
+diff --git a/codex-rs/core/src/compact.rs b/codex-rs/core/src/compact.rs
+index 7176134..fea959e 100644
+--- a/codex-rs/core/src/compact.rs
++++ b/codex-rs/core/src/compact.rs
+@@ -293,6 +293,10 @@ async fn run_compact_task_inner_impl(
+         sess.services
+             .executed_tool_calls
+             .attach_to_compaction_prompt(&mut turn_input);
++        let turn_input = crate::prompt_history_compat::sanitize_prompt_history(
++            &turn_context.config.model_provider_id,
++            turn_input,
++        );
+         let turn_input_len = turn_input.len();
+         let base_instructions = if turn_input
+             .iter()
+diff --git a/codex-rs/core/src/compact_remote_v2_attempt.rs b/codex-rs/core/src/compact_remote_v2_attempt.rs
+index 3f14ac5..4453785 100644
+--- a/codex-rs/core/src/compact_remote_v2_attempt.rs
++++ b/codex-rs/core/src/compact_remote_v2_attempt.rs
+@@ -128,8 +128,12 @@ pub(super) async fn run_remote_compact_v2_attempt(
+             let trace_input_history = compaction_trace
+                 .is_enabled()
+                 .then(|| history.raw_items().cloned().collect());
+-            let (mut input, metadata): (Vec<_>, Vec<_>) = history
+-                .for_prompt_annotated(&model_info.input_modalities)
++            let annotated_input = history.for_prompt_annotated(&model_info.input_modalities);
++            let annotated_input = crate::prompt_history_compat::sanitize_prompt_history_annotated(
++                &turn_context.config.model_provider_id,
++                annotated_input,
++            );
++            let (mut input, metadata): (Vec<_>, Vec<_>) = annotated_input
+                 .into_iter()
+                 .map(|envelope| (envelope.item, envelope.metadata))
+                 .unzip();
+@@ -264,8 +268,13 @@ pub(crate) fn capture_background_input(
+         step_context.settings.model_info.usable_context_window(),
+         &base_instructions,
+     );
+-    let (mut input, metadata): (Vec<_>, Vec<_>) = snapshot
+-        .for_prompt_annotated(&step_context.settings.model_info.input_modalities)
++    let annotated_input =
++        snapshot.for_prompt_annotated(&step_context.settings.model_info.input_modalities);
++    let annotated_input = crate::prompt_history_compat::sanitize_prompt_history_annotated(
++        &step_context.turn.config.model_provider_id,
++        annotated_input,
++    );
++    let (mut input, metadata): (Vec<_>, Vec<_>) = annotated_input
+         .into_iter()
+         .map(|envelope| (envelope.item, envelope.metadata))
+         .unzip();
+diff --git a/codex-rs/core/src/lib.rs b/codex-rs/core/src/lib.rs
+index 08b52fc..3b53040 100644
+--- a/codex-rs/core/src/lib.rs
++++ b/codex-rs/core/src/lib.rs
+@@ -38,6 +38,7 @@ mod compact_remote_history;
+ mod compact_remote_v2;
+ mod compact_retained_tool_outputs;
+ mod compact_token_budget;
++mod prompt_history_compat;
+ mod thread_startup_metadata;
+ pub use codex_network_proxy::EnvironmentNetworkPolicy;
+ pub use codex_network_proxy::NetworkDomainPermission;
+diff --git a/codex-rs/core/src/session/turn.rs b/codex-rs/core/src/session/turn.rs
+index d1d4362..8f805c0 100644
+--- a/codex-rs/core/src/session/turn.rs
++++ b/codex-rs/core/src/session/turn.rs
+@@ -1671,7 +1671,10 @@ pub(crate) fn build_prompt(
+ ) -> Prompt {
+     let turn_context = &step_context.turn;
+     Prompt {
+-        input,
++        input: crate::prompt_history_compat::sanitize_prompt_history(
++            &turn_context.config.model_provider_id,
++            input,
++        ),
+         tools: if incremental_tools {
+             Arc::default()
+         } else {

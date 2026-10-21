@@ -7,6 +7,49 @@ spec=importlib.util.spec_from_file_location('recipe',ROOT/'build_backend.py')
 recipe=importlib.util.module_from_spec(spec);spec.loader.exec_module(recipe)
 
 class Profiles(unittest.TestCase):
+    def test_4894_profile_reuses_identical_unsigned_backend_code(self):
+        new_folder, current = recipe.load_profile('desktop-26.1013.4894.0-sqlite-v2')
+        old_folder, previous = recipe.load_profile('desktop-26.1013.3656.0-sqlite-v2')
+        self.assertEqual(current['id'], 'desktop-26.1013.4894.0-sqlite-v2')
+        self.assertEqual(current['desktop_version'], '26.1013.4894.0')
+        self.assertEqual(current['official_backend_sha256'], 'f6dbf48cb70f62649c645f26c87dc9bf84cc36986202dfad8e12fb5b8ca70312')
+        self.assertEqual(current['official_backend_size'], previous['official_backend_size'])
+        self.assertEqual(current['upstream_commit'], previous['upstream_commit'])
+        self.assertEqual(current['version'], previous['version'])
+        self.assertEqual({k:v for k,v in current['files'].items() if k!='sqlite-migrations.json'},
+                         {k:v for k,v in previous['files'].items() if k!='sqlite-migrations.json'})
+        self.assertNotEqual(current['files']['sqlite-migrations.json'], previous['files']['sqlite-migrations.json'])
+        self.assertEqual(current['source_files'], previous['source_files'])
+        self.assertEqual(recipe.migration_rows(new_folder, current), recipe.migration_rows(old_folder, previous))
+        with self.assertRaisesRegex(ValueError, 'migration_official_backend_identity_mismatch'):
+            recipe.migration_rows(new_folder, {**current, 'official_backend_sha256': previous['official_backend_sha256']})
+        equivalence = current['official_backend_equivalence']
+        self.assertEqual(equivalence['predecessor_backend_sha256'], previous['official_backend_sha256'])
+        self.assertTrue(equivalence['all_named_sections_identical'])
+        self.assertEqual(equivalence['unsigned_body_sha256_with_zero_checksum'],
+                         '27647acf46ec1107fb2f052258a92750f9229218fcc0b8595ed337c53d1c6dea')
+
+    def test_3656_profile_extends_exact_9446_migration_lineage(self):
+        folder, current = recipe.load_profile('desktop-26.1013.3656.0-sqlite-v2')
+        old_folder, previous = recipe.load_profile('desktop-26.1007.9446.0-sqlite-v2')
+        rows = recipe.migration_rows(folder, current)
+        old_rows = recipe.migration_rows(old_folder, previous)
+        old_by_path = {row['path']: row for row in old_rows}
+        current_by_path = {row['path']: row for row in rows}
+        self.assertEqual(current['upstream_commit'], '4ebc485ca321243727539187169425fcf972f2c4')
+        self.assertEqual(current['version'], '0.163.0-alpha.10.2')
+        self.assertEqual(current['official_backend_sha256'], '9ecb9df2ecafcc00542ef0966c6f1737a81397dc9531b0a4b178238e2bf4a46d')
+        self.assertEqual(len(rows), 77)
+        self.assertEqual(len({row['database'] for row in rows}), 6)
+        self.assertEqual(set(current_by_path) - set(old_by_path), {
+            'codex-rs/state/migrations/0060_guardian_review_feedback.sql',
+            'codex-rs/state/migrations/0061_thread_read_state.sql',
+        })
+        self.assertTrue(all(current_by_path[path] == old for path, old in old_by_path.items()))
+        self.assertEqual(len(current['source_files']), 7)
+        self.assertNotEqual(current['id'], previous['id'])
+        self.assertNotEqual(current['official_backend_sha256'], previous['official_backend_sha256'])
+
     def test_9446_profile_binds_exact_source_and_75_migrations(self):
         folder, profile = recipe.load_profile('desktop-26.1007.9446.0-sqlite-v2')
         self.assertEqual(profile['upstream_commit'], '740e5af33c71225640e0c1c1555c514c2c93ab74')

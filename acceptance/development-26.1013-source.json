@@ -1,0 +1,31 @@
+{
+  "status": "passed",
+  "checks": [
+    {
+      "profile": "desktop-26.1013.3656.0-sqlite-v2",
+      "upstream_commit": "4ebc485ca321243727539187169425fcf972f2c4",
+      "patch_applies_to_exact_original": true,
+      "patched_source_files_verified": 7,
+      "duplicate_patch_rejected": true
+    },
+    {
+      "profile": "desktop-26.1013.4894.0-sqlite-v2",
+      "upstream_commit": "4ebc485ca321243727539187169425fcf972f2c4",
+      "patch_applies_to_exact_original": true,
+      "patched_source_files_verified": 7,
+      "duplicate_patch_rejected": true
+    }
+  ],
+  "full_public_binary_build_claimed": false,
+  "scope": "development_source_only",
+  "source_tests": {
+    "ran": 20,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "stable_release": "v0.2.3",
+  "official_binary_included": false,
+  "compiled_backend_included": false,
+  "real_task_data_included": false
+}

@@ -16,3 +16,7 @@ The repository excludes compiled binaries, official desktop packages, authentic 
 ## Desktop 26.924.2738.0
 
 `profiles/desktop-26.924.2738.0` pins upstream `0d9c7cbfa6cf1489f55a8a9542b75ddd2c061807` and retains the Apache-2.0 module, minimal integration patch and synthetic fixture. The upstream compatibility integration files and migration tree are unchanged from the prior pinned revision. [Source evidence](SOURCE_26.924.2738.0.json) records the official package and upstream release identity checks.
+
+## 26.1013 development source additions
+
+The two `desktop-26.1013.*-sqlite-v2` directories contain source-bound patches, synthetic fixtures and migration inventories. `tests/multipage_history_replay.py` exercises supplied binaries using a loopback simulator. The source-only checks are recorded in `acceptance/development-26.1013-source.json`; no compiled backend or official package is distributed.

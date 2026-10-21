@@ -1,1 +1,4 @@
 * text=auto eol=lf
+# Preserve exact bytes bound by the new development profile digests.
+profiles/desktop-26.1013.3656.0-sqlite-v2/* -text
+profiles/desktop-26.1013.4894.0-sqlite-v2/* -text

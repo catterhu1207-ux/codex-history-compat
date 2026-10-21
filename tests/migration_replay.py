@@ -4,7 +4,10 @@ from pathlib import Path
 
 binary,source,home=map(lambda s:Path(s).resolve(),sys.argv[1:4])
 root=Path(__file__).resolve().parents[1]
-rows=json.loads((root/'profiles/desktop-26.924.2738.0-sqlite-v2/sqlite-migrations.json').read_text())['migrations']
+profile=sys.argv[4] if len(sys.argv)>4 else 'desktop-26.924.2738.0-sqlite-v2'
+profile_dir=(root/'profiles'/profile).resolve()
+if profile_dir.parent!=(root/'profiles').resolve():raise ValueError('profile_path_escape')
+rows=json.loads((profile_dir/'sqlite-migrations.json').read_text())['migrations']
 home.mkdir(parents=True,exist_ok=False)
 names=list(dict.fromkeys(row['database'] for row in rows))
 def snapshot():

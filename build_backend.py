@@ -27,7 +27,10 @@ def migration_rows(folder, data):
     """Keep legacy identities while qualifying every database in new profiles."""
     name=data.get('sqlite_migrations', 'migrations.json')
     if name not in data['files']:raise ValueError('migration_inventory_not_hash_bound')
-    rows=json.loads((folder/name).read_text())['migrations']
+    manifest=json.loads((folder/name).read_text())
+    if data.get('sqlite_migrations') and manifest.get('official_backend_sha256')!=data['official_backend_sha256']:
+        raise ValueError('migration_official_backend_identity_mismatch')
+    rows=manifest['migrations']
     return [dict(row, source_path=row['path'] if data.get('sqlite_migrations') else 'codex-rs/state/migrations/'+row['path']) for row in rows]
 
 def qualify_migration_bytes(src, rows, *, all_databases=False, official_bytes=None):
