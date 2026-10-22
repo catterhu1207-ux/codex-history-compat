@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
   "status": "passed",
-  "release_version": "0.2.6",
+  "release_version": "0.2.7",
   "desktop_version": "26.1016.8120.0",
   "upstream_commit": "680c4ba93ec79c292287fb9e0b627dc7a76e3b5e",
   "version": "0.163.0-alpha.11.1.1",

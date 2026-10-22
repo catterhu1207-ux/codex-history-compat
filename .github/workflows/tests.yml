@@ -26,6 +26,9 @@ jobs:
             profile: desktop-26.1013.4894.0-sqlite-v2
           - ref: 5425d3e625daa58eea3ad1de27c087eb3b2ffbd3
             profile: desktop-26.1016.6573.0-sqlite-v2
+          - ref: 680c4ba93ec79c292287fb9e0b627dc7a76e3b5e
+            profile: desktop-26.1016.8120.0-sqlite-v2
+            toolchain: '1.99.1'
     env:
       CARGO_BUILD_JOBS: 2
       CARGO_PROFILE_DEV_DEBUG: 0
@@ -39,7 +42,7 @@ jobs:
           ref: ${{ matrix.ref }}
           path: upstream
       - uses: dtolnay/rust-toolchain@master
-        with: {toolchain: '1.95.0'}
+        with: {toolchain: "${{ matrix.toolchain || '1.95.0' }}"}
       - name: Apply pinned profile
         run: |
           if [ "${{ matrix.profile }}" = "legacy" ]; then
@@ -48,7 +51,7 @@ jobs:
             python3 ./patch/build_backend.py --profile "${{ matrix.profile }}" --apply ./upstream
           fi
       - name: Match the current Windows source-build inputs
-        if: matrix.profile == 'desktop-26.1016.6573.0-sqlite-v2'
+        if: matrix.profile == 'desktop-26.1016.6573.0-sqlite-v2' || matrix.profile == 'desktop-26.1016.8120.0-sqlite-v2'
         run: |
           python3 - <<'PY'
           import sys
@@ -56,7 +59,7 @@ jobs:
           sys.path.insert(0, 'patch')
           import build_backend as build
           source = Path('upstream')
-          folder, profile = build.load_profile('desktop-26.1016.6573.0-sqlite-v2')
+          folder, profile = build.load_profile('${{ matrix.profile }}')
           manifest = source / 'codex-rs/Cargo.toml'
           lock = source / 'codex-rs/Cargo.lock'
           text, locked = build.inject_workspace_version(manifest.read_text(), lock.read_text(), profile)
@@ -65,8 +68,8 @@ jobs:
           build.qualify_migration_bytes(source, build.migration_rows(folder, profile), all_databases=True)
           PY
       - name: Test current compatibility module with locked dependencies
-        if: matrix.profile == 'desktop-26.1016.6573.0-sqlite-v2'
+        if: matrix.profile == 'desktop-26.1016.6573.0-sqlite-v2' || matrix.profile == 'desktop-26.1016.8120.0-sqlite-v2'
         run: cargo test --locked --manifest-path upstream/codex-rs/Cargo.toml -p codex-core prompt_history_compat --lib -- --test-threads 1
       - name: Test retained profiles
-        if: matrix.profile != 'desktop-26.1016.6573.0-sqlite-v2'
+        if: matrix.profile != 'desktop-26.1016.6573.0-sqlite-v2' && matrix.profile != 'desktop-26.1016.8120.0-sqlite-v2'
         run: cargo test --manifest-path upstream/codex-rs/Cargo.toml -p codex-core prompt_history_compat --lib -- --test-threads 1

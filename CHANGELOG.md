@@ -1,6 +1,6 @@
 # Changelog
 
-## v0.2.6
+## v0.2.7
 
 Adds the independent `desktop-26.1016.8120.0-sqlite-v2` configuration for `codex-cli 0.163.0-alpha.11.1.1`, with unchanged compatibility semantics and all 77 official migration checksums. Previous profiles remain available.
 
