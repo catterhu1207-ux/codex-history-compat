@@ -49,6 +49,8 @@ def migration_rows(folder, data):
     manifest=json.loads((folder/name).read_text())
     if data.get('sqlite_migrations') and manifest.get('official_backend_sha256')!=data['official_backend_sha256']:
         raise ValueError('migration_official_backend_identity_mismatch')
+    if 'upstream_commit' in manifest and manifest['upstream_commit']!=data['upstream_commit']:
+        raise ValueError('migration_upstream_commit_mismatch')
     rows=manifest['migrations']
     return [dict(row, source_path=row['path'] if data.get('sqlite_migrations') else 'codex-rs/state/migrations/'+row['path']) for row in rows]
 
