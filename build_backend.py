@@ -9,6 +9,33 @@ def sha(path):
     with path.open('rb') as stream:
         return hashlib.file_digest(stream,'sha256').hexdigest()
 
+def module_test_result(log):
+    text=log.read_text(encoding='utf8',errors='replace')
+    rows=re.findall(r'(?m)^test result: ok\. (\d+) passed; (\d+) failed; (\d+) ignored;',text)
+    if len(rows)!=1 or int(rows[0][0])<1 or rows[0][1:]!=('0','0'):
+        raise ValueError('module_test_log_has_no_complete_success')
+    return int(rows[0][0])
+
+def cached_module_test(target,binding):
+    proof=target/'module-test-cache.json';log=target/'test.log'
+    if not proof.exists():return None
+    if proof.is_symlink() or not log.is_file() or log.is_symlink():
+        raise ValueError('module_test_cache_files_invalid')
+    value=json.loads(proof.read_text(encoding='utf8'))
+    if value.get('schema_version')!=1 or value.get('status')!='passed' or value.get('binding')!=binding:
+        raise ValueError('module_test_cache_inputs_changed')
+    if value.get('test_log_sha256')!=sha(log) or value.get('test_count')!=module_test_result(log):
+        raise ValueError('module_test_cache_log_changed')
+    return value
+
+def save_module_test(target,binding):
+    log=target/'test.log'
+    value={'schema_version':1,'status':'passed','binding':binding,'test_log_sha256':sha(log),'test_count':module_test_result(log)}
+    path=target/'module-test-cache.json';temporary=path.with_suffix('.tmp')
+    if path.exists() or temporary.exists():raise ValueError('module_test_cache_already_exists')
+    temporary.write_text(json.dumps(value,indent=2)+'\n',encoding='utf8');os.replace(temporary,path)
+    return value
+
 def inject_workspace_version(manifest, lock, data):
     """Bind release-tag versions as well as the development 0.0.0 workspace."""
     import tomllib
@@ -100,7 +127,7 @@ def invalidate_stale_migration_cache(src, binary, rows):
     (src/'codex-rs/state/src/lib.rs').touch()
     return True
 
-def build(source,target,profile,official_backend=None,target_cache=None,dry_run=False,reuse_verified_source=False,release_target_cache=None,toolchain_root=None):
+def build(source,target,profile,official_backend=None,target_cache=None,dry_run=False,reuse_verified_source=False,release_target_cache=None,toolchain_root=None,test_only=False):
     folder,data=load_profile(profile)
     profile_digest=sha(folder/'profile.json')
     if sys.version_info < (3,11):raise ValueError('python_3_11_required_for_source_build')
@@ -189,7 +216,14 @@ def build(source,target,profile,official_backend=None,target_cache=None,dry_run=
     if data.get('sqlite_migrations'):
         invalidate_stale_migration_cache(src,release_cache/'release/codex.exe',migrations)
     commands=[('test',cargo_prefix+['test','--locked','-p','codex-core','--lib','prompt_history_compat','--','--test-threads','1']),('build',cargo_prefix+['build','--locked','-p','codex-cli','--bin','codex','--release','-j','1'])]
+    build_environment={k:env.get(k,'') for k in ('CARGO_BUILD_JOBS','CARGO_INCREMENTAL','CARGO_PROFILE_DEV_DEBUG','CARGO_PROFILE_TEST_DEBUG','CARGO_PROFILE_RELEASE_LTO','CARGO_PROFILE_RELEASE_DEBUG','CARGO_PROFILE_RELEASE_STRIP','RUSTFLAGS','CARGO_ENCODED_RUSTFLAGS','CARGO_BUILD_RUSTFLAGS','RUSTC_BOOTSTRAP','RUSTC_WRAPPER')}
+    binding={'profile_sha256':profile_digest,'compat_commit':compat_commit,'build_recipe_sha256':recipe_sha256,
+        'source_commit':data['upstream_commit'],'source_files':data['source_files'],'cargo_lock_sha256':sha(lock),'cargo_toml_sha256':sha(cargo),
+        'migration_sha256':{r['source_path']:r['sha256'] for r in migrations},'rustc':toolchain,
+        'windows_sdk_version':sdk_version,'msvc_tools_version':os.environ.get('VCToolsVersion'),'build_environment':build_environment}
+    test_proof=cached_module_test(target,binding)
     if data.get('build_binary_only'):
+        if test_only:raise ValueError('binary_only_profile_has_no_module_test_phase')
         if (data['desktop_version'],data['upstream_commit']) not in {
             ('26.928.4866.0','ff6aec96948b70d94983af2641a6b67c94faeff5'),
             ('26.1007.9446.0','740e5af33c71225640e0c1c1555c514c2c93ab74'),
@@ -199,11 +233,28 @@ def build(source,target,profile,official_backend=None,target_cache=None,dry_run=
         # and migration acceptance remain mandatory release gates.
         commands=commands[1:]
     for stage,command in commands:
+        if stage=='test' and test_proof is not None:continue
+        if stage=='build' and test_only:continue
         stage_env = dict(env)
         if stage == 'build': stage_env['CARGO_TARGET_DIR'] = str(release_cache)
         with (target/(stage+'.log')).open('wb') as log:
             cp=subprocess.run(command,cwd=src/'codex-rs',env=stage_env,stdout=log,stderr=subprocess.STDOUT)
         if cp.returncode:raise ValueError('backend_'+stage+'_failed:'+str(cp.returncode))
+        if stage=='test':
+            if sha(Path(__file__))!=recipe_sha256 or sha(folder/'profile.json')!=profile_digest or load_profile(profile)[1]!=data:
+                raise ValueError('module_test_recipe_or_profile_changed')
+            if cargo.read_bytes()!=text.encode() or lock.read_bytes()!=desired_lock.encode():
+                raise ValueError('module_test_workspace_inputs_changed')
+            for name,digest in data['source_files'].items():
+                if hashlib.sha256((src/name).read_bytes().replace(b'\r\n',b'\n')).hexdigest()!=digest:
+                    raise ValueError('module_test_source_changed:'+name)
+            for row in migrations:
+                if sha(src/row['source_path'])!=row['sha256']:
+                    raise ValueError('module_test_migration_changed:'+row['path'])
+            test_proof=save_module_test(target,binding)
+    if test_only:
+        if test_proof is None:raise ValueError('module_test_proof_missing')
+        return {'status':'module_tests_passed','proof':str(target/'module-test-cache.json'),'test_count':test_proof['test_count'],'binary_built':False}
     binary=release_cache/'release/codex.exe'
     raw=binary.read_bytes()
     pe_offset=int.from_bytes(raw[60:64],'little')
@@ -229,18 +280,19 @@ def build(source,target,profile,official_backend=None,target_cache=None,dry_run=
         'patched':{'file':'codex.exe','sha256':sha(target/'codex.exe'),'size':(target/'codex.exe').stat().st_size,'pe_machine':'amd64','authenticode_status':'NotSigned','version_output':version},
         'provenance':{'repository':data['upstream_repository'],'source_commit':data['upstream_commit'],'profile_sha256':sha(folder/'profile.json'),'patch_files':data['files'],'rustc':toolchain,'cargo_lock_sha256':sha(lock),'external_dependencies_unchanged':True,'migration_sha384':{r['path']:r['sqlx_sha384'] for r in migrations},'source_snapshots':{str(p.relative_to(src)):{'sha256':sha(p)} for p in [cargo,lock,*[src/'codex-rs/core/src'/name for name in ['lib.rs','session/turn.rs','compact.rs','compact_remote_v2_attempt.rs','prompt_history_compat.rs']]]}}}
     manifest['provenance'].update({'compat_repository':'https://github.com/catterhu1207-ux/codex-history-compat.git','compat_commit':compat_commit,'build_recipe_sha256':recipe_sha256,'windows_sdk_version':sdk_version,'msvc_tools_version':os.environ.get('VCToolsVersion')})
-    manifest['provenance']['build_environment']={k:env[k] for k in ('CARGO_BUILD_JOBS','CARGO_INCREMENTAL','CARGO_PROFILE_DEV_DEBUG','CARGO_PROFILE_TEST_DEBUG','CARGO_PROFILE_RELEASE_LTO','CARGO_PROFILE_RELEASE_DEBUG','CARGO_PROFILE_RELEASE_STRIP')}
+    manifest['provenance']['build_environment']=build_environment
+    if test_proof is not None:manifest['provenance']['module_test_cache_sha256']=sha(target/'module-test-cache.json')
     if sha(Path(__file__))!=recipe_sha256:raise ValueError('build_recipe_changed_during_build')
     (target/'manifest.json').write_text(json.dumps(manifest,indent=2)+'\n',encoding='utf8')
     return {'status':'built','manifest':str(target/'manifest.json'),'backend_sha256':manifest['patched']['sha256']}
 
 def main():
-    p=argparse.ArgumentParser();p.add_argument('--profile',default='0.158.0-alpha.2');p.add_argument('--source',type=Path);p.add_argument('--target',type=Path);p.add_argument('--official-backend',type=Path);p.add_argument('--target-cache',type=Path);p.add_argument('--release-target-cache',type=Path);p.add_argument('--toolchain-root',type=Path);p.add_argument('--apply',type=Path);p.add_argument('--dry-run',action='store_true');p.add_argument('--reuse-verified-source',action='store_true');a=p.parse_args()
+    p=argparse.ArgumentParser();p.add_argument('--profile',default='0.158.0-alpha.2');p.add_argument('--source',type=Path);p.add_argument('--target',type=Path);p.add_argument('--official-backend',type=Path);p.add_argument('--target-cache',type=Path);p.add_argument('--release-target-cache',type=Path);p.add_argument('--toolchain-root',type=Path);p.add_argument('--apply',type=Path);p.add_argument('--dry-run',action='store_true');p.add_argument('--reuse-verified-source',action='store_true');p.add_argument('--test-only',action='store_true');a=p.parse_args()
     try:
         if a.apply:result=apply(a.apply,a.profile);print(json.dumps({'status':'applied','profile':result['id']}))
         else:
             if not a.target:raise ValueError('target_required')
-            print(json.dumps(build(a.source,a.target.resolve(),a.profile,a.official_backend,a.target_cache,a.dry_run,a.reuse_verified_source,a.release_target_cache,a.toolchain_root)))
+            print(json.dumps(build(a.source,a.target.resolve(),a.profile,a.official_backend,a.target_cache,a.dry_run,a.reuse_verified_source,a.release_target_cache,a.toolchain_root,a.test_only)))
         return 0
     except (ValueError,OSError,subprocess.CalledProcessError) as error:
         print(json.dumps({'status':'blocked','reason':str(error)}),file=sys.stderr);return 2
