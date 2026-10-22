@@ -1,5 +1,18 @@
 # codex-history-compat
 
+## Desktop 26.1016.8120.0
+
+Profile `desktop-26.1016.8120.0-sqlite-v2` builds `codex-cli 0.163.0-alpha.11.1.1` from upstream commit `680c4ba93ec79c292287fb9e0b627dc7a76e3b5e`. Its public build inputs are pinned to `8bdfd1e3a92be0cb24ff415ecc45e247ca24e6ac`. Use Python 3.11+, Rust 1.99.1, x64 MSVC and Windows SDK.
+
+```powershell
+git checkout 8bdfd1e3a92be0cb24ff415ecc45e247ca24e6ac
+py -3 build_backend.py --profile desktop-26.1016.8120.0-sqlite-v2 --target C:\codex-compat\backend-8120 --official-backend C:\official\app\resources\codex.exe
+```
+
+The independent Windows build passed 15 compatibility-module tests and seven runtime groups: HTTP, real WebSocket, saved task settings after cold restart, local compaction, remote compaction V2, 77 migrations across six database families, and 105-turn paginated history. All model-service traffic used synthetic loopback fixtures. Existing profiles and apply entry points retain their identities. [Acceptance](ACCEPTANCE.json) binds the tested source and build; [desktop releases](https://github.com/catterhu1207-ux/codex-desktop-workflow/releases) provide the separate installer.
+
+中文：新增 26.1016.8120.0 独立配置。兼容处理只规范化发出的请求副本，保留工具元数据、持久历史和任务设置；旧配置及调用方式继续保留。发行资产提供源码及校验和，兼容后端由使用者选择后在本机编译。
+
 ## Desktop 26.1016.6573.0
 
 Profile `desktop-26.1016.6573.0-sqlite-v2` builds `codex-cli 0.163.0-alpha.11.1` from upstream commit `5425d3e625daa58eea3ad1de27c087eb3b2ffbd3`. Its public build inputs are pinned to `7cf7c00b0b7ce435e2264c04f5b88e0068e41ae2`. Use Python 3.11+, Rust 1.95.0, x64 MSVC and Windows SDK.

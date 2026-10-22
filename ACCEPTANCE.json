@@ -1,35 +1,37 @@
 {
   "schema_version": 2,
   "status": "passed",
-  "release_version": "0.2.5",
-  "desktop_version": "26.1016.6573.0",
-  "upstream_commit": "5425d3e625daa58eea3ad1de27c087eb3b2ffbd3",
-  "version": "0.163.0-alpha.11.1",
-  "build_source_commit": "7cf7c00b0b7ce435e2264c04f5b88e0068e41ae2",
+  "release_version": "0.2.6",
+  "desktop_version": "26.1016.8120.0",
+  "upstream_commit": "680c4ba93ec79c292287fb9e0b627dc7a76e3b5e",
+  "version": "0.163.0-alpha.11.1.1",
+  "build_source_commit": "8bdfd1e3a92be0cb24ff415ecc45e247ca24e6ac",
   "module_tests": 15,
-  "packaging_tests": 22,
+  "packaging_tests": 28,
   "source_inputs": {
-    "build_backend.py": "4ab8cfd56ff6ba3d347fd6384d19f29bd58b35c8cf33b91e7f4899535ae0fc30",
-    "profiles/desktop-26.1016.6573.0-sqlite-v2/deepseek_notice_batch.json": "70f97e6903f72f0011b5da54baf0208721cf664deca4aae4ea58ef229af38e21",
-    "profiles/desktop-26.1016.6573.0-sqlite-v2/integration.patch": "03b0257af9d88ce9d6e606ea1dab7d6cc3dc15b44cc5e025af89537cd40f5ebc",
-    "profiles/desktop-26.1016.6573.0-sqlite-v2/profile.json": "fa6496324b13ea56b6c56de4681b065ce05facec6c83f9a9102d7675c989a504",
-    "profiles/desktop-26.1016.6573.0-sqlite-v2/prompt_history_compat.rs": "b2e552993a7b72100483680498bf9034642cb0344bccb7e5dd65d277eea932f1",
-    "profiles/desktop-26.1016.6573.0-sqlite-v2/sqlite-migrations.json": "39625262c8f0fe3c0397ea57e4d4b859a1e2f0d380f7172f62e8d646260f31d6",
+    "build_backend.py": "fee000bafa67521004550e227a97cae71e678bae241a12d9d42a5b10742b91c7",
+    "profiles/desktop-26.1016.8120.0-sqlite-v2/deepseek_notice_batch.json": "70f97e6903f72f0011b5da54baf0208721cf664deca4aae4ea58ef229af38e21",
+    "profiles/desktop-26.1016.8120.0-sqlite-v2/integration.patch": "03b0257af9d88ce9d6e606ea1dab7d6cc3dc15b44cc5e025af89537cd40f5ebc",
+    "profiles/desktop-26.1016.8120.0-sqlite-v2/profile.json": "44e9723f631be5babd562380229e03a1a559b6de71e9199f9a51d4c5f20940f6",
+    "profiles/desktop-26.1016.8120.0-sqlite-v2/prompt_history_compat.rs": "b2e552993a7b72100483680498bf9034642cb0344bccb7e5dd65d277eea932f1",
+    "profiles/desktop-26.1016.8120.0-sqlite-v2/sqlite-migrations.json": "9f9f17239bc2064d4377d1836302fc4854beba9030fea6c20e3ca2e86c1c0f66",
     "tests/cold_resume.py": "86286ce83355e0f51e08d9d8e5752b9a0f38dfe85834ede9996dbf398b8bdef5",
     "tests/local_replay.py": "5c1c105f0464b81fd2ef79c354f7efff314490b5805cf7d68c9fc914f23d8652",
     "tests/migration_replay.py": "e968258b71dc91f2789cb0e6f9007471bd023bc0d606f41bcfe75125ad0fd88d",
     "tests/multipage_history_replay.py": "e3721e92a8325935743865f9603ce03c346b18d9a49cdf5bf079dac35fad4ec0",
+    "tests/test_module_test_cache.py": "a67d79d2053bd7a516a2549243f1a13184268751876c3b5383a5d61a780d39ec",
+    "tests/test_profile_8120.py": "86152ab8e0b35b6639ca2dc649ad03dd21044c7203ec474c143ab9e6aee63b5a",
     "tests/test_profiles.py": "0cdb2e58fe5d340c93269d47ec5258bbf5b87b564dce088a1d23a7ae0cba792b",
     "tests/test_sqlite_migrations.py": "b7dcdf0545e68ab8950e61f6a1abc545da44c7fc8bb9a1158954534728f1d269"
   },
-  "compiled_backend_sha256": "091404d1cfa3f11131ee024da2dc974ea9db0aa38f115cf340ba1b46b2f2150d",
+  "compiled_backend_sha256": "ff7f7c78c982f79ff22f33538e6c8a4ddfdcd61a164010715408a46db60f7ea5",
   "external_dependencies_unchanged": true,
-  "rustc": "rustc 1.95.0 (59807616e 2026-04-14)",
+  "rustc": "rustc 1.99.1 (58cf8f9c3 2026-10-13)",
   "runtime": {
     "http": {
       "status": "passed",
-      "binary_sha256": "091404d1cfa3f11131ee024da2dc974ea9db0aa38f115cf340ba1b46b2f2150d",
-      "binary_version": "codex-cli 0.163.0-alpha.11.1",
+      "binary_sha256": "ff7f7c78c982f79ff22f33538e6c8a4ddfdcd61a164010715408a46db60f7ea5",
+      "binary_version": "codex-cli 0.163.0-alpha.11.1.1",
       "exit_code": 0,
       "request_count": 2,
       "call_count": 4,
@@ -64,8 +66,8 @@
     },
     "websocket": {
       "status": "passed",
-      "binary_sha256": "091404d1cfa3f11131ee024da2dc974ea9db0aa38f115cf340ba1b46b2f2150d",
-      "binary_version": "codex-cli 0.163.0-alpha.11.1",
+      "binary_sha256": "ff7f7c78c982f79ff22f33538e6c8a4ddfdcd61a164010715408a46db60f7ea5",
+      "binary_version": "codex-cli 0.163.0-alpha.11.1.1",
       "exit_code": 0,
       "request_count": 2,
       "call_count": 4,
@@ -100,7 +102,7 @@
     },
     "cold-resume": {
       "status": "passed",
-      "backend_sha256": "091404d1cfa3f11131ee024da2dc974ea9db0aa38f115cf340ba1b46b2f2150d",
+      "backend_sha256": "ff7f7c78c982f79ff22f33538e6c8a4ddfdcd61a164010715408a46db60f7ea5",
       "global_model_changed": true,
       "retained_model": "fixture-old",
       "retained_effort": "high",
@@ -114,7 +116,7 @@
     },
     "local-compaction": {
       "status": "passed",
-      "backend_sha256": "091404d1cfa3f11131ee024da2dc974ea9db0aa38f115cf340ba1b46b2f2150d",
+      "backend_sha256": "ff7f7c78c982f79ff22f33538e6c8a4ddfdcd61a164010715408a46db60f7ea5",
       "global_model_changed": true,
       "retained_model": "fixture-old",
       "retained_effort": "high",
@@ -128,7 +130,7 @@
     },
     "remote-compaction": {
       "status": "passed",
-      "backend_sha256": "091404d1cfa3f11131ee024da2dc974ea9db0aa38f115cf340ba1b46b2f2150d",
+      "backend_sha256": "ff7f7c78c982f79ff22f33538e6c8a4ddfdcd61a164010715408a46db60f7ea5",
       "global_model_changed": true,
       "retained_model": "fixture-old",
       "retained_effort": "high",
@@ -147,11 +149,11 @@
       "migration_records_unchanged": true,
       "real_data_used": false,
       "normal_exit": true,
-      "backend_sha256": "091404d1cfa3f11131ee024da2dc974ea9db0aa38f115cf340ba1b46b2f2150d"
+      "backend_sha256": "ff7f7c78c982f79ff22f33538e6c8a4ddfdcd61a164010715408a46db60f7ea5"
     },
     "paginated-history": {
       "status": "passed",
-      "backend_sha256": "091404d1cfa3f11131ee024da2dc974ea9db0aa38f115cf340ba1b46b2f2150d",
+      "backend_sha256": "ff7f7c78c982f79ff22f33538e6c8a4ddfdcd61a164010715408a46db60f7ea5",
       "synthetic_turns": 105,
       "page_lengths": [
         25,
@@ -165,17 +167,14 @@
       "normal_exit": true,
       "history_bytes_unchanged_by_read": true,
       "source_database_touched": false,
-      "real_credentials_used": false,
-      "resumed_read_only_after_write_process_exit": true,
-      "replayed_write_requests": 0,
-      "plugin_fixture_jsonl_excluded": true
+      "real_credentials_used": false
     }
   },
   "official_controls": {
     "http": {
       "status": "passed",
-      "binary_sha256": "00c0f1e4099246fddcd67ec620ca8ed50827c7d70e113b7224f7a2933cf2d67c",
-      "binary_version": "codex-cli 0.163.0-alpha.11",
+      "binary_sha256": "e757246b4de87359e660647fa9514955a0971ff6a30affdd8c145d1d5ece7b84",
+      "binary_version": "codex-cli 0.163.0-alpha.11.1",
       "exit_code": 0,
       "request_count": 2,
       "call_count": 4,
@@ -219,8 +218,8 @@
     },
     "websocket": {
       "status": "passed",
-      "binary_sha256": "00c0f1e4099246fddcd67ec620ca8ed50827c7d70e113b7224f7a2933cf2d67c",
-      "binary_version": "codex-cli 0.163.0-alpha.11",
+      "binary_sha256": "e757246b4de87359e660647fa9514955a0971ff6a30affdd8c145d1d5ece7b84",
+      "binary_version": "codex-cli 0.163.0-alpha.11.1",
       "exit_code": 0,
       "request_count": 2,
       "call_count": 4,
@@ -261,10 +260,79 @@
         "sample-c.png": "f45be4aaa8ce9807f46ebf2385e8bb88b0c9b4bf109c5d7c2e665ba9dc2c7f2d",
         "sample-d.png": "f45be4aaa8ce9807f46ebf2385e8bb88b0c9b4bf109c5d7c2e665ba9dc2c7f2d"
       }
+    },
+    "cold-resume": {
+      "status": "passed",
+      "backend_sha256": "e757246b4de87359e660647fa9514955a0971ff6a30affdd8c145d1d5ece7b84",
+      "global_model_changed": true,
+      "retained_model": "fixture-old",
+      "retained_effort": "high",
+      "resume_uses_saved_task_settings": true,
+      "existing_history_bytes_preserved": true,
+      "real_task_data": false,
+      "normal_exit": true,
+      "compaction_mode": null,
+      "compaction_requests": 0,
+      "ordinary_requests": 1
+    },
+    "local-compaction": {
+      "status": "passed",
+      "backend_sha256": "e757246b4de87359e660647fa9514955a0971ff6a30affdd8c145d1d5ece7b84",
+      "global_model_changed": true,
+      "retained_model": "fixture-old",
+      "retained_effort": "high",
+      "resume_uses_saved_task_settings": true,
+      "existing_history_bytes_preserved": true,
+      "real_task_data": false,
+      "normal_exit": true,
+      "compaction_mode": "local",
+      "compaction_requests": 1,
+      "ordinary_requests": 1
+    },
+    "remote-compaction": {
+      "status": "passed",
+      "backend_sha256": "e757246b4de87359e660647fa9514955a0971ff6a30affdd8c145d1d5ece7b84",
+      "global_model_changed": true,
+      "retained_model": "fixture-old",
+      "retained_effort": "high",
+      "resume_uses_saved_task_settings": true,
+      "existing_history_bytes_preserved": true,
+      "real_task_data": false,
+      "normal_exit": true,
+      "compaction_mode": "remote",
+      "compaction_requests": 1,
+      "ordinary_requests": 1
+    },
+    "migrations": {
+      "status": "passed",
+      "database_count": 6,
+      "migration_count": 77,
+      "migration_records_unchanged": true,
+      "real_data_used": false,
+      "normal_exit": true,
+      "backend_sha256": "e757246b4de87359e660647fa9514955a0971ff6a30affdd8c145d1d5ece7b84"
+    },
+    "paginated-history": {
+      "status": "passed",
+      "backend_sha256": "e757246b4de87359e660647fa9514955a0971ff6a30affdd8c145d1d5ece7b84",
+      "synthetic_turns": 105,
+      "page_lengths": [
+        25,
+        25,
+        25,
+        25,
+        5
+      ],
+      "unique_turns": 105,
+      "cold_restart": true,
+      "normal_exit": true,
+      "history_bytes_unchanged_by_read": true,
+      "source_database_touched": false,
+      "real_credentials_used": false
     }
   },
   "real_credentials_used": false,
   "real_task_data_used": false,
   "compiled_binaries_distributed": false,
-  "historical_acceptance": "acceptance/v0.2.4.json"
+  "historical_acceptance": "acceptance/v0.2.5.json"
 }

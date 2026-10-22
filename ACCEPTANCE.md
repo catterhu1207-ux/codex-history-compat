@@ -1,6 +1,12 @@
+# Desktop 26.1016.8120.0 acceptance
+
+The independent public-source build passed 28 profile/packaging tests, 15 Rust module tests and all seven runtime groups recorded in [ACCEPTANCE.json](ACCEPTANCE.json). All seven groups were also run against the exact official backend. Tests used synthetic data and loopback model services. Existing history and migration records remained unchanged.
+
+The prior [v0.2.5 record](acceptance/v0.2.5.json) is retained separately.
+
 # Desktop 26.1016.6573.0 acceptance
 
-The independent public-source build passed 22 profile/packaging tests, 15 Rust module tests and all seven runtime groups recorded in [ACCEPTANCE.json](ACCEPTANCE.json). Ordinary and WebSocket tests were also run against the exact official backend. No real chat data or paid model services were used. Existing history and migration records remained unchanged.
+The independent public-source build passed 22 profile/packaging tests, 15 Rust module tests and all seven runtime groups recorded in [the v0.2.5 acceptance](acceptance/v0.2.5.json). Ordinary and WebSocket tests were also run against the exact official backend. No real chat data or paid model services were used. Existing history and migration records remained unchanged.
 
 The prior [v0.2.4 record](acceptance/v0.2.4.json) is retained separately.
 
