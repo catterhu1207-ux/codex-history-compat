@@ -181,6 +181,9 @@ def build(source,target,profile,official_backend=None,target_cache=None,dry_run=
         env['RUSTC']=str(rustc);env['RUSTDOC']=str(toolchain_root/'bin/rustdoc.exe')
         env['PATH']=str(toolchain_root/'bin')+os.pathsep+env['PATH']
     env['CARGO_BUILD_JOBS']='1';env['CARGO_PROFILE_DEV_DEBUG']='0';env['CARGO_PROFILE_TEST_DEBUG']='0'
+    # This is a pinned release build. Incremental compiler state duplicates the
+    # large core test objects and can exhaust the reserved build volume.
+    env['CARGO_INCREMENTAL']='0'
     env['CARGO_PROFILE_RELEASE_LTO']='false';env['CARGO_PROFILE_RELEASE_DEBUG']='0';env['CARGO_PROFILE_RELEASE_STRIP']='symbols'
     release_cache = (release_target_cache or Path(env['CARGO_TARGET_DIR'])).resolve()
     if data.get('sqlite_migrations'):
@@ -226,6 +229,7 @@ def build(source,target,profile,official_backend=None,target_cache=None,dry_run=
         'patched':{'file':'codex.exe','sha256':sha(target/'codex.exe'),'size':(target/'codex.exe').stat().st_size,'pe_machine':'amd64','authenticode_status':'NotSigned','version_output':version},
         'provenance':{'repository':data['upstream_repository'],'source_commit':data['upstream_commit'],'profile_sha256':sha(folder/'profile.json'),'patch_files':data['files'],'rustc':toolchain,'cargo_lock_sha256':sha(lock),'external_dependencies_unchanged':True,'migration_sha384':{r['path']:r['sqlx_sha384'] for r in migrations},'source_snapshots':{str(p.relative_to(src)):{'sha256':sha(p)} for p in [cargo,lock,*[src/'codex-rs/core/src'/name for name in ['lib.rs','session/turn.rs','compact.rs','compact_remote_v2_attempt.rs','prompt_history_compat.rs']]]}}}
     manifest['provenance'].update({'compat_repository':'https://github.com/catterhu1207-ux/codex-history-compat.git','compat_commit':compat_commit,'build_recipe_sha256':recipe_sha256,'windows_sdk_version':sdk_version,'msvc_tools_version':os.environ.get('VCToolsVersion')})
+    manifest['provenance']['build_environment']={k:env[k] for k in ('CARGO_BUILD_JOBS','CARGO_INCREMENTAL','CARGO_PROFILE_DEV_DEBUG','CARGO_PROFILE_TEST_DEBUG','CARGO_PROFILE_RELEASE_LTO','CARGO_PROFILE_RELEASE_DEBUG','CARGO_PROFILE_RELEASE_STRIP')}
     if sha(Path(__file__))!=recipe_sha256:raise ValueError('build_recipe_changed_during_build')
     (target/'manifest.json').write_text(json.dumps(manifest,indent=2)+'\n',encoding='utf8')
     return {'status':'built','manifest':str(target/'manifest.json'),'backend_sha256':manifest['patched']['sha256']}
