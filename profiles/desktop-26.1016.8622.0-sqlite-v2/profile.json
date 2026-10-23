@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "id": "desktop-26.1016.8622.0-sqlite-v2",
+  "upstream_repository": "https://github.com/openai/codex.git",
+  "upstream_commit": "51f97c6bca5500edbb986f6d9fe64fa2e63cbdd4",
+  "version": "0.163.0-alpha.11.2.1",
+  "rust_toolchain": "1.99.1",
+  "desktop_version": "26.1016.8622.0",
+  "official_backend_sha256": "c81ed464e5e7cafd09a5fa26af390c480bed8e9fab2a87a54b285fbd56e7122a",
+  "official_backend_size": 336134960,
+  "sqlite_migrations": "sqlite-migrations.json",
+  "files": {
+    "deepseek_notice_batch.json": "70f97e6903f72f0011b5da54baf0208721cf664deca4aae4ea58ef229af38e21",
+    "integration.patch": "03b0257af9d88ce9d6e606ea1dab7d6cc3dc15b44cc5e025af89537cd40f5ebc",
+    "prompt_history_compat.rs": "b2e552993a7b72100483680498bf9034642cb0344bccb7e5dd65d277eea932f1",
+    "sqlite-migrations.json": "1d9a15cc2f5f78940fd564a22ce98dc723c868697372596a965f7af7a56f590c"
+  },
+  "source_files": {
+    "codex-rs/core/BUILD.bazel": "eb793fe4639282a840a784c55b714e5085d82067a298210cd7707ab722b6c94c",
+    "codex-rs/core/src/compact.rs": "7dedcf81e5ae05189a7d4854c0619a188dcf5090d30b4cbbac74714837b5470b",
+    "codex-rs/core/src/compact_remote_v2_attempt.rs": "b54b0fd145e637e4e25b5f07ed787cbe964e8491750a3994cdb241ec991dfd9d",
+    "codex-rs/core/src/lib.rs": "b21e02c5ef097d2b9421dbabfafafc2f47d3d80b2b3287255cd4f5601ffbea41",
+    "codex-rs/core/src/session/turn.rs": "560b34ba2519da84e50b83c0ee07fdb1304110efda5e24c94904b2df61799b6e",
+    "codex-rs/core/src/prompt_history_compat.rs": "b2e552993a7b72100483680498bf9034642cb0344bccb7e5dd65d277eea932f1",
+    "codex-rs/core/src/prompt_history_compat_fixtures/deepseek_notice_batch.json": "70f97e6903f72f0011b5da54baf0208721cf664deca4aae4ea58ef229af38e21"
+  },
+  "official_backend_equivalence": {
+    "upstream_release_tag": "rust-v0.163.0-alpha.11.2",
+    "upstream_release_commit": "51f97c6bca5500edbb986f6d9fe64fa2e63cbdd4",
+    "upstream_release_asset": "codex-x86_64-pc-windows-msvc.exe.zst",
+    "upstream_release_asset_sha256": "b817ee6d62e938f58714a81eb1619b5b5a7200b6edd5251ce47ce08b7cef7d26",
+    "upstream_backend_sha256": "3b4f5aeb66f35273f046e4e2baf0143832286a0dcba9db8e1a26dbcd92c90876",
+    "unsigned_body_sha256_with_zero_checksum": "e46744c6a89858632cf1c2bc7b37d48d5518ad939fb82538d031be704d2b8e94",
+    "all_named_sections_identical": true,
+    "difference_scope": "PE checksum and Authenticode certificate only"
+  },
+  "upstream_version": "0.163.0-alpha.11.2",
+  "upstream_lock_workspace_version": "0.0.0"
+}

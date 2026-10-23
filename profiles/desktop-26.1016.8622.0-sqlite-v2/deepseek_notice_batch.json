@@ -1,0 +1,114 @@
+{
+  "schema_version": 1,
+  "note": "synthetic four-call batch; paths, call identifiers, and image payloads contain no user data",
+  "items": [
+    {
+      "type": "function_call",
+      "call_id": "call-synthetic-0",
+      "name": "view_image",
+      "arguments": "{\"path\":\"C:\\\\fixtures\\\\page-1.png\"}"
+    },
+    {
+      "type": "function_call",
+      "call_id": "call-synthetic-1",
+      "name": "view_image",
+      "arguments": "{\"path\":\"C:\\\\fixtures\\\\page-2.png\"}"
+    },
+    {
+      "type": "function_call",
+      "call_id": "call-synthetic-2",
+      "name": "view_image",
+      "arguments": "{\"path\":\"C:\\\\fixtures\\\\page-3.png\"}"
+    },
+    {
+      "type": "function_call",
+      "call_id": "call-synthetic-3",
+      "name": "view_image",
+      "arguments": "{\"path\":\"C:\\\\fixtures\\\\page-4.png\"}"
+    },
+    {
+      "type": "function_call_output",
+      "call_id": "call-synthetic-0",
+      "name": "view_image",
+      "output": [
+        {
+          "type": "input_image",
+          "image_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAADElEQVR4nGP4z8AAAAMBAQDJ/pLvAAAAAElFTkSuQmCC"
+        }
+      ]
+    },
+    {
+      "type": "message",
+      "role": "developer",
+      "content": [
+        {
+          "type": "input_text",
+          "text": "<image_resize_notice>\nImage 1 of 1 in the preceding tool output was resized from 1414x2000 to 1334x1888 pixels.\n</image_resize_notice>"
+        }
+      ]
+    },
+    {
+      "type": "function_call_output",
+      "call_id": "call-synthetic-1",
+      "name": "view_image",
+      "output": [
+        {
+          "type": "input_image",
+          "image_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAADElEQVR4nGP4z8AAAAMBAQDJ/pLvAAAAAElFTkSuQmCC"
+        }
+      ]
+    },
+    {
+      "type": "message",
+      "role": "developer",
+      "content": [
+        {
+          "type": "input_text",
+          "text": "<image_resize_notice>\nImage 1 of 1 in the preceding tool output was resized from 1414x2000 to 1334x1888 pixels.\n</image_resize_notice>"
+        }
+      ]
+    },
+    {
+      "type": "function_call_output",
+      "call_id": "call-synthetic-2",
+      "name": "view_image",
+      "output": [
+        {
+          "type": "input_image",
+          "image_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAADElEQVR4nGP4z8AAAAMBAQDJ/pLvAAAAAElFTkSuQmCC"
+        }
+      ]
+    },
+    {
+      "type": "message",
+      "role": "developer",
+      "content": [
+        {
+          "type": "input_text",
+          "text": "<image_resize_notice>\nImage 1 of 1 in the preceding tool output was resized from 1414x2000 to 1334x1888 pixels.\n</image_resize_notice>"
+        }
+      ]
+    },
+    {
+      "type": "function_call_output",
+      "call_id": "call-synthetic-3",
+      "name": "view_image",
+      "output": [
+        {
+          "type": "input_image",
+          "image_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAADElEQVR4nGP4z8AAAAMBAQDJ/pLvAAAAAElFTkSuQmCC"
+        }
+      ]
+    },
+    {
+      "type": "message",
+      "role": "developer",
+      "content": [
+        {
+          "type": "input_text",
+          "text": "<image_resize_notice>\nImage 1 of 1 in the preceding tool output was resized from 1414x2000 to 1334x1888 pixels.\n</image_resize_notice>"
+        }
+      ]
+    }
+  ]
+}

@@ -29,6 +29,9 @@ jobs:
           - ref: 680c4ba93ec79c292287fb9e0b627dc7a76e3b5e
             profile: desktop-26.1016.8120.0-sqlite-v2
             toolchain: '1.99.1'
+          - ref: 51f97c6bca5500edbb986f6d9fe64fa2e63cbdd4
+            profile: desktop-26.1016.8622.0-sqlite-v2
+            toolchain: '1.99.1'
     env:
       CARGO_BUILD_JOBS: 2
       CARGO_PROFILE_DEV_DEBUG: 0
@@ -51,7 +54,7 @@ jobs:
             python3 ./patch/build_backend.py --profile "${{ matrix.profile }}" --apply ./upstream
           fi
       - name: Match the current Windows source-build inputs
-        if: matrix.profile == 'desktop-26.1016.6573.0-sqlite-v2' || matrix.profile == 'desktop-26.1016.8120.0-sqlite-v2'
+        if: matrix.profile == 'desktop-26.1016.6573.0-sqlite-v2' || matrix.profile == 'desktop-26.1016.8120.0-sqlite-v2' || matrix.profile == 'desktop-26.1016.8622.0-sqlite-v2'
         run: |
           python3 - <<'PY'
           import sys
@@ -68,8 +71,8 @@ jobs:
           build.qualify_migration_bytes(source, build.migration_rows(folder, profile), all_databases=True)
           PY
       - name: Test current compatibility module with locked dependencies
-        if: matrix.profile == 'desktop-26.1016.6573.0-sqlite-v2' || matrix.profile == 'desktop-26.1016.8120.0-sqlite-v2'
+        if: matrix.profile == 'desktop-26.1016.6573.0-sqlite-v2' || matrix.profile == 'desktop-26.1016.8120.0-sqlite-v2' || matrix.profile == 'desktop-26.1016.8622.0-sqlite-v2'
         run: cargo test --locked --manifest-path upstream/codex-rs/Cargo.toml -p codex-core prompt_history_compat --lib -- --test-threads 1
       - name: Test retained profiles
-        if: matrix.profile != 'desktop-26.1016.6573.0-sqlite-v2' && matrix.profile != 'desktop-26.1016.8120.0-sqlite-v2'
+        if: matrix.profile != 'desktop-26.1016.6573.0-sqlite-v2' && matrix.profile != 'desktop-26.1016.8120.0-sqlite-v2' && matrix.profile != 'desktop-26.1016.8622.0-sqlite-v2'
         run: cargo test --manifest-path upstream/codex-rs/Cargo.toml -p codex-core prompt_history_compat --lib -- --test-threads 1
