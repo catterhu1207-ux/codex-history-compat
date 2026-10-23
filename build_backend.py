@@ -104,7 +104,7 @@ def prepare_windows_module_harness(source, target, data, cargo_prefix, env):
         if isinstance(value,dict):return '{ '+', '.join(json.dumps(k)+' = '+toml_value(v) for k,v in value.items())+' }'
         raise ValueError('unsupported_module_harness_toml_value')
     dependencies={}
-    for name in ('codex-history','codex-protocol','serde_json'):
+    for name in ('codex-history','codex-protocol','serde_json','tracing'):
         declared=workspace['workspace']['dependencies'][name]
         spec=dict(declared) if isinstance(declared,dict) else {'version':declared}
         consumer=core.get('dependencies',{}).get(name,{})
@@ -145,7 +145,7 @@ def prepare_windows_module_harness(source, target, data, cargo_prefix, env):
     identity={'strategy':strategy,'source_module_sha256':sha(module),
               'manifest_sha256':sha(root/'Cargo.toml'),'harness_sha256':sha(root/'src/lib.rs'),
               'lock_sha256':sha(harness_lock),'upstream_lock_sha256':sha(lock_path),
-              'real_dependency_crates':['codex-history','codex-protocol','serde_json'],
+              'real_dependency_crates':['codex-history','codex-protocol','serde_json','tracing'],
               'external_dependencies_from_upstream_lock':count}
     return {'identity':identity,'command':cargo_prefix+['test','--locked','--offline','--manifest-path',str(root/'Cargo.toml'),
             '--lib','prompt_history_compat','--','--test-threads','1']}
