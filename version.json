@@ -1,6 +1,6 @@
 {
-  "version": "0.2.7",
+  "version": "0.2.8",
   "default_profile": "0.158.0-alpha.2",
   "legacy_entrypoints_preserved": true,
-  "latest_desktop_profile": "desktop-26.1016.8120.0-sqlite-v2"
+  "latest_desktop_profile": "desktop-26.1016.8622.0-sqlite-v2"
 }

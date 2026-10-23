@@ -1,5 +1,20 @@
 # codex-history-compat
 
+## Desktop 26.1016.8622.0
+
+Profile `desktop-26.1016.8622.0-sqlite-v2` builds `codex-cli 0.163.0-alpha.11.2.1` from upstream commit `51f97c6bca5500edbb986f6d9fe64fa2e63cbdd4`. Use the immutable compatibility-source revision `ad057a0ade9a99eb84161a23c8462ac0f68e8f1a`, Python 3.11+, Rust 1.99.1, x64 MSVC and Windows SDK.
+
+```powershell
+git checkout ad057a0ade9a99eb84161a23c8462ac0f68e8f1a
+py -3 build_backend.py --profile desktop-26.1016.8622.0-sqlite-v2 --target C:\codex-compat\backend-8622 --official-backend C:\official\app\resources\codex.exe
+```
+
+The Windows build passed 15 tests of the unchanged compatibility module against real upstream history/protocol types and locked dependencies, followed by the complete CLI build and seven runtime groups: HTTP, real WebSocket, cold task settings, local compaction, remote compaction V2, 77 migrations across six database families and 105-turn paginated history. Linux CI compiled the complete core test target and passed the same 15 compatibility-module tests; all retained profile jobs passed. Model-service tests use synthetic loopback fixtures.
+
+The desktop installer uses the official backend by default. Select compatibility mode to build this optional backend from the pinned source. The first complete CLI build can take hours. A reused cache must match the source, patch, dependency lock, toolchain and compiler flags. [Acceptance](ACCEPTANCE.json) identifies the tested build; its binary digest is evidence for that local build, not a requirement for builds on other machines. Existing profiles and apply entry points remain available.
+
+中文：新增 26.1016.8622.0 独立配置。仅规范化发出的请求副本，保留工具元数据、持久历史和任务设置。Windows 使用真实上游类型执行全部 15 项兼容测试，再编译完整后端并完成运行检查；旧配置及调用方式保留。安装器默认使用官方后端，兼容后端须显式选择并在本机从固定源码构建。
+
 ## Desktop 26.1016.8120.0
 
 Profile `desktop-26.1016.8120.0-sqlite-v2` builds `codex-cli 0.163.0-alpha.11.1.1` from upstream commit `680c4ba93ec79c292287fb9e0b627dc7a76e3b5e`. Its public build inputs are pinned to `8bdfd1e3a92be0cb24ff415ecc45e247ca24e6ac`. Use Python 3.11+, Rust 1.99.1, x64 MSVC and Windows SDK.

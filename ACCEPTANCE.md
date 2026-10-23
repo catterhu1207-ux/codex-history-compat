@@ -1,6 +1,12 @@
+# Desktop 26.1016.8622.0 acceptance
+
+The independent Windows source build passed 35 packaging/profile tests, 15 unchanged compatibility-module tests with real upstream types, the complete CLI build and all seven runtime groups in [ACCEPTANCE.json](ACCEPTANCE.json). All seven groups also passed against the exact official backend. Model-service traffic used synthetic loopback fixtures. Persistent history, per-task settings and all 77 migration identities were preserved.
+
+The previous [v0.2.7 record](acceptance/v0.2.7.json) retains its original evidence.
+
 # Desktop 26.1016.8120.0 acceptance
 
-The independent public-source build passed 28 profile/packaging tests, 15 Rust module tests and all seven runtime groups recorded in [ACCEPTANCE.json](ACCEPTANCE.json). All seven groups were also run against the exact official backend. Tests used synthetic data and loopback model services. Existing history and migration records remained unchanged.
+The independent public-source build passed 28 profile/packaging tests, 15 Rust module tests and all seven runtime groups recorded in [the v0.2.7 acceptance](acceptance/v0.2.7.json). All seven groups were also run against the exact official backend. Tests used synthetic data and loopback model services. Existing history and migration records remained unchanged.
 
 The prior [v0.2.5 record](acceptance/v0.2.5.json) is retained separately.
 
