@@ -136,7 +136,7 @@ def prepare_windows_module_harness(source, target, data, cargo_prefix, env):
     harness_lock=root/'Cargo.lock'
     if not harness_lock.exists():harness_lock.write_bytes(locked_bytes)
     with (root/'resolve.log').open('ab') as log:
-        cp=subprocess.run(cargo_prefix+['metadata','--offline','--format-version','1','--manifest-path',str(root/'Cargo.toml')],
+        cp=subprocess.run(cargo_prefix+['metadata','--offline','--format-version','1','--filter-platform','x86_64-pc-windows-msvc','--manifest-path',str(root/'Cargo.toml')],
             cwd=source/'codex-rs',env=env,stdout=subprocess.DEVNULL,stderr=log)
     if cp.returncode:raise ValueError('module_harness_locked_resolution_failed')
     if lock_path.read_bytes()!=locked_bytes:raise ValueError('module_harness_modified_upstream_lock')
