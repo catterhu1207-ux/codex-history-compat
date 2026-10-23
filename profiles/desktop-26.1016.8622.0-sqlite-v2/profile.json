@@ -35,5 +35,6 @@
     "difference_scope": "PE checksum and Authenticode certificate only"
   },
   "upstream_version": "0.163.0-alpha.11.2",
-  "upstream_lock_workspace_version": "0.0.0"
+  "upstream_lock_workspace_version": "0.0.0",
+  "windows_module_test": "standalone_real_types_v1"
 }

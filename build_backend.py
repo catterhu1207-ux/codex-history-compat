@@ -58,6 +58,98 @@ def inject_workspace_version(manifest, lock, data):
 def checked(args, cwd=None, env=None):
     return subprocess.check_output(args,cwd=cwd,env=env,text=True,encoding='utf8',errors='replace').strip()
 
+
+def external_lock_identities(value):
+    """Compare resolved external packages independently of unused lock entries."""
+    return {(p['name'],p['version'],p['source'],p.get('checksum'))
+            for p in value['package'] if 'source' in p}
+
+
+def validate_module_harness_lock(upstream, harness):
+    extra=external_lock_identities(harness)-external_lock_identities(upstream)
+    if extra:
+        raise ValueError('module_harness_external_dependencies_changed')
+    return len(external_lock_identities(harness))
+
+
+def prepare_windows_module_harness(source, target, data, cargo_prefix, env):
+    """Run the unchanged module with real history/protocol types and locked deps.
+
+    The full release binary still compiles the actual core integration. Linux CI
+    retains the full core test invocation. This Windows-only profile avoids
+    compiling thousands of unrelated core tests for a fifteen-test filter.
+    """
+    import tomllib
+    strategy=data.get('windows_module_test')
+    if strategy not in (None,'standalone_real_types_v1'):
+        raise ValueError('unknown_windows_module_test_strategy')
+    if strategy is None or os.name!='nt':
+        return None
+    source=Path(source).resolve(strict=True);target=Path(target).resolve(strict=True)
+    root=target/'module-harness';root.mkdir(exist_ok=True)
+    if root.is_symlink() or root.resolve().parent!=target:
+        raise ValueError('module_harness_output_path_invalid')
+    workspace=tomllib.loads((source/'codex-rs/Cargo.toml').read_text())
+    core=tomllib.loads((source/'codex-rs/core/Cargo.toml').read_text())
+    lock_path=source/'codex-rs/Cargo.lock';locked_bytes=lock_path.read_bytes()
+    upstream=tomllib.loads(locked_bytes.decode())
+    module=source/'codex-rs/core/src/prompt_history_compat.rs'
+    expected=data['source_files']['codex-rs/core/src/prompt_history_compat.rs']
+    if hashlib.sha256(module.read_bytes().replace(b'\r\n',b'\n')).hexdigest()!=expected:
+        raise ValueError('module_harness_source_identity_mismatch')
+    def toml_value(value):
+        if isinstance(value,bool):return str(value).lower()
+        if isinstance(value,(str,int)):return json.dumps(value)
+        if isinstance(value,list):return '['+', '.join(toml_value(x) for x in value)+']'
+        if isinstance(value,dict):return '{ '+', '.join(json.dumps(k)+' = '+toml_value(v) for k,v in value.items())+' }'
+        raise ValueError('unsupported_module_harness_toml_value')
+    dependencies={}
+    for name in ('codex-history','codex-protocol','serde_json'):
+        declared=workspace['workspace']['dependencies'][name]
+        spec=dict(declared) if isinstance(declared,dict) else {'version':declared}
+        consumer=core.get('dependencies',{}).get(name,{})
+        if isinstance(consumer,dict):
+            spec['features']=sorted(set(spec.get('features',[]))|set(consumer.get('features',[])))
+            if 'default-features' in consumer:spec['default-features']=consumer['default-features']
+        if 'path' in spec:spec['path']=str((source/'codex-rs'/spec['path']).resolve(strict=True))
+        if name=='serde_json':
+            versions={p['version'] for p in upstream['package'] if p['name']==name and 'source' in p}
+            if len(versions)!=1:raise ValueError('module_harness_json_dependency_ambiguous')
+            spec['version']='='+next(iter(versions))
+        dependencies[name]=spec
+    edition=workspace['workspace']['package']['edition']
+    resolver=workspace['workspace'].get('resolver','2')
+    manifest='[package]\nname="codex-history-compat-module-qualification"\nversion="0.0.0"\nedition='+toml_value(edition)+'\n'
+    manifest+='[workspace]\nresolver='+toml_value(str(resolver))+'\n[dependencies]\n'
+    manifest+=''.join(json.dumps(k)+' = '+toml_value(v)+'\n' for k,v in dependencies.items())
+    for name,patches in workspace.get('patch',{}).items():
+        manifest+='\n[patch.'+json.dumps(name)+']\n'
+        for key,value in patches.items():
+            spec=dict(value)
+            if 'path' in spec:spec['path']=str((source/'codex-rs'/spec['path']).resolve(strict=True))
+            manifest+=json.dumps(key)+' = '+toml_value(spec)+'\n'
+    library='#[path = '+json.dumps(str(module).replace('\\','/'))+']\nmod prompt_history_compat;\n'
+    for path,raw in [(root/'Cargo.toml',manifest.encode()),(root/'src/lib.rs',library.encode())]:
+        path.parent.mkdir(parents=True,exist_ok=True)
+        if path.exists() and path.read_bytes()!=raw:raise ValueError('module_harness_file_changed')
+        if not path.exists():path.write_bytes(raw)
+    harness_lock=root/'Cargo.lock'
+    if not harness_lock.exists():harness_lock.write_bytes(locked_bytes)
+    with (root/'resolve.log').open('ab') as log:
+        cp=subprocess.run(cargo_prefix+['metadata','--offline','--format-version','1','--manifest-path',str(root/'Cargo.toml')],
+            cwd=source/'codex-rs',env=env,stdout=subprocess.DEVNULL,stderr=log)
+    if cp.returncode:raise ValueError('module_harness_locked_resolution_failed')
+    if lock_path.read_bytes()!=locked_bytes:raise ValueError('module_harness_modified_upstream_lock')
+    resolved=tomllib.loads(harness_lock.read_text())
+    count=validate_module_harness_lock(upstream,resolved)
+    identity={'strategy':strategy,'source_module_sha256':sha(module),
+              'manifest_sha256':sha(root/'Cargo.toml'),'harness_sha256':sha(root/'src/lib.rs'),
+              'lock_sha256':sha(harness_lock),'upstream_lock_sha256':sha(lock_path),
+              'real_dependency_crates':['codex-history','codex-protocol','serde_json'],
+              'external_dependencies_from_upstream_lock':count}
+    return {'identity':identity,'command':cargo_prefix+['test','--locked','--offline','--manifest-path',str(root/'Cargo.toml'),
+            '--lib','prompt_history_compat','--','--test-threads','1']}
+
 def load_profile(profile):
     folder=ROOT/'profiles'/profile
     if not folder.resolve().is_relative_to((ROOT/'profiles').resolve()):
@@ -216,11 +308,15 @@ def build(source,target,profile,official_backend=None,target_cache=None,dry_run=
     if data.get('sqlite_migrations'):
         invalidate_stale_migration_cache(src,release_cache/'release/codex.exe',migrations)
     commands=[('test',cargo_prefix+['test','--locked','-p','codex-core','--lib','prompt_history_compat','--','--test-threads','1']),('build',cargo_prefix+['build','--locked','-p','codex-cli','--bin','codex','--release','-j','1'])]
+    module_harness=prepare_windows_module_harness(src,target,data,cargo_prefix,env)
+    if module_harness is not None:
+        commands[0]=('test',module_harness['command'])
     build_environment={k:env.get(k,'') for k in ('CARGO_BUILD_JOBS','CARGO_INCREMENTAL','CARGO_PROFILE_DEV_DEBUG','CARGO_PROFILE_TEST_DEBUG','CARGO_PROFILE_RELEASE_LTO','CARGO_PROFILE_RELEASE_DEBUG','CARGO_PROFILE_RELEASE_STRIP','RUSTFLAGS','CARGO_ENCODED_RUSTFLAGS','CARGO_BUILD_RUSTFLAGS','RUSTC_BOOTSTRAP','RUSTC_WRAPPER')}
     binding={'profile_sha256':profile_digest,'compat_commit':compat_commit,'build_recipe_sha256':recipe_sha256,
         'source_commit':data['upstream_commit'],'source_files':data['source_files'],'cargo_lock_sha256':sha(lock),'cargo_toml_sha256':sha(cargo),
         'migration_sha256':{r['source_path']:r['sha256'] for r in migrations},'rustc':toolchain,
         'windows_sdk_version':sdk_version,'msvc_tools_version':os.environ.get('VCToolsVersion'),'build_environment':build_environment}
+    if module_harness is not None:binding['module_harness']=module_harness['identity']
     test_proof=cached_module_test(target,binding)
     if data.get('build_binary_only'):
         if test_only:raise ValueError('binary_only_profile_has_no_module_test_phase')
