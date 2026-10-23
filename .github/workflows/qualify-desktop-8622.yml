@@ -5,6 +5,15 @@ on:
 permissions:
   contents: read
 jobs:
+  windows-packaging:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: ad057a0ade9a99eb84161a23c8462ac0f68e8f1a}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - name: All repository packaging and retained-interface tests on Windows
+        run: python -m unittest discover -s tests -v
   exact-current-source:
     runs-on: ubuntu-latest
     env:
@@ -28,9 +37,6 @@ jobs:
           test "$(git -C patch rev-parse HEAD)" = ad057a0ade9a99eb84161a23c8462ac0f68e8f1a
           echo 'b230fa8e3902fcdc45b274f95c19ac78dfe29639ac11401dc6e1ec4d1e895bf1  patch/build_backend.py' | sha256sum --check
           echo '5097116c9d1b73f0586a2d75ff4e34120a22b2a1bde920d7ca76a457534d5aaf  patch/profiles/desktop-26.1016.8622.0-sqlite-v2/profile.json' | sha256sum --check
-      - name: All repository packaging and retained-interface tests
-        working-directory: patch
-        run: python -m unittest discover -s tests -v
       - uses: dtolnay/rust-toolchain@master
         with: {toolchain: '1.99.1'}
       - name: Apply exact current profile and migration bytes
