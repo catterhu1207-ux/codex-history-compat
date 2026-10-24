@@ -7,6 +7,26 @@ spec=importlib.util.spec_from_file_location('recipe',ROOT/'build_backend.py')
 recipe=importlib.util.module_from_spec(spec);spec.loader.exec_module(recipe)
 
 class Profiles(unittest.TestCase):
+    def test_3705_profile_pins_proved_source_and_retains_migration_contract(self):
+        folder, current = recipe.load_profile('desktop-26.1021.3705.0-sqlite-v2')
+        previous_folder, previous = recipe.load_profile('desktop-26.1016.8622.0-sqlite-v2')
+        self.assertEqual(current['upstream_commit'], '6905ecede7816e91373e9eabda3f6b0368fc747b')
+        self.assertEqual(current['official_backend_sha256'],
+                         '1103e9e09c71fa2cd0afd6d8f3b9a2d63174fe8efd7cb5bd09f1cb14ef58a098')
+        self.assertEqual(current['rust_toolchain'], '1.99.1')
+        self.assertEqual(current['upstream_version'], '0.164.0-alpha.11.1')
+        self.assertEqual(current['version'], '0.164.0-alpha.11.1.1')
+        self.assertEqual(current['files']['prompt_history_compat.rs'],
+                         previous['files']['prompt_history_compat.rs'])
+        rows = recipe.migration_rows(folder, current)
+        prior_rows = recipe.migration_rows(previous_folder, previous)
+        self.assertEqual(len(rows), 77)
+        contract = lambda values: [(row['source_path'], row['database'], row['version'],
+                                   row['sha256'], row['sqlx_sha384']) for row in values]
+        self.assertEqual(contract(rows), contract(prior_rows))
+        with self.assertRaisesRegex(ValueError, 'migration_official_backend_identity_mismatch'):
+            recipe.migration_rows(folder, {**current, 'official_backend_sha256': previous['official_backend_sha256']})
+
     def test_version_injection_binds_release_tags_and_preserves_external_packages(self):
         for old in ('0.0.0', '0.163.0-alpha.11'):
             manifest='[workspace.package]\nversion = "'+old+'"\n'

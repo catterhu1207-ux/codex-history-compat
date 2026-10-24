@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "id": "desktop-26.1021.3705.0-sqlite-v2",
+  "upstream_repository": "https://github.com/openai/codex.git",
+  "upstream_commit": "6905ecede7816e91373e9eabda3f6b0368fc747b",
+  "version": "0.164.0-alpha.11.1.1",
+  "rust_toolchain": "1.99.1",
+  "desktop_version": "26.1021.3705.0",
+  "official_backend_sha256": "1103e9e09c71fa2cd0afd6d8f3b9a2d63174fe8efd7cb5bd09f1cb14ef58a098",
+  "official_backend_size": 354661168,
+  "sqlite_migrations": "sqlite-migrations.json",
+  "files": {
+    "deepseek_notice_batch.json": "70f97e6903f72f0011b5da54baf0208721cf664deca4aae4ea58ef229af38e21",
+    "integration.patch": "1299eef6d351c56443535bfa96d782f695f537187ab2ba074cfd704e336cad32",
+    "prompt_history_compat.rs": "b2e552993a7b72100483680498bf9034642cb0344bccb7e5dd65d277eea932f1",
+    "sqlite-migrations.json": "6e34210b27448a107de3cf68be548e0e89f691a1e5ee1e3d57f09db48712153e"
+  },
+  "source_files": {
+    "codex-rs/core/BUILD.bazel": "eb793fe4639282a840a784c55b714e5085d82067a298210cd7707ab722b6c94c",
+    "codex-rs/core/src/compact.rs": "5f7b4d94be056dac19392247a66f8ca9a0e792390f41ed265c6118c3efff45e1",
+    "codex-rs/core/src/compact_remote_v2_attempt.rs": "b54b0fd145e637e4e25b5f07ed787cbe964e8491750a3994cdb241ec991dfd9d",
+    "codex-rs/core/src/lib.rs": "4733a650b17837d3b475efe3d1ede4fdf1281642db4cbbffa2dfe09a20065bde",
+    "codex-rs/core/src/prompt_history_compat.rs": "b2e552993a7b72100483680498bf9034642cb0344bccb7e5dd65d277eea932f1",
+    "codex-rs/core/src/prompt_history_compat_fixtures/deepseek_notice_batch.json": "70f97e6903f72f0011b5da54baf0208721cf664deca4aae4ea58ef229af38e21",
+    "codex-rs/core/src/session/turn.rs": "4d6e49f5b40a98a297a26022d726eff2243d504696651ee5b451fe94fd759e97",
+    "codex-rs/core/src/thread_manager.rs": "430577c23be2e1650535b175fa50982375ed542ac04863b230d77ac20c4e8d83"
+  },
+  "official_backend_equivalence": {
+    "upstream_release_tag": "rust-v0.164.0-alpha.11.1",
+    "upstream_release_commit": "6905ecede7816e91373e9eabda3f6b0368fc747b",
+    "upstream_release_asset": "codex-x86_64-pc-windows-msvc.exe.zst",
+    "upstream_release_asset_sha256": "a1fcf9bc61b8f931c19e31fb7ccf79048ace3030973fdfd5aae9377b02f991fa",
+    "upstream_backend_sha256": "4fd2f057bad603bf53dc202457ffd0c3591de62e867a8b01e73816e3fbce5a73",
+    "unsigned_body_sha256_with_zero_checksum": "03304bdcb70032ca6cb43766e753b20d96fbeead635e748a4c529ee81f8613f9",
+    "all_named_sections_identical": true,
+    "difference_scope": "PE checksum and Authenticode certificate only"
+  },
+  "upstream_version": "0.164.0-alpha.11.1",
+  "upstream_lock_workspace_version": "0.0.0",
+  "windows_module_test": "standalone_real_types_v1",
+  "source_optimizations": {
+    "fork_boundary_snapshot": "metadata_only_preserving_turn_identity_and_payload",
+    "runtime_memory_acceptance": "required_separately"
+  }
+}
