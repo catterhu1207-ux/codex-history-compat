@@ -1,0 +1,60 @@
+name: qualify-desktop-3705
+on:
+  push:
+    branches: [qualify-desktop-26-1021-3705]
+permissions:
+  contents: read
+jobs:
+  windows-packaging:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: fabd73f0370b279be6e57c74a14ec53cd6c3c945}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - name: All repository packaging and retained-interface tests on Windows
+        run: python -m unittest discover -s tests -v
+  exact-current-source:
+    runs-on: ubuntu-latest
+    env:
+      CARGO_BUILD_JOBS: 2
+      CARGO_PROFILE_DEV_DEBUG: 0
+      CARGO_PROFILE_TEST_DEBUG: 0
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fabd73f0370b279be6e57c74a14ec53cd6c3c945
+          path: patch
+      - uses: actions/checkout@v4
+        with:
+          repository: openai/codex
+          ref: 6905ecede7816e91373e9eabda3f6b0368fc747b
+          path: upstream
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - name: Verify exact public build recipe
+        run: |
+          test "$(git -C patch rev-parse HEAD)" = fabd73f0370b279be6e57c74a14ec53cd6c3c945
+          echo 'b230fa8e3902fcdc45b274f95c19ac78dfe29639ac11401dc6e1ec4d1e895bf1  patch/build_backend.py' | sha256sum --check
+          echo 'b4f57af377b006afea893bcd6564f2f812942dfd83923043747aeb0d01eb6e48  patch/profiles/desktop-26.1021.3705.0-sqlite-v2/profile.json' | sha256sum --check
+      - uses: dtolnay/rust-toolchain@master
+        with: {toolchain: '1.99.1'}
+      - name: Apply exact current profile and migration bytes
+        run: |
+          python3 patch/build_backend.py --profile desktop-26.1021.3705.0-sqlite-v2 --apply upstream
+          python3 - <<'PYCODE'
+          import sys
+          from pathlib import Path
+          sys.path.insert(0, 'patch')
+          import build_backend as build
+          source = Path('upstream')
+          folder, profile = build.load_profile('desktop-26.1021.3705.0-sqlite-v2')
+          manifest = source / 'codex-rs/Cargo.toml'
+          lock = source / 'codex-rs/Cargo.lock'
+          text, locked = build.inject_workspace_version(manifest.read_text(), lock.read_text(), profile)
+          manifest.write_text(text)
+          lock.write_text(locked)
+          build.qualify_migration_bytes(source, build.migration_rows(folder, profile), all_databases=True)
+          PYCODE
+      - name: Complete core compilation and all compatibility-module tests
+        run: cargo test --locked --manifest-path upstream/codex-rs/Cargo.toml -p codex-core prompt_history_compat --lib -- --test-threads 1
