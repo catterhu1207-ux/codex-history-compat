@@ -1,0 +1,368 @@
+{
+  "schema_version": 2,
+  "status": "passed",
+  "release_version": "0.2.8",
+  "desktop_version": "26.1016.8622.0",
+  "upstream_commit": "51f97c6bca5500edbb986f6d9fe64fa2e63cbdd4",
+  "version": "0.163.0-alpha.11.2.1",
+  "build_source_commit": "ad057a0ade9a99eb84161a23c8462ac0f68e8f1a",
+  "module_tests": 15,
+  "packaging_tests": 35,
+  "source_inputs": {
+    "build_backend.py": "b230fa8e3902fcdc45b274f95c19ac78dfe29639ac11401dc6e1ec4d1e895bf1",
+    "profiles/desktop-26.1016.8622.0-sqlite-v2/deepseek_notice_batch.json": "70f97e6903f72f0011b5da54baf0208721cf664deca4aae4ea58ef229af38e21",
+    "profiles/desktop-26.1016.8622.0-sqlite-v2/integration.patch": "03b0257af9d88ce9d6e606ea1dab7d6cc3dc15b44cc5e025af89537cd40f5ebc",
+    "profiles/desktop-26.1016.8622.0-sqlite-v2/profile.json": "5097116c9d1b73f0586a2d75ff4e34120a22b2a1bde920d7ca76a457534d5aaf",
+    "profiles/desktop-26.1016.8622.0-sqlite-v2/prompt_history_compat.rs": "b2e552993a7b72100483680498bf9034642cb0344bccb7e5dd65d277eea932f1",
+    "profiles/desktop-26.1016.8622.0-sqlite-v2/sqlite-migrations.json": "1d9a15cc2f5f78940fd564a22ce98dc723c868697372596a965f7af7a56f590c",
+    "tests/cold_resume.py": "86286ce83355e0f51e08d9d8e5752b9a0f38dfe85834ede9996dbf398b8bdef5",
+    "tests/local_replay.py": "5c1c105f0464b81fd2ef79c354f7efff314490b5805cf7d68c9fc914f23d8652",
+    "tests/migration_replay.py": "e968258b71dc91f2789cb0e6f9007471bd023bc0d606f41bcfe75125ad0fd88d",
+    "tests/multipage_history_replay.py": "e3721e92a8325935743865f9603ce03c346b18d9a49cdf5bf079dac35fad4ec0",
+    "tests/test_module_harness.py": "7eed1280008f8b70449d1ac8dc44eb72d3b52cee64641193f283aefb65c01d7e",
+    "tests/test_module_test_cache.py": "a67d79d2053bd7a516a2549243f1a13184268751876c3b5383a5d61a780d39ec",
+    "tests/test_profile_8120.py": "86152ab8e0b35b6639ca2dc649ad03dd21044c7203ec474c143ab9e6aee63b5a",
+    "tests/test_profile_8622.py": "e77a3d70723af148a9df4895d0d28b92c6155abd183242442f80de0f0a51208a",
+    "tests/test_profiles.py": "0cdb2e58fe5d340c93269d47ec5258bbf5b87b564dce088a1d23a7ae0cba792b",
+    "tests/test_sqlite_migrations.py": "b7dcdf0545e68ab8950e61f6a1abc545da44c7fc8bb9a1158954534728f1d269"
+  },
+  "compiled_backend_sha256": "b080661facff6b186f5536deccdbdb3730907d649e67a0d7eea489bed406643f",
+  "windows_module_test": {
+    "strategy": "standalone_real_types_v1",
+    "source_module_sha256": "b2e552993a7b72100483680498bf9034642cb0344bccb7e5dd65d277eea932f1",
+    "manifest_sha256": "f6e5b0d468cb089632b462576b56c92a1b964f965f0403750a1b687a8082b5d7",
+    "harness_sha256": "31e171b9a16fd873f8bae0c9faa98daddf23511d76e04fae74f6d106191fc1d0",
+    "lock_sha256": "2e85270177dfbe31d8631f15d4c5b1cff0e3e85c22253a5937eb43d84c26b269",
+    "upstream_lock_sha256": "69423f50504f89e21b94e691f3f142ae6f4a686611124c32652db867525c1399",
+    "real_dependency_crates": [
+      "codex-history",
+      "codex-protocol",
+      "serde_json",
+      "tracing"
+    ],
+    "external_dependencies_from_upstream_lock": 571
+  },
+  "linux_ci": {
+    "status": "passed",
+    "source_commit": "ad057a0ade9a99eb84161a23c8462ac0f68e8f1a",
+    "upstream_commit": "51f97c6bca5500edbb986f6d9fe64fa2e63cbdd4",
+    "core_test_compilation": "complete_codex_core_lib_test_target",
+    "executed_module_tests": 15,
+    "unrelated_upstream_tests": "filtered_not_counted_as_executed",
+    "rust_toolchain": "1.99.1",
+    "locked_dependencies": true,
+    "run_url": "https://github.com/catterhu1207-ux/codex-history-compat/actions/runs/39916786116",
+    "all_retained_matrix_jobs_passed": true,
+    "jobs_passed": 8
+  },
+  "external_dependencies_unchanged": true,
+  "rustc": "rustc 1.99.1 (58cf8f9c3 2026-10-13)",
+  "runtime": {
+    "http": {
+      "status": "passed",
+      "binary_sha256": "b080661facff6b186f5536deccdbdb3730907d649e67a0d7eea489bed406643f",
+      "binary_version": "codex-cli 0.163.0-alpha.11.2.1",
+      "exit_code": 0,
+      "request_count": 2,
+      "call_count": 4,
+      "output_count": 4,
+      "call_output_pairing": "complete",
+      "call_positions": [
+        4,
+        5,
+        6,
+        7
+      ],
+      "output_positions": [
+        8,
+        9,
+        10,
+        11
+      ],
+      "notice_message_positions": [],
+      "message_immediately_before_output": [],
+      "folded_notice_output_count": 4,
+      "recorded_items": 12,
+      "content_logged": false,
+      "transport": [
+        "http"
+      ],
+      "fixture_sha256": {
+        "sample-a.png": "f45be4aaa8ce9807f46ebf2385e8bb88b0c9b4bf109c5d7c2e665ba9dc2c7f2d",
+        "sample-b.png": "f45be4aaa8ce9807f46ebf2385e8bb88b0c9b4bf109c5d7c2e665ba9dc2c7f2d",
+        "sample-c.png": "f45be4aaa8ce9807f46ebf2385e8bb88b0c9b4bf109c5d7c2e665ba9dc2c7f2d",
+        "sample-d.png": "f45be4aaa8ce9807f46ebf2385e8bb88b0c9b4bf109c5d7c2e665ba9dc2c7f2d"
+      }
+    },
+    "websocket": {
+      "status": "passed",
+      "binary_sha256": "b080661facff6b186f5536deccdbdb3730907d649e67a0d7eea489bed406643f",
+      "binary_version": "codex-cli 0.163.0-alpha.11.2.1",
+      "exit_code": 0,
+      "request_count": 2,
+      "call_count": 4,
+      "output_count": 4,
+      "call_output_pairing": "complete",
+      "call_positions": [
+        4,
+        5,
+        6,
+        7
+      ],
+      "output_positions": [
+        8,
+        9,
+        10,
+        11
+      ],
+      "notice_message_positions": [],
+      "message_immediately_before_output": [],
+      "folded_notice_output_count": 4,
+      "recorded_items": 12,
+      "content_logged": false,
+      "transport": [
+        "websocket"
+      ],
+      "fixture_sha256": {
+        "sample-a.png": "f45be4aaa8ce9807f46ebf2385e8bb88b0c9b4bf109c5d7c2e665ba9dc2c7f2d",
+        "sample-b.png": "f45be4aaa8ce9807f46ebf2385e8bb88b0c9b4bf109c5d7c2e665ba9dc2c7f2d",
+        "sample-c.png": "f45be4aaa8ce9807f46ebf2385e8bb88b0c9b4bf109c5d7c2e665ba9dc2c7f2d",
+        "sample-d.png": "f45be4aaa8ce9807f46ebf2385e8bb88b0c9b4bf109c5d7c2e665ba9dc2c7f2d"
+      }
+    },
+    "cold-resume": {
+      "status": "passed",
+      "backend_sha256": "b080661facff6b186f5536deccdbdb3730907d649e67a0d7eea489bed406643f",
+      "global_model_changed": true,
+      "retained_model": "fixture-old",
+      "retained_effort": "high",
+      "resume_uses_saved_task_settings": true,
+      "existing_history_bytes_preserved": true,
+      "real_task_data": false,
+      "normal_exit": true,
+      "compaction_mode": null,
+      "compaction_requests": 0,
+      "ordinary_requests": 1
+    },
+    "local-compaction": {
+      "status": "passed",
+      "backend_sha256": "b080661facff6b186f5536deccdbdb3730907d649e67a0d7eea489bed406643f",
+      "global_model_changed": true,
+      "retained_model": "fixture-old",
+      "retained_effort": "high",
+      "resume_uses_saved_task_settings": true,
+      "existing_history_bytes_preserved": true,
+      "real_task_data": false,
+      "normal_exit": true,
+      "compaction_mode": "local",
+      "compaction_requests": 1,
+      "ordinary_requests": 1
+    },
+    "remote-compaction": {
+      "status": "passed",
+      "backend_sha256": "b080661facff6b186f5536deccdbdb3730907d649e67a0d7eea489bed406643f",
+      "global_model_changed": true,
+      "retained_model": "fixture-old",
+      "retained_effort": "high",
+      "resume_uses_saved_task_settings": true,
+      "existing_history_bytes_preserved": true,
+      "real_task_data": false,
+      "normal_exit": true,
+      "compaction_mode": "remote",
+      "compaction_requests": 1,
+      "ordinary_requests": 1
+    },
+    "migrations": {
+      "status": "passed",
+      "database_count": 6,
+      "migration_count": 77,
+      "migration_records_unchanged": true,
+      "real_data_used": false,
+      "normal_exit": true,
+      "backend_sha256": "b080661facff6b186f5536deccdbdb3730907d649e67a0d7eea489bed406643f"
+    },
+    "paginated-history": {
+      "status": "passed",
+      "backend_sha256": "b080661facff6b186f5536deccdbdb3730907d649e67a0d7eea489bed406643f",
+      "synthetic_turns": 105,
+      "page_lengths": [
+        25,
+        25,
+        25,
+        25,
+        5
+      ],
+      "unique_turns": 105,
+      "cold_restart": true,
+      "normal_exit": true,
+      "history_bytes_unchanged_by_read": true,
+      "source_database_touched": false,
+      "real_credentials_used": false
+    }
+  },
+  "official_controls": {
+    "http": {
+      "status": "passed",
+      "binary_sha256": "c81ed464e5e7cafd09a5fa26af390c480bed8e9fab2a87a54b285fbd56e7122a",
+      "binary_version": "codex-cli 0.163.0-alpha.11.2",
+      "exit_code": 0,
+      "request_count": 2,
+      "call_count": 4,
+      "output_count": 4,
+      "call_output_pairing": "complete",
+      "call_positions": [
+        4,
+        5,
+        6,
+        7
+      ],
+      "output_positions": [
+        8,
+        10,
+        12,
+        14
+      ],
+      "notice_message_positions": [
+        9,
+        11,
+        13,
+        15
+      ],
+      "message_immediately_before_output": [
+        10,
+        12,
+        14
+      ],
+      "folded_notice_output_count": 0,
+      "recorded_items": 16,
+      "content_logged": false,
+      "transport": [
+        "http"
+      ],
+      "fixture_sha256": {
+        "sample-a.png": "f45be4aaa8ce9807f46ebf2385e8bb88b0c9b4bf109c5d7c2e665ba9dc2c7f2d",
+        "sample-b.png": "f45be4aaa8ce9807f46ebf2385e8bb88b0c9b4bf109c5d7c2e665ba9dc2c7f2d",
+        "sample-c.png": "f45be4aaa8ce9807f46ebf2385e8bb88b0c9b4bf109c5d7c2e665ba9dc2c7f2d",
+        "sample-d.png": "f45be4aaa8ce9807f46ebf2385e8bb88b0c9b4bf109c5d7c2e665ba9dc2c7f2d"
+      }
+    },
+    "websocket": {
+      "status": "passed",
+      "binary_sha256": "c81ed464e5e7cafd09a5fa26af390c480bed8e9fab2a87a54b285fbd56e7122a",
+      "binary_version": "codex-cli 0.163.0-alpha.11.2",
+      "exit_code": 0,
+      "request_count": 2,
+      "call_count": 4,
+      "output_count": 4,
+      "call_output_pairing": "complete",
+      "call_positions": [
+        4,
+        5,
+        6,
+        7
+      ],
+      "output_positions": [
+        8,
+        10,
+        12,
+        14
+      ],
+      "notice_message_positions": [
+        9,
+        11,
+        13,
+        15
+      ],
+      "message_immediately_before_output": [
+        10,
+        12,
+        14
+      ],
+      "folded_notice_output_count": 0,
+      "recorded_items": 16,
+      "content_logged": false,
+      "transport": [
+        "websocket"
+      ],
+      "fixture_sha256": {
+        "sample-a.png": "f45be4aaa8ce9807f46ebf2385e8bb88b0c9b4bf109c5d7c2e665ba9dc2c7f2d",
+        "sample-b.png": "f45be4aaa8ce9807f46ebf2385e8bb88b0c9b4bf109c5d7c2e665ba9dc2c7f2d",
+        "sample-c.png": "f45be4aaa8ce9807f46ebf2385e8bb88b0c9b4bf109c5d7c2e665ba9dc2c7f2d",
+        "sample-d.png": "f45be4aaa8ce9807f46ebf2385e8bb88b0c9b4bf109c5d7c2e665ba9dc2c7f2d"
+      }
+    },
+    "cold-resume": {
+      "status": "passed",
+      "backend_sha256": "c81ed464e5e7cafd09a5fa26af390c480bed8e9fab2a87a54b285fbd56e7122a",
+      "global_model_changed": true,
+      "retained_model": "fixture-old",
+      "retained_effort": "high",
+      "resume_uses_saved_task_settings": true,
+      "existing_history_bytes_preserved": true,
+      "real_task_data": false,
+      "normal_exit": true,
+      "compaction_mode": null,
+      "compaction_requests": 0,
+      "ordinary_requests": 1
+    },
+    "local-compaction": {
+      "status": "passed",
+      "backend_sha256": "c81ed464e5e7cafd09a5fa26af390c480bed8e9fab2a87a54b285fbd56e7122a",
+      "global_model_changed": true,
+      "retained_model": "fixture-old",
+      "retained_effort": "high",
+      "resume_uses_saved_task_settings": true,
+      "existing_history_bytes_preserved": true,
+      "real_task_data": false,
+      "normal_exit": true,
+      "compaction_mode": "local",
+      "compaction_requests": 1,
+      "ordinary_requests": 1
+    },
+    "remote-compaction": {
+      "status": "passed",
+      "backend_sha256": "c81ed464e5e7cafd09a5fa26af390c480bed8e9fab2a87a54b285fbd56e7122a",
+      "global_model_changed": true,
+      "retained_model": "fixture-old",
+      "retained_effort": "high",
+      "resume_uses_saved_task_settings": true,
+      "existing_history_bytes_preserved": true,
+      "real_task_data": false,
+      "normal_exit": true,
+      "compaction_mode": "remote",
+      "compaction_requests": 1,
+      "ordinary_requests": 1
+    },
+    "migrations": {
+      "status": "passed",
+      "database_count": 6,
+      "migration_count": 77,
+      "migration_records_unchanged": true,
+      "real_data_used": false,
+      "normal_exit": true,
+      "backend_sha256": "c81ed464e5e7cafd09a5fa26af390c480bed8e9fab2a87a54b285fbd56e7122a"
+    },
+    "paginated-history": {
+      "status": "passed",
+      "backend_sha256": "c81ed464e5e7cafd09a5fa26af390c480bed8e9fab2a87a54b285fbd56e7122a",
+      "synthetic_turns": 105,
+      "page_lengths": [
+        25,
+        25,
+        25,
+        25,
+        5
+      ],
+      "unique_turns": 105,
+      "cold_restart": true,
+      "normal_exit": true,
+      "history_bytes_unchanged_by_read": true,
+      "source_database_touched": false,
+      "real_credentials_used": false
+    }
+  },
+  "real_credentials_used": false,
+  "real_task_data_used": false,
+  "compiled_binaries_distributed": false,
+  "historical_acceptance": "acceptance/v0.2.7.json"
+}

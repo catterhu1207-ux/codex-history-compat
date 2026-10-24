@@ -1,5 +1,20 @@
 # codex-history-compat
 
+## Desktop 26.1021.3705.0
+
+Profile `desktop-26.1021.3705.0-sqlite-v2` builds `codex-cli 0.164.0-alpha.11.1.1` from upstream commit `6905ecede7816e91373e9eabda3f6b0368fc747b`. Build from immutable compatibility-source revision `fabd73f0370b279be6e57c74a14ec53cd6c3c945` with Python 3.11+, Rust 1.99.1, x64 MSVC and Windows SDK.
+
+```powershell
+git checkout fabd73f0370b279be6e57c74a14ec53cd6c3c945
+py -3 build_backend.py --profile desktop-26.1021.3705.0-sqlite-v2 --target C:\codex-compat\backend-3705 --official-backend C:\official\app\resources\codex.exe
+```
+
+The Windows source build passed all 15 compatibility-module tests and seven runtime groups: HTTP, real WebSocket, cold task settings, local compaction, remote compaction V2, 77 database migrations, and 105-turn paginated history. The same runtime groups passed against the official backend. Independent Linux CI compiled the complete core test target and passed all 15 compatibility-module tests. Compatibility handling preserves stored history and tool metadata while normalizing outgoing request copies. [Acceptance](ACCEPTANCE.json) records the tested source and local build.
+
+The [desktop installer](https://github.com/catterhu1207-ux/codex-desktop-workflow/releases) uses the official backend by default. Compatibility mode compiles this optional backend from the fixed public source. Previous profiles and apply commands remain available.
+
+中文：新增 26.1021.3705.0 独立配置，固定上游源码、Rust 工具链和 77 项迁移字节。Windows 编译、15 项兼容模块测试及七组运行检查均已通过，历史和任务设置保持原有语义。桌面安装器默认使用官方后端；选择兼容模式后，从固定公开源码在本机编译。
+
 ## Desktop 26.1016.8622.0
 
 Profile `desktop-26.1016.8622.0-sqlite-v2` builds `codex-cli 0.163.0-alpha.11.2.1` from upstream commit `51f97c6bca5500edbb986f6d9fe64fa2e63cbdd4`. Use the immutable compatibility-source revision `ad057a0ade9a99eb84161a23c8462ac0f68e8f1a`, Python 3.11+, Rust 1.99.1, x64 MSVC and Windows SDK.
