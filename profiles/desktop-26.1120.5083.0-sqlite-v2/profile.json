@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "id": "desktop-26.1120.5083.0-sqlite-v2",
+  "upstream_repository": "https://github.com/openai/codex.git",
+  "upstream_commit": "ad9d659a8491fc5169a00dcf7b7e6ca8a87adf69",
+  "version": "0.171.0-alpha.13.2+history.1",
+  "rust_toolchain": "1.99.1",
+  "desktop_version": "26.1120.5083.0",
+  "official_backend_sha256": "6c5bb28fc2d290b649a060e4a88498511d0df9e51321781573b685ea20835a7e",
+  "official_backend_size": 408218928,
+  "sqlite_migrations": "sqlite-migrations.json",
+  "files": {
+    "deepseek_notice_batch.json": "70f97e6903f72f0011b5da54baf0208721cf664deca4aae4ea58ef229af38e21",
+    "integration.patch": "cc33254592d40039ef0e8091daaa30c49d70cdeae435009cc8022cb6337e3939",
+    "prompt_history_compat.rs": "b2e552993a7b72100483680498bf9034642cb0344bccb7e5dd65d277eea932f1",
+    "sqlite-migrations.json": "0c99d1aaaa814b9c2829ff2a9e461852a25943b890083d393284a63f0c16ece8"
+  },
+  "source_files": {
+    "codex-rs/core/BUILD.bazel": "b58e646ad7e91e488bb183616499a92ebe1fb9690d63f2096f0f8dc3306d787a",
+    "codex-rs/core/src/compact.rs": "a82704647d63a18b5cb26b0d2cf8e8a774ee77c5dde88d0f6f03c3c17a469b27",
+    "codex-rs/core/src/compact_remote_v2_attempt.rs": "726b41b8e53b279f4b6cf54f769b7ce498029d802d8b5e7597e2f3396f546621",
+    "codex-rs/core/src/lib.rs": "d0668fec6bea4758eab27a93de6c7e3946ee81e0a01de8941095f74df3ebe743",
+    "codex-rs/core/src/prompt_history_compat.rs": "b2e552993a7b72100483680498bf9034642cb0344bccb7e5dd65d277eea932f1",
+    "codex-rs/core/src/prompt_history_compat_fixtures/deepseek_notice_batch.json": "70f97e6903f72f0011b5da54baf0208721cf664deca4aae4ea58ef229af38e21",
+    "codex-rs/core/src/session/turn.rs": "d8aa3ee1b9bfdcd93a4548f8973e831e54329cbbaf56130af6c003e91e16208a",
+    "codex-rs/core/src/thread_manager.rs": "ed76b514e08ee8d682d506f7738c08be0cafdcb64c17814ad7c96f9237edc5d7"
+  },
+  "upstream_version": "0.171.0-alpha.13.2",
+  "upstream_lock_workspace_version": "0.0.0",
+  "windows_module_test": "standalone_real_types_v1",
+  "source_optimizations": {
+    "fork_boundary_snapshot": "metadata_only_preserving_turn_identity_and_payload",
+    "runtime_memory_acceptance": "required_separately"
+  },
+  "official_backend_source": {
+    "signed_store_blockmap_sha256": "85e538bf32c3deeb2fa88a9ca3879353970a93ae8a3632777970d03d941a551f",
+    "embedded_commit": "ad9d659a8491fc5169a00dcf7b7e6ca8a87adf69"
+  }
+}

@@ -1,0 +1,112 @@
+diff --git a/codex-rs/core/BUILD.bazel b/codex-rs/core/BUILD.bazel
+index 723cee3..c68f272 100644
+--- a/codex-rs/core/BUILD.bazel
++++ b/codex-rs/core/BUILD.bazel
+@@ -2,7 +2,9 @@ load("//:defs.bzl", "codex_rust_crate")
+ 
+ codex_rust_crate(
+     name = "core",
+-    compile_data = glob(["assets/**"]),
++    compile_data = glob(["assets/**"]) + [
++        "src/prompt_history_compat_fixtures/deepseek_notice_batch.json",
++    ],
+     crate_name = "codex_core",
+     crate_srcs = glob(["src/**/*.rs"]) + [
+         "//codex-rs/ext/guardian-v2:src/sync_reviewer/reviewer_config.rs",
+diff --git a/codex-rs/core/src/compact.rs b/codex-rs/core/src/compact.rs
+index 497a8f5..fdb5058 100644
+--- a/codex-rs/core/src/compact.rs
++++ b/codex-rs/core/src/compact.rs
+@@ -319,6 +319,10 @@ async fn run_compact_task_inner_impl(
+         sess.services
+             .executed_tool_calls
+             .attach_to_compaction_prompt(&mut turn_input);
++        let turn_input = crate::prompt_history_compat::sanitize_prompt_history(
++            &turn_context.config.model_provider_id,
++            turn_input,
++        );
+         let turn_input_len = turn_input.len();
+         let base_instructions = if turn_input
+             .iter()
+diff --git a/codex-rs/core/src/compact_remote_v2_attempt.rs b/codex-rs/core/src/compact_remote_v2_attempt.rs
+index 191389e..1d8f60b 100644
+--- a/codex-rs/core/src/compact_remote_v2_attempt.rs
++++ b/codex-rs/core/src/compact_remote_v2_attempt.rs
+@@ -133,12 +133,17 @@ pub(super) async fn run_remote_compact_v2_attempt(
+             let trace_input_history = compaction_trace
+                 .is_enabled()
+                 .then(|| history.raw_items().cloned().collect());
+-            let (mut input, metadata): (Vec<_>, Vec<_>) = history
++            let annotated_input = history
+                 .for_prompt_annotated(
+                     &model_info.input_modalities,
+                     sess.services.image_store.as_ref(),
+                 )
+-                .await
++                .await;
++            let annotated_input = crate::prompt_history_compat::sanitize_prompt_history_annotated(
++                &turn_context.config.model_provider_id,
++                annotated_input,
++            );
++            let (mut input, metadata): (Vec<_>, Vec<_>) = annotated_input
+                 .into_iter()
+                 .map(|envelope| (envelope.item, envelope.metadata))
+                 .unzip();
+@@ -314,8 +319,12 @@ pub(crate) async fn capture_background_input(
+     );
+     snapshot.normalize_history(&step_context.settings.model_info.input_modalities);
+     snapshot.project_file_audio_for_prompt();
+-    let (mut input, metadata): (Vec<_>, Vec<_>) = snapshot
+-        .into_annotated_items()
++    let annotated_input = snapshot.into_annotated_items();
++    let annotated_input = crate::prompt_history_compat::sanitize_prompt_history_annotated(
++        &step_context.turn.config.model_provider_id,
++        annotated_input,
++    );
++    let (mut input, metadata): (Vec<_>, Vec<_>) = annotated_input
+         .into_iter()
+         .map(|envelope| (envelope.item, envelope.metadata))
+         .unzip();
+diff --git a/codex-rs/core/src/lib.rs b/codex-rs/core/src/lib.rs
+index 1e9090a..f2f89df 100644
+--- a/codex-rs/core/src/lib.rs
++++ b/codex-rs/core/src/lib.rs
+@@ -43,6 +43,7 @@ mod compact_remote_history;
+ mod compact_remote_v2;
+ mod compact_retained_tool_outputs;
+ mod compact_token_budget;
++mod prompt_history_compat;
+ mod thread_startup_metadata;
+ /// Catalog handle installed in each thread's extension data before startup callbacks.
+ pub use codex_models_manager::manager::SharedModelsManager;
+diff --git a/codex-rs/core/src/session/turn.rs b/codex-rs/core/src/session/turn.rs
+index fd555b5..750edd4 100644
+--- a/codex-rs/core/src/session/turn.rs
++++ b/codex-rs/core/src/session/turn.rs
+@@ -1902,7 +1902,10 @@ pub(crate) fn build_prompt(
+ ) -> Prompt {
+     let turn_context = &step_context.turn;
+     Prompt {
+-        input,
++        input: crate::prompt_history_compat::sanitize_prompt_history(
++            &turn_context.config.model_provider_id,
++            input,
++        ),
+         tools: if incremental_tools {
+             // Hosted tools still require top-level Responses configuration.
+             step_context
+diff --git a/codex-rs/core/src/thread_manager.rs b/codex-rs/core/src/thread_manager.rs
+index c080574..a86fb6a 100644
+--- a/codex-rs/core/src/thread_manager.rs
++++ b/codex-rs/core/src/thread_manager.rs
+@@ -3232,7 +3232,9 @@ fn snapshot_turn_state(history: &InitialHistory) -> SnapshotTurnState {
+     }
+     let active_turn_id = builder.active_turn_id_if_explicit();
+     if builder.has_active_turn() && active_turn_id.is_some() {
+-        let active_turn_snapshot = builder.active_turn_snapshot();
++        // Fork boundary detection needs only status and identity. Copying the full
++        // active turn here duplicates potentially large tool outputs and images.
++        let active_turn_snapshot = builder.active_turn_metadata_snapshot();
+         if active_turn_snapshot
+             .as_ref()
+             .is_some_and(|turn| turn.status != TurnStatus::InProgress)
